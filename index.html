@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* Estilo «tarjetas flotantes»: fondo verde-gris frío, tarjetas blancas con sombra difusa, verde azulado como único color de marca */
+/* Tarjetas con sombra difusa; crema + azul petróleo */
 :root{
   /* Crema + azul petróleo oscuro; arena como tono de apoyo (pelo canela, sin marrones) */
   --bg:#F3EDE2;--card:#FFFCF6;--ink:#1D2B33;--muted:#6A675E;--line:#ECE4D6;
@@ -40,7 +40,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--f);-webkit-text-size-adjust:100%}
 body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
-h1,h2,h3,.serif{font-family:var(--f);font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h1,h2,h3{font-family:var(--f);font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:balance}
 button{font:inherit;color:inherit;cursor:pointer}
 a{color:var(--verde)}
 .ic{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.2em;flex:none}
@@ -56,11 +56,6 @@ header.top h1 .estado::after{content:"";position:absolute;inset:-12px}
 .estado.sync{background:var(--ambar);opacity:1;animation:lat 1s infinite}
 .estado.error{background:var(--rojo);opacity:1}
 @keyframes lat{50%{opacity:.25}}
-.menu-btn{border:0;background:none;width:40px;height:40px;display:grid;place-items:center;color:var(--ink);flex:none}
-.menu-btn svg{width:24px;height:24px}
-.icon-btn{border:0;background:var(--card);width:42px;height:42px;border-radius:50%;display:grid;place-items:center;box-shadow:var(--sombra);flex:none;overflow:hidden;padding:0;color:var(--verde)}
-.icon-btn svg{width:20px;height:20px}
-.icon-btn.avatar{background:var(--verde2) center/cover no-repeat}
 
 main{max-width:760px;margin:0 auto;padding:4px 20px 24px}
 .vista{display:none}.vista.activa{display:block;animation:entra .25s ease}
@@ -75,8 +70,6 @@ main{max-width:760px;margin:0 auto;padding:4px 20px 24px}
 .hero{position:relative;margin:-4px -20px 0;cursor:pointer}
 .hero-foto{height:min(94vw,376px);border-radius:0 0 34px 34px;background:var(--panel) center 35%/cover no-repeat;display:grid;place-items:center;color:color-mix(in srgb,var(--verde) 55%,var(--panel));overflow:hidden;position:relative}
 .hero-foto .silueta{width:130px;height:130px;margin-top:-80px}
-.hero-foto .puntos{position:absolute;bottom:74px;left:50%;transform:translateX(-50%);display:flex;gap:4px}
-.hero-foto .puntos i{width:6px;height:6px;border-radius:3px;background:#fff;opacity:.6}.hero-foto .puntos i:first-child{width:16px;background:var(--verde);opacity:1}
 .hero-card{position:absolute;left:16px;right:16px;bottom:16px;background:var(--vidrio);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid var(--vidrio-borde);border-radius:var(--r);box-shadow:0 10px 30px rgba(20,30,36,.18);padding:16px 20px}
 .hc-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .hc-top h2{font-size:26px}
@@ -87,15 +80,6 @@ main{max-width:760px;margin:0 auto;padding:4px 20px 24px}
 .hc-loc span{display:flex;align-items:center;gap:5px}.hc-loc .ic{color:var(--verde)}
 .foto{width:96px;height:96px;border-radius:30px;background:var(--verde2) center/cover no-repeat;display:grid;place-items:center;flex:none;color:var(--verde)}
 .foto svg{width:56%;height:56%}
-
-/* Categorías como en el buscador */
-.cats{display:flex;gap:12px;overflow-x:auto;margin:16px -20px 0;padding:6px 20px 10px;scrollbar-width:none}
-.cats::-webkit-scrollbar{display:none}
-.cat{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);font-weight:600;flex:none;padding:0}
-.cat i{width:58px;height:58px;border-radius:18px;background:var(--card);box-shadow:var(--sombra);display:grid;place-items:center;color:var(--verde)}
-.cat i svg{width:28px;height:28px}
-.cat.on i{background:var(--verde);color:var(--sobre);box-shadow:var(--sombra-btn)}
-.cat.on{color:var(--ink)}
 
 /* Filas */
 .fila{display:flex;gap:14px;align-items:center;padding:13px 0;border-top:1px solid var(--line);cursor:pointer}
@@ -126,19 +110,8 @@ main{max-width:760px;margin:0 auto;padding:4px 20px 24px}
 .contacto:first-child{border-top:0}
 .tel{border:0;background:var(--verde);color:var(--sobre);border-radius:14px;padding:9px 14px;font-weight:700;font-size:13.5px;text-decoration:none;flex:none;box-shadow:var(--sombra-btn)}
 
-.resumen{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.cifra{background:var(--card);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sombra)}
-.cifra b{display:block;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
-.cifra span{color:var(--muted);font-size:13px;font-weight:600}
-.cifra.oscura{background:var(--verde);color:var(--sobre);box-shadow:var(--sombra-btn)}.cifra.oscura span{color:var(--sobre);opacity:.75}
-
-/* Comida */
-.barra{height:10px;border-radius:6px;background:var(--verde2);overflow:hidden;margin:12px 0 8px}
-.barra i{display:block;height:100%;background:var(--verde);border-radius:6px;transition:width .4s}
-.barra.pronto i{background:var(--ambar)}.barra.vencido i{background:var(--rojo)}
+/* Cifra grande (peso) */
 .grande{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums}
-.botones{display:flex;gap:10px;margin:14px 0 8px}
-.botones .btn{padding:13px 12px;font-size:15px}
 
 /* Peso */
 .grafica{width:100%;height:auto;display:block;margin-bottom:8px}
@@ -161,15 +134,6 @@ main{max-width:760px;margin:0 auto;padding:4px 20px 24px}
 
 .ajustes-link{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:26px 0 6px;border:0;background:none;color:var(--muted);font-weight:700;font-size:14px;padding:10px}
 .ajustes-link .estado{display:inline-block}
-.banda{background:var(--banda);color:var(--banda-txt);margin:30px -20px calc(-120px - env(safe-area-inset-bottom));padding:6px 22px calc(130px + env(safe-area-inset-bottom));border-radius:34px 34px 0 0}
-.banda .sec{margin-top:22px}
-.banda .link{color:var(--banda-txt);opacity:.8}
-.banda .datos{padding:4px 0 0;gap:0}
-.banda .datos dt,.banda .datos dd{padding:11px 0;border-top:1px solid color-mix(in srgb,var(--banda-txt) 14%,transparent)}
-.banda .datos dt:first-of-type,.banda .datos dd:first-of-type{border-top:0}
-.banda .datos dt{color:var(--banda-txt);opacity:.65}
-.banda-vacia{opacity:.7;font-size:14.5px;margin:4px 0 0}
-.banda .ajustes-link{color:var(--banda-txt);opacity:.7;margin-top:18px}
 /* Barra inferior y botón + */
 nav.tabs{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;padding:0 14px calc(10px + env(safe-area-inset-bottom));z-index:6;pointer-events:none}
 nav.tabs .in{display:flex;width:100%;max-width:520px;background:var(--card);border-radius:26px;box-shadow:0 12px 34px rgba(38,46,52,.14);padding:8px;pointer-events:auto}
@@ -214,178 +178,34 @@ textarea{min-height:84px;resize:vertical}
 .estado-sync b{font-size:14.5px}.estado-sync span{color:var(--muted);line-height:1.4}
 .estado-sync.bien{background:var(--verde2)}.estado-sync.bien b{color:var(--verde)}
 .estado-sync.mal{background:var(--rojo2)}.estado-sync.mal b{color:var(--rojo)}.estado-sync.mal span{color:var(--ink)}
-
-/* Pasaporte de vacunas */
-.filtros-pas{display:grid;gap:8px;margin:-4px -20px 14px}
-.chips-f{display:flex;gap:7px;overflow-x:auto;padding:2px 20px 4px;scrollbar-width:none}
-.chips-f::-webkit-scrollbar{display:none}
-.chips-f button{flex:none;border:0;border-radius:13px;padding:8px 13px;font-weight:800;font-size:14px;background:var(--card);color:var(--ink);box-shadow:var(--sombra);display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums}
-.chips-f button small{font-size:11px;font-weight:800;color:var(--muted);background:var(--bg);border-radius:8px;padding:1px 6px}
-.chips-f button.on{background:var(--verde);color:var(--sobre);box-shadow:var(--sombra-btn)}
-.chips-f button.on small{background:color-mix(in srgb,var(--sobre) 20%,transparent);color:var(--sobre)}
-.chips-f.vacs button{font-weight:700;font-size:13.5px;padding:7px 12px;border-radius:999px}
 .anio-tit{display:flex;align-items:center;gap:10px;margin:20px 4px 10px;font-weight:800;font-size:15px;color:var(--verde)}
 .anio-tit::after{content:"";flex:1;height:1px;background:var(--line)}
-
-.pas-estados{display:flex;gap:12px;overflow-x:auto;margin:0 -20px;padding:2px 20px 12px;scroll-snap-type:x mandatory;scrollbar-width:none}
-.pas-estados::-webkit-scrollbar{display:none}
-.pas-estado{flex:0 0 min(84%,330px);scroll-snap-align:start;text-align:left;border:2px solid transparent;background:var(--card);border-radius:var(--r);padding:14px 16px 12px;box-shadow:var(--sombra)}
-.pas-estados .pas-estado:only-child{flex-basis:100%}
-.pas-estado.on{border-color:var(--verde)}
-.pe-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.pe-top b{font-size:18px;font-weight:800}
-.pe-hasta{font-size:14px;color:var(--muted);margin-top:4px}.pe-hasta strong{color:var(--ink)}
-.pe-pie{font-size:12.5px;color:var(--muted);margin-top:8px}
-.tl{margin-top:12px}
-.tl-barra{position:relative;height:12px;border-radius:6px;background:var(--line)}
-.tl-barra i{position:absolute;top:0;bottom:0;background:var(--verde);border-radius:6px;opacity:.85;box-shadow:inset -1.5px 0 0 var(--card)}
-.tl-barra b{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--rojo);border-radius:1px}
-.tl-anos{position:relative;height:16px;margin-top:3px;font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-.tl-anos span{position:absolute;transform:translateX(-1px)}
 .pas-hoja{display:grid;gap:14px;grid-template-columns:1fr}
 @media (min-width:700px){.pas-hoja{grid-template-columns:1fr 1fr}}
-.pas-item{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:12px;align-items:center;text-align:left;border:0;padding:14px;border-radius:var(--r);overflow:hidden;color:var(--ink);
-  background:var(--card) repeating-linear-gradient(135deg,transparent 0 9px,color-mix(in srgb,var(--verde) 4%,transparent) 9px 10px);box-shadow:var(--sombra)}
-.pas-item.vigente{outline:2px solid color-mix(in srgb,var(--verde) 45%,transparent);outline-offset:-2px}
 .peg{position:relative;aspect-ratio:1.55;border-radius:10px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.06),0 4px 10px rgba(0,0,0,.10);overflow:hidden;display:flex;flex-direction:column;color:#222;border:1px solid rgba(0,0,0,.06)}
 .peg.foto{background:#fff center/cover no-repeat}
-.peg-top{background:var(--pc);color:var(--pf);flex:1.15;padding:8px 10px 6px;display:flex;flex-direction:column;justify-content:flex-end;clip-path:polygon(0 0,100% 0,100% 82%,72% 100%,48% 88%,0 100%)}
-.peg-marca{font-weight:800;font-size:15px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.peg-lab{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
-.peg-pie{flex:1;display:grid;grid-template-columns:auto 1fr;gap:0 6px;align-content:center;padding:4px 10px;font-size:10px;font-variant-numeric:tabular-nums}
-.peg-pie span{color:#888;text-transform:uppercase;letter-spacing:.05em}
-.peg-pie b{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;font-weight:600;color:#222;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pas-fechas{list-style:none;margin:0;padding:0;display:grid;gap:5px;position:relative;z-index:1}
-.pas-fechas li{display:grid;grid-template-columns:18px 1fr;column-gap:7px;align-items:baseline}
-.pas-fechas i{grid-row:span 2;font-style:normal;font-size:10px;font-weight:800;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--verde2);color:var(--verde);align-self:center}
-.pas-fechas span{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;line-height:1.1}
-.pas-fechas b{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2}
-.pas-fechas li:last-child b{color:var(--verde)}
-.pas-pie{grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);font-weight:700;border-top:1px dashed var(--line);padding-top:9px;margin-top:-2px}
-.pas-pie span:first-child{display:flex;align-items:center;flex:none}
-.pas-pie .pas-tipo{color:var(--ink);font-weight:800}
-.pas-pie span:last-child{text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sello{position:absolute;right:-10px;bottom:18px;width:96px;height:96px;color:var(--verde);opacity:.16;pointer-events:none}
-.pas-vig{font-style:normal;margin-right:6px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--verde);background:var(--verde2);padding:3px 8px;border-radius:999px}
 .peg-edit{display:flex;gap:14px;align-items:center;margin:6px 0 2px}
 .peg-edit .peg{width:150px;flex:none}
 .peg-edit .peg.vacia{display:grid;place-items:center;text-align:center;font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card);border:1.5px dashed var(--panel);box-shadow:none}
 .peg-edit-btns{display:grid;gap:8px;flex:1}
 .peg-edit-btns .btn{padding:11px 12px;font-size:14.5px}
-
-/* Propuesta 1 · desplegable en píldora */
-.f1{display:grid;gap:10px;margin:-4px 0 14px}
-.f1-fila{display:flex;gap:8px;align-items:stretch}.f1-fila>*{white-space:nowrap;line-height:1.2}
-.f1-anio,.f1-todos{position:relative;display:flex;align-items:center;gap:6px;border:0;border-radius:14px;padding:10px 14px;font-weight:800;font-size:15px;background:var(--card);color:var(--ink);box-shadow:var(--sombra)}
-.f1-anio svg{width:16px;height:16px}
-.f1-anio select,.f2-op select{position:absolute;inset:0;opacity:0;width:100%;font-size:16px;cursor:pointer}
-.f1-anio.on,.f1-todos.on{background:var(--verde);color:var(--sobre);box-shadow:var(--sombra-btn)}
-.f1 .chips-f{margin:0 -20px}
-/* Propuesta 2 · control segmentado + pestañas subrayadas */
+.f2-op select{position:absolute;inset:0;opacity:0;width:100%;font-size:16px;cursor:pointer}
+/* Pasaporte: selector de año segmentado */
 .f2{margin:-4px 0 16px}
 .f2-seg{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border-radius:16px;padding:4px;box-shadow:var(--sombra)}
 .f2-op{position:relative;display:flex;align-items:center;justify-content:center;gap:6px;border:0;background:none;border-radius:12px;padding:10px;font-weight:800;font-size:15px;color:var(--muted)}
 .f2-op svg{width:16px;height:16px}
 .f2-op.on{background:var(--verde);color:var(--sobre)}
-.f2-tabs{display:flex;gap:20px;overflow-x:auto;margin:12px -20px 0;padding:0 20px;border-bottom:1px solid var(--line);scrollbar-width:none}
-.f2-tabs::-webkit-scrollbar{display:none}
-.f2-tabs button{flex:none;border:0;background:none;padding:10px 0;font-weight:700;font-size:14.5px;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-1px}
-.f2-tabs button.on{color:var(--ink);border-bottom-color:var(--verde)}
-/* Propuesta 3 · año grande con hoja + puntos de color */
-.f3{margin:-8px 0 14px}
-.f3-cab{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.f3-anio{display:flex;align-items:center;gap:6px;border:0;background:none;padding:0;font-size:30px;font-weight:800;color:var(--ink);letter-spacing:-.02em}
-.f3-anio svg{width:22px;height:22px;color:var(--verde);margin-top:4px}
-.f3-link{border:0;background:none;color:var(--verde);font-weight:800;font-size:14px;padding:4px 0}
-.f3 .chips-f{margin:10px -20px 0}
-.f3-vacs button{gap:7px}
-.f3-vacs button i{width:9px;height:9px;border-radius:50%;flex:none}
-.f3-vacs button.on i{box-shadow:0 0 0 2px var(--sobre)}
-.rej-anios{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
-.rej-anios button{border:0;border-radius:16px;padding:16px 0;font-weight:800;font-size:18px;background:var(--card);color:var(--ink);box-shadow:var(--sombra)}
-.rej-anios button.on{background:var(--verde);color:var(--sobre)}
 
 /* Salud: 4 pestañas fijas en 2 filas */
 .seg.seg-fija{display:grid;grid-template-columns:1fr 1fr;gap:8px;overflow:visible;margin:6px 0 16px;padding:0}
 .seg.seg-fija button{width:100%;padding:11px 8px;text-align:center}
-/* Vacunas: cuadrícula de estado */
-.vac-cab{display:flex;justify-content:space-between;align-items:baseline;margin:16px 4px 8px;font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
-.vac-cab button{border:0;background:none;color:var(--verde);font-weight:800;font-size:13.5px;text-transform:none;letter-spacing:0;padding:0}
-.vac-rejilla{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-.vac-op{position:relative;display:grid;grid-template-columns:10px 1fr;grid-template-rows:auto auto;column-gap:9px;row-gap:3px;align-items:center;text-align:left;border:2px solid transparent;border-radius:18px;padding:12px 12px 11px;background:var(--card);box-shadow:var(--sombra);transition:opacity .2s,border-color .2s}
-.vac-op i{grid-row:1/3;width:10px;height:100%;min-height:34px;border-radius:5px;background:var(--vc)}
-.vac-op .vo-nom{font-weight:800;font-size:15px;line-height:1.15;color:var(--ink)}
-.vac-op .vo-est{font-size:12.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
-.vac-op .vo-est b{color:#2E9E6A;margin-right:4px}
-.vac-op .vo-est.pronto{color:var(--ambar)}.vac-op .vo-est.vencido{color:var(--rojo)}
-.vac-op.on{border-color:var(--verde);background:color-mix(in srgb,var(--verde2) 55%,var(--card))}
-.vac-op.apagada{opacity:.55}
 
 /* Salud: parte superior (beige) */
 .banda-top{margin:0 0 6px}
 .banda-top .sec{margin:20px 4px 12px}
 .banda-top .seg.seg-fija{margin:6px 0 4px}
 
-/* A · lista */
-.va-lista{background:var(--tl);border-radius:18px;overflow:hidden}
-.va-fila{width:100%;display:grid;grid-template-columns:10px 1fr auto 20px;gap:12px;align-items:center;border:0;background:none;color:var(--banda-txt);padding:13px 14px;text-align:left;border-top:1px solid color-mix(in srgb,var(--banda-txt) 9%,transparent)}
-.va-fila:first-child{border-top:0}
-.va-fila i{width:10px;height:10px;border-radius:50%}
-.va-nom{font-weight:800;font-size:15px}
-.va-est{font-size:13px;font-weight:700;opacity:.75;font-variant-numeric:tabular-nums}
-.va-est.vencido{color:#F4A08F;opacity:1}.va-est.pronto{color:#F2C878;opacity:1}
-.va-chk{width:18px;height:18px;opacity:0;color:var(--banda-txt)}
-.va-fila.on{background:var(--tl2)}.va-fila.on .va-chk{opacity:1}
-.va-fila.apagada{opacity:.5}
-/* B · anillos */
-.vb-fila{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.vb-op{border:0;background:none;color:var(--banda-txt);display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:16px}
-.vb-op svg{width:58px;height:58px;transform:rotate(-90deg)}
-.vb-op svg text{transform:rotate(90deg);transform-origin:30px 30px;fill:var(--banda-txt);font-weight:800;font-size:17px;font-family:inherit}
-.vb-fondo{fill:none;stroke:var(--tl2);stroke-width:5}
-.vb-arco{fill:none;stroke-width:5;stroke-linecap:round}
-.vb-nom{font-weight:800;font-size:13px}
-.vb-est{font-size:11.5px;font-weight:700;opacity:.7;font-variant-numeric:tabular-nums}
-.vb-est.vencido{color:#F4A08F;opacity:1}.vb-est.pronto{color:#F2C878;opacity:1}
-.vb-op.on{background:var(--tl2)}
-.vb-op.apagada{opacity:.45}
-/* C · segmentado */
-.vc-seg{display:grid;grid-template-columns:repeat(5,auto);background:var(--tl);border-radius:16px;padding:4px;gap:2px}
-.vc-seg button{border:0;background:none;color:var(--banda-txt);opacity:.75;font-weight:800;font-size:13.5px;padding:10px 2px;border-radius:12px;white-space:nowrap}
-.vc-seg button.on{background:var(--banda-txt);color:var(--banda);opacity:1}
-.vc-info{display:flex;align-items:center;gap:8px;margin:12px 4px 0;font-size:14px}
-.vc-info i{width:10px;height:10px;border-radius:50%;flex:none}
-.vc-info span{opacity:.75;font-weight:700}.vc-info span.vencido{color:#F4A08F;opacity:1}
-
-/* Ficha en forma de tarjeta */
-.tarjeta{perspective:1200px;cursor:pointer;max-width:420px;margin:0 auto}
-.tj-in{position:relative;aspect-ratio:1.586;max-width:100%;transition:transform .7s cubic-bezier(.3,.8,.3,1);transform-style:preserve-3d}
-.tarjeta.girada .tj-in{transform:rotateY(180deg)}
-.tj-cara{position:absolute;inset:0;border-radius:18px;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;color:#F6F0E6;box-shadow:0 14px 30px rgba(20,40,48,.28),inset 0 0 0 1px rgba(255,255,255,.08);
-  background:radial-gradient(120% 90% at 100% 0%,rgba(255,255,255,.14),transparent 55%),repeating-radial-gradient(circle at 15% 120%,rgba(255,255,255,.05) 0 1px,transparent 1px 7px),linear-gradient(135deg,#1F4B57 0%,#2C6170 55%,#163843 100%)}
-.tj-frente{padding:16px 18px;display:grid;grid-template-rows:auto auto 1fr auto auto;row-gap:6px}
-.tj-top{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;font-weight:800;letter-spacing:.14em}
-.tj-tipo{opacity:.6}
-.tj-chip{width:40px;height:30px;border-radius:6px;background:linear-gradient(135deg,#EFE4CF,#CDBB98);position:relative;margin-top:4px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
-.tj-chip i{position:absolute;inset:6px 8px;border:1px solid rgba(60,50,30,.35);border-radius:3px}
-.tj-chip i::before,.tj-chip i::after{content:"";position:absolute;left:-8px;right:-8px;top:50%;height:1px;background:rgba(60,50,30,.35)}
-.tj-chip i::after{left:50%;right:auto;top:-6px;bottom:-6px;width:1px;height:auto}
-.tj-num{align-self:end;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:clamp(15px,5vw,20px);letter-spacing:.08em;font-weight:600;text-shadow:0 1px 0 rgba(0,0,0,.25);white-space:nowrap}
-.tj-num em{font-family:var(--f);font-style:normal;font-size:14px;opacity:.7;letter-spacing:0}
-.tj-extra{font-size:10.5px;opacity:.7;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tj-pie{display:grid;grid-template-columns:1.3fr auto 1fr;gap:12px;align-items:end;padding-right:34px}
-.tj-c{min-width:0}
-.tj-c span{display:block;font-size:8.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
-.tj-c b{display:block;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
-.tj-huella{position:absolute;right:16px;bottom:16px;width:28px;height:28px;opacity:.85;color:#EFE4CF}
-.tj-dorso{transform:rotateY(180deg);display:flex;flex-direction:column}
-.tj-banda{height:34px;margin-top:16px;background:#0F262D;flex:none}
-.tj-dueno{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;padding:10px 18px 0}
-.tj-dueno .ancho{grid-column:1/-1}
-.tj-dueno .tj-c b{font-size:12.5px}
-.tj-vacio{margin:6px 0 0;font-size:13px;opacity:.8;grid-column:1/-1}
-.tj-notas{margin-top:auto;padding:0 18px 12px;font-size:10px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tj-ayuda{text-align:center;font-size:12.5px;color:var(--muted);margin:10px 0 0}
 
 /* Ficha (chapa sin medalla) */
 .f1c{background:var(--card);border-radius:var(--r);box-shadow:var(--sombra);padding:18px 18px 16px;display:grid;gap:14px}
@@ -404,7 +224,7 @@ textarea{min-height:84px;resize:vertical}
 .pliegue-btn svg{width:16px;height:16px;transition:transform .2s}
 .pliegue.abierto .pliegue-btn svg{transform:rotate(180deg)}
 .pliegue .fila:first-child{border-top:1px solid var(--line)}
-.banda-top + .card,.banda-top + .cons-lista{margin-top:22px}
+.banda-top + .card{margin-top:22px}
 
 /* Ficha oscura + QR */
 .f1c.oscura{background:var(--banda);color:var(--banda-txt);box-shadow:0 14px 30px rgba(20,40,48,.22)}
@@ -421,15 +241,8 @@ textarea{min-height:84px;resize:vertical}
 .f1c-qr.vacio{background:none;border:1.5px dashed color-mix(in srgb,var(--banda-txt) 45%,transparent);color:var(--banda-txt);font-weight:800;font-size:13px;box-shadow:none}
 .qr-grande{width:min(72vw,300px);margin:8px auto 0;border-radius:18px;overflow:hidden;box-shadow:var(--sombra)}
 .qr-grande svg{display:block;width:100%;height:auto}
-/* Consultas con diagnóstico y tratamiento visibles (en Salud) */
-.cons-lista{display:grid;gap:12px}
-.cons-item{background:var(--card);border-radius:var(--r);box-shadow:var(--sombra);padding:14px 16px;text-align:left;border:0;width:100%;display:grid;gap:8px;cursor:pointer;color:var(--ink);font-family:inherit}
-.cons-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.cons-cab b{font-size:16.5px;font-weight:800;line-height:1.25}
-.cons-cab .s{display:block;margin-top:2px}
 .cons-bloque span{display:block;font-size:11px;font-weight:800;color:var(--verde);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
 .cons-bloque p{margin:0;font-size:14.5px;line-height:1.45;white-space:pre-wrap}
-.cons-pie{font-size:12.5px;color:var(--muted);font-weight:700;display:flex;gap:12px;flex-wrap:wrap;border-top:1px dashed var(--line);padding-top:8px}
 /* Peso ajustado a la pantalla */
 #v-peso.activa{display:flex;flex-direction:column;overflow:hidden}
 #v-peso .peso-graf{flex:1 1 auto;min-height:150px;display:flex;flex-direction:column;margin-bottom:0}
@@ -438,34 +251,12 @@ textarea{min-height:84px;resize:vertical}
 #v-peso .sec{flex:none;margin:16px 4px 10px}
 #v-peso .peso-regs{flex:0 1 auto;min-height:0;overflow:auto;margin-bottom:0;-webkit-overflow-scrolling:touch}
 
-/* Peso A · calendario */
-.pa-fila,.pb-fila,.pc-fila{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;background:none;padding:10px 0;border-top:1px solid var(--line);text-align:left;color:var(--ink);font-family:inherit}
+.pb-fila{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;background:none;padding:10px 0;border-top:1px solid var(--line);text-align:left;color:var(--ink);font-family:inherit}
 .peso-regs > :first-child,.pliegue > :first-child{border-top:0}
-.pa-kg{display:flex;align-items:baseline;gap:5px}
-.pa-kg b{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-.pa-kg span{font-weight:700;color:var(--muted)}
-.pa-kg em{font-style:normal;font-size:12px;font-weight:800;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--bg);color:var(--muted)}
-.pa-kg em.sube{color:#2E8C5E}.pa-kg em.baja{color:var(--ambar)}
-.pa-cal{width:52px;border-radius:12px;overflow:hidden;background:var(--card);box-shadow:0 2px 8px rgba(30,50,55,.12);text-align:center;flex:none;display:grid}
-.pa-cal span{background:var(--verde);color:var(--sobre);font-size:10px;font-weight:800;letter-spacing:.08em;padding:2px 0}
-.pa-cal b{font-size:22px;font-weight:800;line-height:1.1;padding-top:3px}
-.pa-cal i{font-style:normal;font-size:9.5px;color:var(--muted);font-weight:700;padding-bottom:3px}
-/* Peso B · fecha grande */
+/* Peso: filas de registros */
 .pb-kg{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
 .pb-kg span{font-size:15px;color:var(--muted);font-weight:700}
 .pb-kg small{display:block;font-size:12.5px;color:var(--muted);font-weight:600}
-.pb-fecha{display:flex;align-items:baseline;gap:7px;text-align:left}
-.pb-fecha b{font-size:34px;font-weight:800;line-height:1;color:var(--verde);font-variant-numeric:tabular-nums}
-.pb-fecha em{font-style:normal;font-size:34px;font-weight:300;line-height:1;color:var(--verde);letter-spacing:.02em}
-.pb-fecha span{font-size:12px;font-weight:700;color:var(--muted);align-self:center}
-/* Peso C · barra + fecha en bloque */
-.pc-kg{flex:1;min-width:0}
-.pc-kg b{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
-.pc-barra{height:6px;border-radius:3px;background:var(--verde2);margin-top:6px;max-width:180px}
-.pc-barra i{display:block;height:100%;border-radius:3px;background:var(--verde)}
-.pc-fecha{display:flex;align-items:center;gap:8px;padding-left:12px;border-left:1.5px solid var(--line)}
-.pc-fecha b{font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
-.pc-fecha span{font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--muted);line-height:1.25}
 /* Consultas comunes */
 .cd-chev{width:18px;height:18px;flex:none;color:var(--muted);transition:transform .2s}
 .ab .cd-chev{transform:rotate(180deg)}
@@ -473,7 +264,7 @@ textarea{min-height:84px;resize:vertical}
 .cd-acc{display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--muted);font-weight:700;border-top:1px dashed var(--line);padding-top:10px}
 .cd-acc span:first-child{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cd-acc button{border:0;background:var(--verde2);color:var(--verde);font-weight:800;font-size:13px;padding:7px 12px;border-radius:10px;font-family:inherit}
-/* Consultas A · acordeón */
+/* Consultas: acordeón */
 .ca{padding:4px 16px}
 .ca-it{border-top:1px solid var(--line)}.ca-it:first-child{border-top:0}
 .ca-cab{width:100%;display:flex;align-items:center;gap:12px;border:0;background:none;padding:12px 0;text-align:left;color:var(--ink);font-family:inherit}
@@ -483,61 +274,10 @@ textarea{min-height:84px;resize:vertical}
 .ca-txt span{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ca-cab em{font-style:normal;font-size:12.5px;font-weight:800;color:var(--muted)}
 .ca-it.ab .cd-det{padding:0 0 14px 58px}
-/* Consultas B · tarjetas */
-.cb{display:grid;gap:12px}
-.cb-it{background:var(--card);border-radius:var(--r);box-shadow:var(--sombra);padding:14px 16px;display:grid;gap:8px;cursor:pointer}
-.cb-cab{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.cb-fecha{display:block;font-size:11.5px;font-weight:800;color:var(--verde);text-transform:uppercase;letter-spacing:.06em}
-.cb-cab b{font-size:16.5px;font-weight:800}
-.cb-prev{margin:0;font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.cb-mas{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:800;color:var(--verde)}
-.cb-mas .cd-chev{color:var(--verde);width:15px;height:15px}
-/* Consultas C · línea de tiempo */
-.cc{position:relative;padding-left:2px}
-.cc-it{display:grid;grid-template-columns:44px 14px 1fr;gap:8px;position:relative;padding-bottom:14px}
-.cc-it::before{content:"";position:absolute;left:58px;top:18px;bottom:-4px;width:2px;background:var(--line)}
-.cc-it:last-child::before{display:none}
-.cc-lado{text-align:right;padding-top:6px}
-.cc-lado b{display:block;font-size:20px;font-weight:800;line-height:1}
-.cc-lado span{display:block;font-size:10.5px;font-weight:800;color:var(--verde);letter-spacing:.05em}
-.cc-lado i{font-style:normal;font-size:10px;color:var(--muted);font-weight:700}
-.cc-punto{width:14px;height:14px;border-radius:50%;background:var(--card);border:3px solid var(--verde);margin-top:10px;position:relative;z-index:1}
-.cc-card{background:var(--card);border-radius:18px;box-shadow:var(--sombra);padding:12px 14px;cursor:pointer;display:grid;gap:6px;min-width:0}
-.cc-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.cc-cab b{font-size:15.5px;font-weight:800}
-.cc-sub{font-size:13px;color:var(--muted)}
 
-/* Fechas · 1 chip suave */
+/* Fecha en chip suave */
 .fu1{font-size:14px;font-weight:800;color:var(--verde);background:var(--verde2);padding:7px 12px;border-radius:999px;font-variant-numeric:tabular-nums;white-space:nowrap}
-/* 2 · número sobre mes (widget) */
-.fu2{display:grid;justify-items:center;min-width:46px;line-height:1}
-.fu2 b{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.fu2 i{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--verde);margin-top:3px}
-/* 3 · relativo */
-.fu3{display:grid;justify-items:end;text-align:right;line-height:1.2}
-.fu3 b{font-size:14.5px;font-weight:800}
-.fu3 i{font-style:normal;font-size:12px;color:var(--muted);font-weight:600}
-/* 4 · tarjeta con día de la semana */
-.fu4{display:grid;justify-items:center;width:50px;padding:6px 0 5px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);line-height:1}
-.fu4 i{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.1em;color:var(--rojo)}
-.fu4 b{font-size:21px;font-weight:800;margin:2px 0 1px;font-variant-numeric:tabular-nums}
-.fu4 em{font-style:normal;font-size:10.5px;font-weight:700;color:var(--muted)}
-/* 5 · pastilla bicolor */
-.fu5{display:inline-flex;align-items:stretch;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(30,50,55,.12);font-variant-numeric:tabular-nums}
-.fu5 b{background:var(--verde);color:var(--sobre);font-size:17px;font-weight:800;padding:6px 10px;min-width:38px;text-align:center}
-.fu5 i{font-style:normal;background:var(--card);color:var(--verde);font-size:12px;font-weight:800;letter-spacing:.1em;padding:0 10px;display:flex;align-items:center}
-
-/* Vacuna 1 · compacta */
-.v1{display:flex;gap:0;border:0;padding:0;text-align:left;background:var(--card);border-radius:20px;box-shadow:var(--sombra);overflow:hidden;color:var(--ink);font-family:inherit;width:100%}
-.v1-barra{width:7px;background:var(--pc);flex:none}
-.v1-cuerpo{flex:1;min-width:0;padding:12px 14px;display:grid;gap:4px}
-.v1-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.v1-tipo{font-size:11px;font-weight:800;color:var(--verde);text-transform:uppercase;letter-spacing:.08em}
-.v1-marca{font-size:17px;font-weight:800}.v1-marca small{font-size:12px;color:var(--muted);font-weight:700}
-.v1-fechas{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:800;font-variant-numeric:tabular-nums}
-.v1-fechas svg{width:16px;height:16px;color:var(--muted)}
-.v1-pie{font-size:12px;color:var(--muted)}.v1-pie b{color:var(--ink);font-family:ui-monospace,Menlo,monospace;font-weight:600}
-/* Vacuna 2 · billete */
+/* Ficha de vacuna: billete */
 .v2{display:flex;border:0;padding:0;text-align:left;background:var(--card);border-radius:20px;box-shadow:var(--sombra);overflow:hidden;color:var(--ink);font-family:inherit;width:100%;position:relative}
 .v2-talon{width:44px;flex:none;background:var(--pc);color:var(--pf);display:flex;align-items:center;justify-content:center;position:relative}
 .v2-talon span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
@@ -552,32 +292,6 @@ textarea{min-height:84px;resize:vertical}
 .v2-dcha{text-align:right}.v2-dcha b{color:var(--verde)}
 .v2-linea{display:flex;align-items:center;gap:4px;color:var(--muted)}.v2-linea i{flex:1;border-top:1.5px dashed var(--line)}.v2-linea svg{width:16px;height:16px}
 .v2-pie{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:var(--muted);font-weight:700;border-top:1px solid var(--line);padding-top:7px}
-/* Vacuna 3 · validez */
-.v3{border:0;width:100%;text-align:left;background:var(--card);border-radius:20px;box-shadow:var(--sombra);padding:14px 16px;display:grid;gap:8px;color:var(--ink);font-family:inherit}
-.v3-cab{display:flex;align-items:center;gap:12px}
-.v3-mini{width:42px;height:42px;border-radius:12px;background:var(--pc);color:var(--pf);display:grid;place-items:center;font-weight:800;font-size:18px;flex:none}
-.v3-txt{flex:1;min-width:0}.v3-txt b{display:block;font-size:16px;font-weight:800}.v3-txt span{font-size:12.5px;color:var(--muted);font-weight:700}
-.v3-hasta span{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}.v3-hasta b{font-size:21px;font-weight:800}
-.v3-barra{height:8px;border-radius:4px;background:var(--verde2);overflow:hidden}.v3-barra i{display:block;height:100%;background:var(--verde);border-radius:4px}.v3-barra.fin i{background:var(--muted)}
-.v3-ext{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-weight:700;margin-top:-3px}
-.v3-chips{display:flex;flex-wrap:wrap;gap:6px}.v3-chips span{font-size:11.5px;font-weight:700;background:var(--bg);border-radius:8px;padding:4px 8px;color:var(--muted)}
-/* Vacuna 4 · pegatina protagonista */
-.v4{position:relative;overflow:hidden;border:0;width:100%;text-align:left;background:var(--card);border-radius:22px;box-shadow:var(--sombra);padding:12px;display:grid;gap:10px;color:var(--ink);font-family:inherit}
-.v4-peg{border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12);display:grid;grid-template-rows:auto auto;min-height:118px}
-.v4-peg.foto{background:#fff center/cover no-repeat;height:130px}
-.v4-band{background:var(--pc);color:var(--pf);padding:12px 14px 16px;clip-path:polygon(0 0,100% 0,100% 80%,70% 100%,45% 86%,0 100%)}
-.v4-band b{display:block;font-size:20px;font-weight:800;line-height:1.1}.v4-band span{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
-.v4-datos{display:flex;align-items:center;gap:16px;padding:6px 14px 10px;color:#222}
-.v4-datos span{display:block;font-size:9.5px;color:#888;letter-spacing:.08em}.v4-datos b{font-family:ui-monospace,Menlo,monospace;font-size:13px;font-weight:600}
-.v4-cod{margin-left:auto;display:flex;gap:1.5px;height:26px;align-items:stretch}.v4-cod i{background:#333;display:block}
-.v4-fechas{display:grid;gap:8px}
-.v4-fechas div{background:var(--bg);border-radius:12px;padding:7px 9px}
-.v4-fechas span{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.v4-fechas em{font-style:normal;width:15px;height:15px;border-radius:50%;background:var(--verde2);color:var(--verde);display:grid;place-items:center;font-size:9px}
-.v4-fechas b{display:block;font-size:14.5px;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
-.v4-fechas div:last-child b{color:var(--verde)}
-.v4-pie{display:flex;justify-content:space-between;align-items:center}.v4-pie b{font-weight:800}
-.v4 .sello{right:-14px;bottom:40px;width:86px;height:86px}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -593,7 +307,6 @@ textarea{min-height:84px;resize:vertical}
 .toast.ver{transform:translate(-50%,0)}
 
 @media (min-width:820px){
-  .doscol{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
   .hero-foto{height:352px}
 }
 
@@ -623,7 +336,6 @@ body.menu-a .mas-nav{display:flex}
 <main>
   <section class="vista activa" id="v-inicio"></section>
   <section class="vista" id="v-salud"></section>
-  <section class="vista" id="v-comida"></section>
   <section class="vista" id="v-peso"></section>
   <section class="vista" id="v-docs"></section>
 </main>
@@ -653,7 +365,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v29';
+const VERSION = 'v30';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -798,14 +510,6 @@ function pendiente(s, lista) {
   if (!s.proxima) return false;
   return !lista.some(o => o.id !== s.id && norm(o.nombre) === norm(s.nombre) && (o.fecha || '') > (s.fecha || ''));
 }
-function pienso() {
-  const c = D.comida;
-  if (!(c.racionG > 0 && c.sacoKg > 0 && c.sacoFecha)) return null;
-  const dias = Math.floor(c.sacoKg * 1000 / c.racionG);
-  const fin = sumarDias(c.sacoFecha, dias);
-  const quedan = diasHasta(fin);
-  return { dias, fin, quedan, pct: Math.max(0, Math.min(1, quedan / dias)) };
-}
 function proximoCumple() {
   const n = D.perfil.nacimiento; if (!n) return null;
   const h = aFecha(hoy()), a = aFecha(n);
@@ -816,8 +520,6 @@ function proximoCumple() {
 function avisos() {
   const L = vivos('salud');
   const r = L.filter(s => pendiente(s, L) && diasHasta(s.proxima) >= -60).map(s => ({ fecha: s.proxima, titulo: s.nombre || TIPOS[s.tipo]?.n, sub: TIPOS[s.tipo]?.n || '', ico: TIPOS[s.tipo]?.ico || '🩺', abrir: `formSalud(D.salud.find(x=>x.id==='${s.id}'))` }));
-  const p = pienso();
-  if (false && p) r.push({ fecha: p.fin, titulo: 'Se acaba el pienso', sub: D.comida.pienso || 'Pienso', ico: '🥣', terra: 1, abrir: `irA('comida')` });
   const cu = proximoCumple();
   if (cu && diasHasta(cu.fecha) <= 45) r.push({ fecha: cu.fecha, titulo: `Cumple ${cu.anios} ${cu.anios === 1 ? 'año' : 'años'}`, sub: fmt(cu.fecha), ico: '🎂', terra: 1, abrir: 'editarPerfil()', cumple: 1 });
   return r.sort((a, b) => a.fecha.localeCompare(b.fecha));
@@ -848,7 +550,7 @@ const medActiva = m => !m.fin || m.fin >= hoy();
 
 /* ---------- navegación ---------- */
 let tab = 'inicio', subSalud = 'vacunas', filtroDoc = 'Todos';
-const TITULOS = { inicio: null, salud: 'Salud', comida: 'Comida', peso: 'Peso', docs: 'Documentos' };
+const TITULOS = { inicio: null, salud: 'Salud', peso: 'Peso', docs: 'Documentos' };
 function pintarTema() {
   document.body.classList.toggle('tab-salud', tab === 'salud');
   const cs = getComputedStyle(document.documentElement);
@@ -872,7 +574,6 @@ function accionFab() {
     if (subSalud === 'consultas') return formConsulta();
     return formMed();
   }
-  if (tab === 'comida') return formCompra();
   if (tab === 'peso') return formPeso();
   if (tab === 'docs') return $('#fdoc').click();
   abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>Añadir</h3><button class="cerrar" onclick="cerrarHoja()">✕</button></div>
@@ -889,7 +590,7 @@ function accionFab() {
 /* ---------- pintar ---------- */
 function render() {
   $('#titulo').textContent = TITULOS[tab] || (D.perfil.nombre ? D.perfil.nombre : 'Mi Mascota');
-  ({ inicio: renderInicio, salud: renderSalud, comida: renderComida, peso: renderPeso, docs: renderDocs })[tab]();
+  ({ inicio: renderInicio, salud: renderSalud, peso: renderPeso, docs: renderDocs })[tab]();
 }
 const fila = ({ ico, terra, t, s, der, abrir }) => `<div class="fila" onclick="${esc(abrir || '')}"><div class="ico ${terra ? 'terra' : ''}">${ico}</div><div class="txt"><div class="t">${esc(t)}</div>${s ? `<div class="s">${esc(s)}</div>` : ''}</div>${der || ''}</div>`;
 const vacioHTML = (e, t) => `<div class="vacio"><b>${e}</b>${t}</div>`;
@@ -897,14 +598,8 @@ const vacioHTML = (e, t) => `<div class="vacio"><b>${e}</b>${t}</div>`;
 function renderInicio() {
   const p = D.perfil, ps = pesos(), ult = ps.at(-1);
   const av = avisos();
-  const meds = vivos('medicacion').filter(medActiva);
   const cons = vivos('consultas').sort(porFechaDesc);
-  const anio = String(new Date().getFullYear());
-  const gVet = vivos('consultas').filter(c => (c.fecha || '').startsWith(anio)).reduce((s, c) => s + (Number(c.coste) || 0), 0)
-    + vivos('salud').filter(c => (c.fecha || '').startsWith(anio)).reduce((s, c) => s + (Number(c.coste) || 0), 0);
-  const gCom = vivos('compras').filter(c => (c.fecha || '').startsWith(anio)).reduce((s, c) => s + (Number(c.precio) || 0), 0);
 
-  const sexoIc = p.sexo === 'Hembra' ? ic('hembra') : p.sexo === 'Macho' ? ic('macho') : '';
   let h = `<div class="hero" onclick="editarPerfil()">
     ${(() => { const u = imgURL(p.foto, p.fotoDrive); return `<div class="hero-foto" style="${u ? `background-image:url('${u}')` : ''}">${u ? '' : ic('perro', 'silueta')}</div>`; })()}
     <div class="hero-card">
@@ -957,7 +652,7 @@ function filaSalud(s, L) {
 window.consAbiertas = window.consAbiertas || {};
 function toggleCons(id) { consAbiertas[id] = !consAbiertas[id]; render(); }
 function consultasDesplegables(cons) {
-  const m = window.MODO_CONS || 'a', MES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+  const MES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
   const det = c => {
     const adj = vivos('docs').filter(d => d.consulta === c.id).length;
     const b = (t, v) => v ? `<div class="cons-bloque"><span>${t}</span><p>${esc(v)}</p></div>` : '';
@@ -965,25 +660,8 @@ function consultasDesplegables(cons) {
       <div class="cd-acc">${c.vet ? `<span>${esc(c.vet)}</span>` : '<span></span>'}${adj ? `<span>📎 ${adj}</span>` : ''}<button onclick="event.stopPropagation();formConsulta(D.consultas.find(x=>x.id==='${c.id}'))">Editar</button></div></div>`;
   };
   const chev = '<svg class="cd-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
-  if (m === 'a') {
-    // A · Acordeón en una sola tarjeta, con fecha en cuadradito
-    return `<div class="card ca">` + cons.map(c => { const d = aFecha(c.fecha), ab = consAbiertas[c.id]; return `<div class="ca-it ${ab ? 'ab' : ''}"><button class="ca-cab" onclick="toggleCons('${c.id}')"><div class="ca-dia"><b>${d.getDate()}</b><span>${MES[d.getMonth()]} ${String(d.getFullYear()).slice(2)}</span></div><div class="ca-txt"><b>${esc(c.motivo || 'Consulta')}</b>${!ab && c.diagnostico ? `<span>${esc(c.diagnostico)}</span>` : ''}</div>${chev}</button>${ab ? det(c) : ''}</div>`; }).join('') + `</div>`;
-  }
-  if (m === 'b') {
-    // B · Tarjetas sueltas con vista previa y «Ver más»
-    return `<div class="cb">` + cons.map(c => { const ab = consAbiertas[c.id]; return `<div class="cb-it ${ab ? 'ab' : ''}" onclick="toggleCons('${c.id}')"><div class="cb-cab"><div><span class="cb-fecha">${fmt(c.fecha)}</span><b>${esc(c.motivo || 'Consulta')}</b></div>${c.coste ? `<span class="pill neutro">${euros(c.coste)}</span>` : ''}</div>${ab ? det(c) : `${c.diagnostico ? `<p class="cb-prev">${esc(c.diagnostico)}</p>` : ''}<span class="cb-mas">Ver todo ${chev}</span>`}</div>`; }).join('') + `</div>`;
-  }
-  // C · Línea de tiempo
-  return `<div class="cc">` + cons.map(c => { const d = aFecha(c.fecha), ab = consAbiertas[c.id]; return `<div class="cc-it ${ab ? 'ab' : ''}"><div class="cc-lado"><b>${d.getDate()}</b><span>${MES[d.getMonth()]}</span><i>${d.getFullYear()}</i></div><div class="cc-punto"></div><div class="cc-card" onclick="toggleCons('${c.id}')"><div class="cc-cab"><b>${esc(c.motivo || 'Consulta')}</b>${chev}</div>${!ab ? `<span class="cc-sub">${esc([c.vet, c.coste ? euros(c.coste) : ''].filter(Boolean).join(' · '))}</span>` : det(c)}</div></div>`; }).join('') + `</div>`;
-}
-function tarjetaConsulta(c) {
-  const adj = vivos('docs').filter(d => d.consulta === c.id).length;
-  const bloque = (t, v) => v ? `<div class="cons-bloque"><span>${t}</span><p>${esc(v)}</p></div>` : '';
-  return `<button class="cons-item" onclick="formConsulta(D.consultas.find(x=>x.id==='${c.id}'))">
-    <div class="cons-cab"><div><b>${esc(c.motivo || 'Consulta')}</b><span class="s">${esc([fmt(c.fecha), c.vet].filter(Boolean).join(' · '))}</span></div>${c.coste ? `<span class="pill neutro">${euros(c.coste)}</span>` : ''}</div>
-    ${bloque('Diagnóstico', c.diagnostico)}${bloque('Tratamiento', c.tratamiento)}${bloque('Notas', c.notas)}
-    ${adj ? `<div class="cons-pie"><span>📎 ${adj} ${adj === 1 ? 'documento' : 'documentos'}</span></div>` : ''}
-  </button>`;
+  // Acordeón en una sola tarjeta, con fecha en cuadradito
+  return `<div class="card ca">` + cons.map(c => { const d = aFecha(c.fecha), ab = consAbiertas[c.id]; return `<div class="ca-it ${ab ? 'ab' : ''}"><button class="ca-cab" onclick="toggleCons('${c.id}')"><div class="ca-dia"><b>${d.getDate()}</b><span>${MES[d.getMonth()]} ${String(d.getFullYear()).slice(2)}</span></div><div class="ca-txt"><b>${esc(c.motivo || 'Consulta')}</b>${!ab && c.diagnostico ? `<span>${esc(c.diagnostico)}</span>` : ''}</div>${chev}</button>${ab ? det(c) : ''}</div>`; }).join('') + `</div>`;
 }
 function filaConsulta(c) {
   const adj = vivos('docs').filter(d => d.consulta === c.id).length;
@@ -1023,89 +701,43 @@ function renderSalud() {
 
 
 /* ---------- pasaporte de vacunas ---------- */
-let filtroVac = 'Todas', filtroAnio = '', filtroAnioPrev = '';
-function hojaAnios(anios) {
-  abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>Elige el año</h3><button class="cerrar" onclick="cerrarHoja()">✕</button></div>
-  <div class="rej-anios">${anios.map(a => `<button class="${filtroAnio === a ? 'on' : ''}" onclick="filtroAnio='${a}';filtroAnioPrev='${a}';cerrarHoja();render()">${a}</button>`).join('')}</div>
-  <div class="acciones"><button class="btn sec" onclick="filtroAnio='Todos';cerrarHoja();render()">Todos los años</button></div>`);
-}
+let filtroAnio = '', filtroAnioPrev = '';
 const MARCAS = [
   [/eurican.*pneumo/i, '#F2B6CF', '#5A1E3A'], [/eurican.*(dappi|lmulti)/i, '#2D5C9A', '#fff'], [/letifend|leti\b/i, '#3E8FCF', '#fff'], [/canigen/i, '#2E8B3E', '#fff'], [/eurican/i, '#C8202F', '#fff'], [/rabigen|virbac/i, '#1F5FA6', '#fff'], [/versiguard|zoetis|vanguard/i, '#F4F1EA', '#B3262E'],
-  [/nobivac|msd/i, '#0E7C7B', '#fff'], [/canigen/i, '#2C6E3F', '#fff'], [/letifend|canileish/i, '#6B3FA0', '#fff'],
+  [/nobivac|msd/i, '#0E7C7B', '#fff'], [/canileish/i, '#6B3FA0', '#fff'],
 ];
 const colorMarca = t => { for (const [re, bg, fg] of MARCAS) if (re.test(t || '')) return [bg, fg]; return ['var(--verde)', 'var(--sobre)']; };
-const fmtNum = s => { if (!s) return '—'; const d = aFecha(s); return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`; };
 
-function sello(texto, k) {
-  const t = esc((texto || 'Veterinario').toUpperCase()).slice(0, 34);
-  const rot = [-14, 9, -6, 13, -10][k % 5];
-  return `<svg class="sello" viewBox="0 0 100 100" style="transform:rotate(${rot}deg)" aria-hidden="true"><defs><path id="sc${k}" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0"/></defs><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="50" cy="50" r="27" fill="none" stroke="currentColor" stroke-width="1.4"/><text font-size="9.5" font-weight="800" letter-spacing="1.2" fill="currentColor"><textPath href="#sc${k}" startOffset="0">${t} · ${t}</textPath></text><g transform="translate(38 38) scale(1)" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${SVG.perro}</g></svg>`;
-}
 
-function lineaTiempo(regs) {
-  const r = regs.filter(x => x.fecha).map(x => ({ a: x.validaDesde || x.fecha, b: x.proxima || sumarMeses(x.fecha, 12) })).sort((p, q) => p.a.localeCompare(q.a));
-  if (!r.length) return '';
-  const y0 = aFecha(r[0].a).getFullYear(), y1 = Math.max(aFecha(r.at(-1).b).getFullYear(), new Date().getFullYear()) + 1;
-  const t0 = new Date(y0, 0, 1).getTime(), t1 = new Date(y1, 0, 1).getTime(), X = s => ((aFecha(s).getTime() - t0) / (t1 - t0) * 100).toFixed(2);
-  const hoyX = X(hoy());
-  let segs = r.map(p => `<i style="left:${X(p.a)}%;width:${Math.max(.8, X(p.b) - X(p.a))}%"></i>`).join('');
-  let anos = ''; for (let y = y0; y < y1; y++) anos += `<span style="left:${X(y + '-01-01')}%">${String(y).slice(2)}</span>`;
-  return `<div class="tl"><div class="tl-barra">${segs}<b style="left:${hoyX}%"></b></div><div class="tl-anos">${anos}</div></div>`;
-}
 
 function renderPasaporte() {
   const L = vivos('salud');
   const vac = L.filter(s => s.tipo === 'vacuna').sort(porFechaDesc);
   const otros = L.filter(s => s.tipo === 'otro').sort(porFechaDesc);
-  if (!vac.length && !otros.length) return `<div class="card">${vacioHTML('💉', 'Aquí tendrás tu propio pasaporte: cada vacuna con su pegatina, lote, fechas y sello. Pulsa + para apuntar la primera.')}</div>`;
-  const grupos = {};
-  vac.forEach(v => { const k = (v.nombre || 'Vacuna').trim(); (grupos[k] = grupos[k] || []).push(v); });
-  const nombres = Object.keys(grupos).sort((a, b) => grupos[b].length - grupos[a].length);
-  if (filtroVac !== 'Todas' && !grupos[filtroVac]) filtroVac = 'Todas';
+  if (!vac.length && !otros.length) return `<div class="card">${vacioHTML('💉', 'Aquí tendrás tu propio pasaporte: cada vacuna con su marca, lote y fechas. Pulsa + para apuntar la primera.')}</div>`;
   let h = '';
-  // Filtros: año (actual por defecto, desplegable para los anteriores) + «Todos»; debajo, vacunas
+  // Año: el actual por defecto (desplegable para los anteriores) o «Todos los años»
   const anioDe = v => (v.fecha || '').slice(0, 4);
   const actual = String(new Date().getFullYear());
   const todosAnios = [...new Set([actual, ...vac.map(anioDe).filter(Boolean)])].sort().reverse();
   if (!filtroAnio || (filtroAnio !== 'Todos' && !todosAnios.includes(filtroAnio))) filtroAnio = actual;
-  filtroVac = 'Todas';
-  const porVac = vac;
-  const anios = [...new Set(porVac.map(anioDe).filter(Boolean))].sort().reverse();
-  const lista = filtroAnio === 'Todos' ? porVac : porVac.filter(v => anioDe(v) === filtroAnio);
+  const anios = [...new Set(vac.map(anioDe).filter(Boolean))].sort().reverse();
+  const lista = filtroAnio === 'Todos' ? vac : vac.filter(v => anioDe(v) === filtroAnio);
   const anioSel = filtroAnio === 'Todos' ? (filtroAnioPrev || actual) : filtroAnio;
   const opcionesAnio = todosAnios.map(a => `<option value="${a}" ${a === anioSel ? 'selected' : ''}>${a}</option>`).join('');
   const selAnio = cls => `<label class="${cls} ${filtroAnio !== 'Todos' ? 'on' : ''}"><span>${anioSel}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg><select aria-label="Año" onchange="filtroAnio=this.value;filtroAnioPrev=this.value;render()" onclick="if(filtroAnio==='Todos'){filtroAnio=this.value;render()}">${opcionesAnio}</select></label>`;
   const btnTodos = cls => `<button class="${cls} ${filtroAnio === 'Todos' ? 'on' : ''}" onclick="filtroAnioPrev=filtroAnio==='Todos'?filtroAnioPrev:filtroAnio;filtroAnio='Todos';render()">Todos los años</button>`;
-  const colorVac = n => ({ 'Rabia': '#C8202F', 'Polivalente': '#2D5C9A', 'Leishmaniosis': '#3E8FCF', 'Tos de las perreras': '#D77AA6' })[n] || 'var(--verde)';
-  const vacsLista = ['Todas', ...nombres];
   h += `<div class="sec"><h2>Pasaporte</h2><span class="s">${lista.length} ${lista.length === 1 ? 'vacunación' : 'vacunaciones'}</span></div>`;
-  // Año: control segmentado (año actual con desplegable | todos los años)
   h += `<div class="f2"><div class="f2-seg">${selAnio('f2-op')}${btnTodos('f2-op')}</div></div>`;
-  // Vacunas: cuadrícula fija con el estado de cada una; tocar filtra, volver a tocar quita el filtro
-  // (menú de vacunas eliminado: se ven todas las del año elegido)
   h += `<!--fin-top-->`;
-  if (!lista.length) h += `<div class="card">${vacioHTML('💉', filtroAnio === 'Todos' ? 'No hay vacunas de este tipo.' : `En ${filtroAnio} no hay ${filtroVac === 'Todas' ? 'vacunas apuntadas' : 'dosis de ' + esc(filtroVac).toLowerCase()}. Elige otro año en el desplegable o «Todos los años».`)}</div>`;
-  const tarjeta = (v, k) => {
+  if (!lista.length) h += `<div class="card">${vacioHTML('💉', `En ${filtroAnio} no hay vacunas apuntadas. Elige otro año en el desplegable o «Todos los años».`)}</div>`;
+  const tarjeta = v => {
     const [bg, fg] = colorMarca(v.producto + ' ' + (v.laboratorio || ''));
     const vigente = v.proxima && diasHasta(v.proxima) >= 0 && (!v.validaDesde || diasHasta(v.validaDesde) <= 0) && diasHasta(v.fecha) <= 0;
-    const mV = window.MODO_VCARD || '2'; if (mV !== '0') return tarjetaVac(v, k, mV, bg, fg, vigente);
-    const pegU = imgURL(v.fotoPeg, v.fotoPegDrive);
-    const peg = pegU
-      ? `<div class="peg foto" style="background-image:url('${pegU}')"></div>`
-      : `<div class="peg" style="--pc:${bg};--pf:${fg}"><div class="peg-top"><span class="peg-marca">${esc(v.producto || v.nombre || 'Vacuna')}</span>${v.laboratorio ? `<span class="peg-lab">${esc(v.laboratorio)}</span>` : ''}</div><div class="peg-pie"><span>Lote</span><b>${esc(v.lote || '—')}</b><span>CAD</span><b>${esc(v.caducidad || '—')}</b></div></div>`;
-    const filas = v.validaDesde
-      ? [['Vacunación', v.fecha], ['Válida desde', v.validaDesde], ['Válida hasta', v.proxima]]
-      : [['Vacunación', v.fecha], ['Válida hasta', v.proxima]];
-    return `<button class="pas-item ${vigente ? 'vigente' : ''}" onclick="formSalud(D.salud.find(x=>x.id==='${v.id}'))">
-      ${peg}
-      <ol class="pas-fechas">${filas.map(([t, f], j) => `<li><i>${j + 1}</i><span>${t}</span><b>${fmtNum(f)}</b></li>`).join('')}</ol>
-      <div class="pas-pie"><span>${vigente ? '<em class="pas-vig">En vigor</em>' : ''}</span><span class="pas-tipo">${esc(v.nombre || '')}</span></div>
-      ${sello(v.vet, k)}
-    </button>`;
+    return tarjetaVac(v, bg, fg, vigente);
   };
   if (filtroAnio === 'Todos') {
-    let k = 0;
-    h += anios.map(a => `<div class="anio-tit"><span>${a}</span></div><div class="pas-hoja">${porVac.filter(v => anioDe(v) === a).map(v => tarjeta(v, k++)).join('')}</div>`).join('');
+    h += anios.map(a => `<div class="anio-tit"><span>${a}</span></div><div class="pas-hoja">${vac.filter(v => anioDe(v) === a).map(tarjeta).join('')}</div>`).join('');
   } else {
     h += `<div class="pas-hoja">` + lista.map(tarjeta).join('') + `</div>`;
   }
@@ -1114,68 +746,19 @@ function renderPasaporte() {
 }
 
 
-/* ---------- propuestas de ficha de vacuna ---------- */
-function tarjetaVac(v, k, m, bg, fg, vigente) {
+/* ---------- ficha de vacuna (billete) ---------- */
+function tarjetaVac(v, bg, fg, vigente) {
   const abrir = `formSalud(D.salud.find(x=>x.id==='${v.id}'))`;
   const caducada = v.proxima && diasHasta(v.proxima) < 0;
   const est = vigente ? ['ok', 'En vigor'] : caducada ? ['neutro', 'Caducada'] : ['pronto', 'Pendiente'];
   const corta = f => { if (!f) return '—'; const d = aFecha(f); return `${d.getDate()} ${MESES[d.getMonth()]} ${String(d.getFullYear()).slice(2)}`; };
   const marca = esc(v.producto || v.nombre || 'Vacuna'), tipo = esc(v.nombre || ''), lab = esc(v.laboratorio || '');
-  const pegU = imgURL(v.fotoPeg, v.fotoPegDrive);
-  const fotoMini = pegU ? `style="background-image:url('${pegU}');background-size:cover"` : '';
-  if (m === '1') {
-    return `<button class="v1" onclick="${abrir}" style="--pc:${bg}"><i class="v1-barra"></i><div class="v1-cuerpo">
-      <div class="v1-top"><span class="v1-tipo">${tipo}</span><span class="pill ${est[0]}">${est[1]}</span></div>
-      <b class="v1-marca">${marca}${lab ? ` <small>${lab}</small>` : ''}</b>
-      <div class="v1-fechas"><span>${corta(v.fecha)}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>${corta(v.proxima)}</span></div>
-      <div class="v1-pie">Lote <b>${esc(v.lote || '—')}</b> · CAD <b>${esc(v.caducidad || '—')}</b>${v.validaDesde ? ` · desde ${corta(v.validaDesde)}` : ''}</div></div></button>`;
-  }
-  if (m === '2') {
-    return `<button class="v2" onclick="${abrir}"><div class="v2-talon" style="--pc:${bg};--pf:${fg}"><span>${tipo}</span></div><div class="v2-cuerpo">
-      <div class="v2-top"><b>${marca}</b><span class="pill ${est[0]}">${est[1]}</span></div>
-      <div class="v2-vuelo"><div><span>Vacunado</span><b>${corta(v.fecha)}</b></div><div class="v2-linea"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><i></i></div><div class="v2-dcha"><span>Válida hasta</span><b>${corta(v.proxima)}</b></div></div>
-      <div class="v2-pie"><span>${lab || '&nbsp;'}</span><span>Lote ${esc(v.lote || '—')} · CAD ${esc(v.caducidad || '—')}</span></div></div></button>`;
-  }
-  if (m === '3') {
-    const ini = v.validaDesde || v.fecha, fin = v.proxima;
-    let pct = 0; if (ini && fin) { const tot = Math.max(1, diasEntre(ini, fin)); pct = Math.max(0, Math.min(100, (tot - Math.max(0, diasHasta(fin))) / tot * 100)); }
-    return `<button class="v3" onclick="${abrir}"><div class="v3-cab"><div class="v3-mini" style="--pc:${bg};--pf:${fg}" ${fotoMini}>${pegU ? '' : marca.slice(0, 1)}</div><div class="v3-txt"><b>${marca}</b><span>${tipo}${lab ? ' · ' + lab : ''}</span></div><span class="pill ${est[0]}">${est[1]}</span></div>
-      <div class="v3-hasta"><span>Válida hasta</span><b>${v.proxima ? fmt(v.proxima) : '—'}</b></div>
-      <div class="v3-barra ${caducada ? 'fin' : ''}"><i style="width:${pct.toFixed(0)}%"></i></div>
-      <div class="v3-ext"><span>${corta(ini)}</span><span>${corta(fin)}</span></div>
-      <div class="v3-chips"><span>Lote ${esc(v.lote || '—')}</span><span>CAD ${esc(v.caducidad || '—')}</span>${v.vet ? `<span>${esc(v.vet)}</span>` : ''}</div></button>`;
-  }
-  // 4 · Pegatina protagonista
-  const barras = Array.from({ length: 34 }, (_, i) => `<i style="width:${[1, 2, 1, 3, 1, 2][(i * 7 + (v.lote || '').length) % 6]}px"></i>`).join('');
-  const filas = v.validaDesde ? [['Vacunación', v.fecha], ['Desde', v.validaDesde], ['Hasta', v.proxima]] : [['Vacunación', v.fecha], ['Hasta', v.proxima]];
-  return `<button class="v4" onclick="${abrir}">
-    ${pegU ? `<div class="v4-peg foto" style="background-image:url('${pegU}')"></div>` : `<div class="v4-peg" style="--pc:${bg};--pf:${fg}"><div class="v4-band"><b>${marca}</b>${lab ? `<span>${lab}</span>` : ''}</div><div class="v4-datos"><div><span>LOTE</span><b>${esc(v.lote || '—')}</b></div><div><span>CAD</span><b>${esc(v.caducidad || '—')}</b></div><div class="v4-cod">${barras}</div></div></div>`}
-    <div class="v4-fechas" style="grid-template-columns:repeat(${filas.length},1fr)">${filas.map(([t, f], j) => `<div><span><em>${j + 1}</em>${t}</span><b>${corta(f)}</b></div>`).join('')}</div>
-    <div class="v4-pie"><span class="pill ${est[0]}">${est[1]}</span><b>${tipo}</b></div>
-    ${sello(v.vet, k)}</button>`;
+  return `<button class="v2" onclick="${abrir}"><div class="v2-talon" style="--pc:${bg};--pf:${fg}"><span>${tipo}</span></div><div class="v2-cuerpo">
+    <div class="v2-top"><b>${marca}</b><span class="pill ${est[0]}">${est[1]}</span></div>
+    <div class="v2-vuelo"><div><span>Vacunado</span><b>${corta(v.fecha)}</b></div><div class="v2-linea"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><i></i></div><div class="v2-dcha"><span>Válida hasta</span><b>${corta(v.proxima)}</b></div></div>
+    <div class="v2-pie"><span>${lab || '&nbsp;'}</span><span>Lote ${esc(v.lote || '—')} · CAD ${esc(v.caducidad || '—')}</span></div></div></button>`;
 }
 
-function renderComida() {
-  const c = D.comida, p = pienso();
-  let h = `<div class="sec" style="margin-top:6px"><h2>Pienso actual</h2><button class="link" onclick="formComida()">Editar</button></div><div class="card">`;
-  if (!c.pienso && !c.racionG) {
-    h += vacioHTML('🥣', 'Apunta qué come, la ración diaria y el tamaño del saco, y te avisaré antes de que se acabe.') + `<button class="btn" onclick="formComida()">Configurar pienso</button>`;
-  } else {
-    h += `<div class="t" style="font-size:18px">${esc(c.pienso || 'Pienso')}</div><div class="s">${[c.racionG ? `${num(c.racionG)} g al día` : '', c.tomas ? `${c.tomas} ${c.tomas == 1 ? 'toma' : 'tomas'}` : '', c.sacoKg ? `saco de ${num(c.sacoKg)} kg` : ''].filter(Boolean).join(' · ')}</div>`;
-    if (p) {
-      const cls = p.quedan < 0 ? 'vencido' : p.quedan <= 7 ? 'pronto' : '';
-      h += `<div class="barra ${cls}"><i style="width:${Math.round(p.pct * 100)}%"></i></div>
-      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span class="grande">${p.quedan < 0 ? 'Agotado' : p.quedan === 0 ? 'Se acaba hoy' : `${p.quedan} ${p.quedan === 1 ? 'día' : 'días'}`}</span><span class="s">${p.quedan < 0 ? 'desde el ' + fmt(p.fin) : 'hasta el ' + fmt(p.fin)}</span></div>
-      <div class="s">Saco abierto el ${fmt(c.sacoFecha)} · dura unos ${p.dias} días</div>`;
-    } else h += `<div class="s" style="margin-top:8px">Pon la ración y el tamaño del saco para calcular cuánto queda.</div>`;
-    h += `<div class="botones"><button class="btn" onclick="formSaco()">Abrir saco nuevo</button></div>`;
-  }
-  h += `</div>`;
-  if (c.premios || c.notas) h += `<div class="card">${c.premios ? `<div class="t">Premios y extras</div><div class="s" style="white-space:pre-wrap;margin-bottom:8px">${esc(c.premios)}</div>` : ''}${c.notas ? `<div class="t">Notas</div><div class="s" style="white-space:pre-wrap">${esc(c.notas)}</div>` : ''}</div>`;
-  const comp = vivos('compras').sort(porFechaDesc);
-  h += `<div class="sec"><h2>Compras</h2></div><div class="card">${comp.length ? comp.map(x => fila({ ico: '🛒', terra: 1, t: x.producto || 'Compra', s: [fmt(x.fecha), x.kg ? num(x.kg) + ' kg' : '', x.tienda].filter(Boolean).join(' · '), der: x.precio ? `<span class="pill neutro">${euros(x.precio)}</span>` : '', abrir: `formCompra(D.compras.find(y=>y.id==='${x.id}'))` })).join('') : vacioHTML('🛒', 'Apunta lo que compras (pienso, premios, juguetes) para llevar el gasto.')}</div>`;
-  $('#v-comida').innerHTML = conIconos(h);
-}
 
 function grafica(ps, W = 340, H = 150) {
   if (ps.length < 2) return '';
@@ -1193,18 +776,10 @@ function grafica(ps, W = 340, H = 150) {
   return `<svg class="grafica" viewBox="0 0 ${W} ${H}" role="img" aria-label="Evolución del peso">${rej}<path class="area" d="${area}" opacity=".8"/><path class="lin" d="${lin}"/>${pf}<text x="${pl}" y="${H - 6}">${fmtCorto(ps[0].fecha)}</text><text x="${W - pr}" y="${H - 6}" text-anchor="end">${fmtCorto(ps.at(-1).fecha)}</text></svg>`;
 }
 
-/* ---------- propuestas de fecha ---------- */
+/* ---------- fecha de los registros de peso («23 oct»; año corto si no es el actual) ---------- */
 function fechaUI(d) {
-  const m = window.MODO_FECHA || '1', MESC = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-  const DIAS = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
   const otroAnio = d.getFullYear() !== new Date().getFullYear();
-  const dd = Math.round((aFecha(hoy()) - d) / 864e5);
-  const rel = dd === 0 ? 'Hoy' : dd === 1 ? 'Ayer' : dd < 7 ? `Hace ${dd} días` : dd < 35 ? `Hace ${Math.round(dd / 7)} sem` : dd < 365 ? (Math.round(dd / 30.4) === 1 ? 'Hace 1 mes' : `Hace ${Math.round(dd / 30.4)} meses`) : `Hace ${Math.floor(dd / 365)} ${Math.floor(dd / 365) === 1 ? 'año' : 'años'}`;
-  if (m === '1') return `<span class="fu1">${d.getDate()} ${MESC[d.getMonth()]}${otroAnio ? ` ${String(d.getFullYear()).slice(2)}` : ''}</span>`;
-  if (m === '2') return `<span class="fu2"><b>${d.getDate()}</b><i>${MESC[d.getMonth()].toUpperCase()}${otroAnio ? ' ' + String(d.getFullYear()).slice(2) : ''}</i></span>`;
-  if (m === '3') return `<span class="fu3"><b>${rel}</b><i>${d.getDate()} ${MESC[d.getMonth()]} ${d.getFullYear()}</i></span>`;
-  if (m === '4') return `<span class="fu4"><i>${DIAS[d.getDay()]}</i><b>${d.getDate()}</b><em>${MESC[d.getMonth()]}${otroAnio ? ' ' + String(d.getFullYear()).slice(2) : ''}</em></span>`;
-  return `<span class="fu5"><b>${d.getDate()}</b><i>${MESC[d.getMonth()].toUpperCase()}${otroAnio ? ' ' + String(d.getFullYear()).slice(2) : ''}</i></span>`;
+  return `<span class="fu1">${d.getDate()} ${MESES[d.getMonth()]}${otroAnio ? ` ${String(d.getFullYear()).slice(2)}` : ''}</span>`;
 }
 let verPesos = false;
 function renderPeso() {
@@ -1215,19 +790,7 @@ function renderPeso() {
     h += `<div class="card peso-graf"><div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px"><div><div class="s">Último peso · ${fmt(ult.fecha)}</div><div class="grande" style="font-size:34px">${num(ult.kg)} kg</div></div>${prev ? `<span class="pill ${Math.abs(dif) < .05 ? 'neutro' : 'ok'}">${dif > 0 ? '+' : ''}${num(Math.round(dif * 100) / 100)} kg</span>` : ''}</div><div class="graf-caja" id="grafCaja"></div></div>`;
   }
   const regs = ps.slice().reverse();
-  const MES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
-  const mP = window.MODO_PESO || 'b';
-  const kgMin = Math.min(...ps.map(x => x.kg)), kgMax = Math.max(...ps.map(x => x.kg));
-  const filaPeso = p => {
-    const d = aFecha(p.fecha), i = regs.indexOf(p), ant = regs[i + 1];
-    const dif = ant ? Math.round((p.kg - ant.kg) * 10) / 10 : null;
-    const difTxt = dif === null ? '' : dif === 0 ? '=' : (dif > 0 ? '▲ ' : '▼ ') + num(Math.abs(dif));
-    const abrir = `formPeso(D.peso.find(x=>x.id==='${p.id}'))`;
-    if (mP === 'a') return `<button class="pa-fila" onclick="${abrir}"><div class="pa-kg"><b>${num(p.kg)}</b><span>kg</span>${difTxt ? `<em class="${dif > 0 ? 'sube' : dif < 0 ? 'baja' : ''}">${difTxt}</em>` : ''}</div><div class="pa-cal"><span>${MES[d.getMonth()]}</span><b>${d.getDate()}</b><i>${d.getFullYear()}</i></div></button>`;
-    if (mP === 'b') return `<button class="pb-fila" onclick="${abrir}"><div class="pb-kg">${num(p.kg)} <span>kg</span>${p.nota ? `<small>${esc(p.nota)}</small>` : ''}</div>${fechaUI(d)}</button>`;
-    const pct = kgMax > kgMin ? (p.kg - kgMin) / (kgMax - kgMin) : .5;
-    return `<button class="pc-fila" onclick="${abrir}"><div class="pc-kg"><b>${num(p.kg)} kg</b><div class="pc-barra"><i style="width:${(15 + pct * 85).toFixed(0)}%"></i></div></div><div class="pc-fecha"><b>${pad(d.getDate())}</b><span>${MES[d.getMonth()]}<br>${d.getFullYear()}</span></div></button>`;
-  };
+  const filaPeso = p => `<button class="pb-fila" onclick="formPeso(D.peso.find(x=>x.id==='${p.id}'))"><div class="pb-kg">${num(p.kg)} <span>kg</span>${p.nota ? `<small>${esc(p.nota)}</small>` : ''}</div>${fechaUI(aFecha(p.fecha))}</button>`;
   const resto = regs.slice(4);
   h += `<div class="sec"><h2>Registros</h2>${regs.length ? `<span class="s">${regs.length}</span>` : ''}</div><div class="card peso-regs">${regs.length ? regs.slice(0, 4).map(filaPeso).join('') + (resto.length ? `<div class="pliegue ${verPesos ? 'abierto' : ''}">${verPesos ? resto.map(filaPeso).join('') : ''}<button class="pliegue-btn" onclick="verPesos=!verPesos;render()">${verPesos ? 'Ocultar anteriores' : `Ver ${resto.length} ${resto.length === 1 ? 'registro anterior' : 'registros anteriores'}`}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div>` : '') : vacioHTML('⚖️', 'Apunta su peso de vez en cuando (en casa o en el veterinario) y verás la evolución.')}</div>`;
   const v = $('#v-peso');
@@ -1535,51 +1098,6 @@ function formPeso(p) {
   });
 }
 
-function formComida() {
-  formulario({
-    titulo: 'Pienso y alimentación', v: D.comida,
-    campos: [
-      { k: 'pienso', l: 'Pienso', ph: 'Marca y variedad' },
-      { k: 'racionG', l: 'Ración diaria (g)', t: 'number', half: 1 }, { k: 'tomas', l: 'Tomas al día', t: 'number', half: 1 },
-      { k: 'sacoKg', l: 'Tamaño del saco (kg)', t: 'number', half: 1 }, { k: 'sacoFecha', l: 'Saco abierto el', t: 'date', half: 1 },
-      { k: 'precio', l: 'Precio del saco (€)', t: 'number', half: 1 }, { k: 'tienda', l: 'Dónde lo compras', half: 1 },
-      { k: 'premios', l: 'Premios y extras', t: 'area', ph: 'Snacks, latas, huesos…' },
-      { k: 'notas', l: 'Notas', t: 'area', ph: 'Alimentos prohibidos, cambios de dieta…' },
-    ],
-    guardar: v => { guardarObj('comida', v); toast('Guardado'); },
-  });
-}
-function formSaco() {
-  const c = D.comida;
-  formulario({
-    titulo: 'Abrir saco nuevo', v: { fecha: hoy(), kg: c.sacoKg, precio: c.precio, producto: c.pienso, tienda: c.tienda },
-    html: '<div class="s" style="margin:0 2px">Se reinicia la cuenta de días y, si pones el precio, se apunta la compra.</div>',
-    campos: [
-      { k: 'producto', l: 'Pienso' },
-      { k: 'fecha', l: 'Abierto el', t: 'date', half: 1 }, { k: 'kg', l: 'Kilos', t: 'number', half: 1 },
-      { k: 'precio', l: 'Precio (€)', t: 'number', half: 1 }, { k: 'tienda', l: 'Tienda', half: 1 },
-    ],
-    validar: v => !(v.kg > 0) && 'Pon los kilos del saco',
-    guardar: v => {
-      D.comida = { ...D.comida, pienso: v.producto || c.pienso, sacoKg: v.kg, sacoFecha: v.fecha, precio: v.precio || c.precio, tienda: v.tienda || c.tienda, upd: Date.now() };
-      if (v.precio) guardarItem('compras', { fecha: v.fecha, producto: v.producto, kg: v.kg, precio: v.precio, tienda: v.tienda }); else cambio();
-      toast('Saco nuevo apuntado');
-    },
-  });
-}
-function formCompra(x) {
-  const nuevo = !x; x = x || { fecha: hoy(), producto: D.comida.pienso || '', tienda: D.comida.tienda || '' };
-  formulario({
-    titulo: nuevo ? 'Nueva compra' : 'Editar compra', v: x,
-    campos: [
-      { k: 'producto', l: 'Qué', ph: 'Pienso, premios, juguete…' },
-      { k: 'fecha', l: 'Fecha', t: 'date', half: 1 }, { k: 'precio', l: 'Precio (€)', t: 'number', half: 1 },
-      { k: 'kg', l: 'Kilos (si es pienso)', t: 'number', half: 1 }, { k: 'tienda', l: 'Tienda', half: 1 },
-    ],
-    guardar: v => { guardarItem('compras', { ...x, ...v }); toast('Guardado'); },
-    borrar: nuevo ? null : () => borrarItem('compras', x.id),
-  });
-}
 
 /* ---------- documentos y archivos ---------- */
 const idb = (() => {
@@ -1597,10 +1115,6 @@ function lienzo(img, max) {
   const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
   const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
   const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height); return c;
-}
-function recortarCuadrado(img, lado) {
-  const s = Math.min(img.naturalWidth, img.naturalHeight), c = document.createElement('canvas'); c.width = c.height = lado;
-  c.getContext('2d').drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, lado, lado); return c;
 }
 const aBlob = (c, q) => new Promise(r => c.toBlob(r, 'image/jpeg', q));
 const blobA64 = b => new Promise((ok, ko) => { const fr = new FileReader(); fr.onload = () => ok(fr.result.split(',')[1]); fr.onerror = ko; fr.readAsDataURL(b); });

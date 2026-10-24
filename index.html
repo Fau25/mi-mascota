@@ -319,6 +319,29 @@ textarea{min-height:84px;resize:vertical}
 .vac-op .vo-est.pronto{color:var(--ambar)}.vac-op .vo-est.vencido{color:var(--rojo)}
 .vac-op.on{border-color:var(--verde);background:color-mix(in srgb,var(--verde2) 55%,var(--card))}
 .vac-op.apagada{opacity:.55}
+
+/* Salud: franja oscura superior */
+.banda-top{background:var(--banda);color:var(--banda-txt);margin:0 -20px 18px;padding:8px 20px 20px;border-radius:0 0 34px 34px;--tl:color-mix(in srgb,var(--banda-txt) 10%,transparent);--tl2:color-mix(in srgb,var(--banda-txt) 18%,transparent)}
+.banda-top .seg.seg-fija{margin:4px 0 4px}
+.banda-top .seg button{background:var(--tl);color:var(--banda-txt);box-shadow:none}
+.banda-top .seg button.on{background:var(--banda-txt);color:var(--banda);box-shadow:none}
+.banda-top .sec{margin:22px 4px 12px}
+.banda-top .sec h2{color:var(--banda-txt)}
+.banda-top .sec .s{color:var(--banda-txt);opacity:.65}
+.banda-top .f2{margin:0}
+.banda-top .f2-seg{background:var(--tl);box-shadow:none}
+.banda-top .f2-op{color:var(--banda-txt);opacity:.75}
+.banda-top .f2-op.on{background:var(--banda-txt);color:var(--banda);opacity:1}
+.banda-top .vac-cab{color:var(--banda-txt);opacity:.65}
+.banda-top .vac-cab button{color:var(--banda-txt)}
+.banda-top .vac-rejilla{margin-bottom:0}
+.banda-top .vac-op{background:var(--tl);box-shadow:none}
+.banda-top .vac-op .vo-nom{color:var(--banda-txt)}
+.banda-top .vac-op .vo-est{color:var(--banda-txt);opacity:.75}
+.banda-top .vac-op .vo-est b{color:#7FD9A8}
+.banda-top .vac-op .vo-est.vencido{color:#F4A08F;opacity:1}.banda-top .vac-op .vo-est.pronto{color:#F2C878;opacity:1}
+.banda-top .vac-op.on{background:var(--tl2);border-color:var(--banda-txt)}
+.banda-top .vac-op.apagada{opacity:.5}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -395,7 +418,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v16';
+const VERSION = 'v17';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -680,6 +703,11 @@ function renderSalud() {
     if (act.length) h += `<div class="sec"><h2>Activa</h2></div><div class="card">${act.map(f).join('')}</div>`;
     if (ant.length) h += `<div class="sec"><h2>Anteriores</h2></div><div class="card">${ant.map(f).join('')}</div>`;
   }
+  // Parte superior (pestañas + controles del pasaporte) en franja oscura
+  const corte = h.indexOf('<!--fin-top-->');
+  const finSeg = h.indexOf('</div>') + 6;
+  const top = corte >= 0 ? h.slice(0, corte) : h.slice(0, finSeg), resto = corte >= 0 ? h.slice(corte) : h.slice(finSeg);
+  h = `<section class="banda-top">${top}</section>${resto}`;
   $('#v-salud').innerHTML = conIconos(h);
 }
 
@@ -750,7 +778,7 @@ function renderPasaporte() {
     return `<button class="vac-op ${filtroVac === n ? 'on' : ''} ${filtroVac !== 'Todas' && filtroVac !== n ? 'apagada' : ''}" style="--vc:${colorVac(n)}" onclick="filtroVac=filtroVac==='${esc(n)}'?'Todas':'${esc(n)}';render()" aria-pressed="${filtroVac === n}">
       <i></i><span class="vo-nom">${esc(n)}</span><span class="vo-est ${est[0]}">${est[0] === 'ok' ? '<b>✓</b>' : ''}${est[1]}</span>
     </button>`;
-  }).join('') + `</div>`;
+  }).join('') + `</div><!--fin-top-->`;
   if (!lista.length) h += `<div class="card">${vacioHTML('💉', filtroAnio === 'Todos' ? 'No hay vacunas de este tipo.' : `En ${filtroAnio} no hay ${filtroVac === 'Todas' ? 'vacunas apuntadas' : 'dosis de ' + esc(filtroVac).toLowerCase()}. Elige otro año en el desplegable o «Todos los años».`)}</div>`;
   const tarjeta = (v, k) => {
     const [bg, fg] = colorMarca(v.producto + ' ' + (v.laboratorio || ''));

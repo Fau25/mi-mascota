@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F5EFE5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141916" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#E8EFEE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111918" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -15,180 +15,214 @@
 <title>Mi Mascota</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* Estilo «tarjetas flotantes»: fondo verde-gris frío, tarjetas blancas con sombra difusa, verde azulado como único color de marca */
 :root{
-  --bg:#F5EFE5;--card:#FFFCF7;--ink:#22302A;--muted:#6F776F;--line:#E7DFD2;
-  --verde:#2F5D50;--verde2:#E1EBE4;--terra:#C4613A;--terra2:#F6E3D8;
-  --ambar:#9A6514;--ambar2:#FAEFD9;--rojo:#B23A2B;--rojo2:#F7DEDA;
-  --sombra:0 1px 2px rgba(40,30,20,.05),0 6px 18px rgba(40,30,20,.06);
+  --bg:#E8EFEE;--card:#FFFFFF;--ink:#2A3B39;--muted:#8B9B98;--line:#E4ECEA;
+  --verde:#2F6B64;--verde2:#E4EFED;--verde3:#3E8077;--terra:#2F6B64;--terra2:#EAF1EF;
+  --ambar:#B07A1F;--ambar2:#FBF1DE;--rojo:#C2493A;--rojo2:#FBE5E1;
+  --panel:#C9D6D4;--sobre:#FFFFFF;
+  --sombra:0 14px 34px rgba(47,90,85,.10),0 2px 6px rgba(47,90,85,.05);
+  --sombra-btn:0 10px 22px rgba(47,107,100,.30);
+  --r:24px;
+  --f:'Nunito','Avenir Next',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#141916;--card:#1D2420;--ink:#ECE6DA;--muted:#9BA39C;--line:#2C352F;
-  --verde:#8DC2AB;--verde2:#22332B;--terra:#E38A62;--terra2:#3A2A22;
-  --ambar:#E5B460;--ambar2:#352C1C;--rojo:#EE8473;--rojo2:#3B2522;
-  --sombra:none;color-scheme:dark;
+  --bg:#111918;--card:#1A2423;--ink:#E6EEEC;--muted:#8FA19E;--line:#26332F;
+  --verde:#7CC2B6;--verde2:#20302D;--verde3:#5FA79A;--terra:#7CC2B6;--terra2:#20302D;
+  --ambar:#E6BA68;--ambar2:#352C1A;--rojo:#F08A7A;--rojo2:#3A2421;
+  --panel:#24322F;--sobre:#0F1F1C;
+  --sombra:0 10px 28px rgba(0,0,0,.35);--sombra-btn:0 8px 20px rgba(0,0,0,.4);
+  color-scheme:dark;
 }}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
-body{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
-h1,h2,h3,.serif{font-family:Fraunces,Georgia,serif;font-weight:650;letter-spacing:-.01em;margin:0}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--f);-webkit-text-size-adjust:100%}
+body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+h1,h2,h3,.serif{font-family:var(--f);font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:balance}
 button{font:inherit;color:inherit;cursor:pointer}
 a{color:var(--verde)}
+.ic{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.2em;flex:none}
 
-header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;display:flex;align-items:center;gap:10px;max-width:760px;margin:0 auto}
-header.top h1{font-size:27px;flex:1}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:calc(env(safe-area-inset-top) + 12px) 20px 10px;display:flex;align-items:center;gap:12px;max-width:760px;margin:0 auto}
+header.top h1{font-size:24px;flex:1;text-align:center}
 .estado{width:9px;height:9px;border-radius:50%;background:var(--muted);opacity:.35;flex:none}
 .estado.ok{background:var(--verde);opacity:1}
 .estado.sync{background:var(--ambar);opacity:1;animation:lat 1s infinite}
 .estado.error{background:var(--rojo);opacity:1}
 @keyframes lat{50%{opacity:.25}}
-.icon-btn{border:1px solid var(--line);background:var(--card);width:40px;height:40px;border-radius:13px;display:grid;place-items:center;box-shadow:var(--sombra);flex:none}
+.menu-btn{border:0;background:none;width:40px;height:40px;display:grid;place-items:center;color:var(--ink);flex:none}
+.menu-btn svg{width:24px;height:24px}
+.icon-btn{border:0;background:var(--card);width:42px;height:42px;border-radius:50%;display:grid;place-items:center;box-shadow:var(--sombra);flex:none;overflow:hidden;padding:0;color:var(--verde)}
 .icon-btn svg{width:20px;height:20px}
+.icon-btn.avatar{background:var(--verde2) center/cover no-repeat}
 
-main{max-width:760px;margin:0 auto;padding:4px 16px 24px}
-.vista{display:none}.vista.activa{display:block;animation:entra .22s ease}
-@keyframes entra{from{opacity:0;transform:translateY(6px)}}
-.card{background:var(--card);border-radius:20px;padding:14px 16px;box-shadow:var(--sombra);margin-bottom:12px;border:1px solid var(--line)}
-.sec{display:flex;justify-content:space-between;align-items:baseline;margin:22px 2px 9px}
-.sec h2{font-size:19px}
-.link{border:0;background:none;color:var(--verde);font-weight:600;font-size:14.5px;padding:4px 0}
+main{max-width:760px;margin:0 auto;padding:4px 20px 24px}
+.vista{display:none}.vista.activa{display:block;animation:entra .25s ease}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}}
+.card{background:var(--card);border-radius:var(--r);padding:8px 18px;box-shadow:var(--sombra);margin-bottom:14px}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:26px 4px 12px}
+.sec h2{font-size:18px}
+.link{border:0;background:none;color:var(--verde);font-weight:700;font-size:14px;padding:4px 0}
 .s{color:var(--muted);font-size:13.5px}
 
-/* Ficha */
-.hero{display:flex;gap:16px;align-items:center;padding:16px;cursor:pointer;background:linear-gradient(135deg,var(--card),color-mix(in srgb,var(--verde2) 70%,var(--card)))}
-.foto{width:96px;height:96px;border-radius:30px;background:var(--verde2) center/cover no-repeat;display:grid;place-items:center;font-size:44px;flex:none;border:3px solid var(--card);box-shadow:0 4px 14px rgba(0,0,0,.1)}
-.hero h2{font-size:30px;line-height:1.05}
-.hero .s{font-size:14.5px;margin-top:3px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.chip{font-size:12.5px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--ink)}
+/* Ficha estilo «perfil de adopción» */
+.hero{position:relative;margin:4px 0 6px;cursor:pointer}
+.hero-foto{height:250px;border-radius:30px;background:var(--panel) center/cover no-repeat;display:grid;place-items:center;color:color-mix(in srgb,var(--verde) 55%,var(--panel));overflow:hidden;position:relative}
+.hero-foto .silueta{width:150px;height:150px;margin-top:-50px}
+.hero-foto .puntos{position:absolute;bottom:74px;left:50%;transform:translateX(-50%);display:flex;gap:4px}
+.hero-foto .puntos i{width:6px;height:6px;border-radius:3px;background:#fff;opacity:.6}.hero-foto .puntos i:first-child{width:16px;background:var(--verde);opacity:1}
+.hero-card{background:var(--card);border-radius:var(--r);box-shadow:var(--sombra);padding:16px 20px;margin:-62px 14px 0;position:relative}
+.hc-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hc-top h2{font-size:26px}
+.sexo{color:var(--verde);display:grid;place-items:center}.sexo svg{width:24px;height:24px}
+.hc-sub{display:flex;justify-content:space-between;gap:10px;color:var(--ink);font-size:14.5px;margin-top:2px;font-weight:600}
+.hc-sub span:last-child{color:var(--muted);font-weight:600}
+.hc-loc{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:13.5px;margin-top:8px}
+.hc-loc span{display:flex;align-items:center;gap:5px}.hc-loc .ic{color:var(--verde)}
+.foto{width:96px;height:96px;border-radius:30px;background:var(--verde2) center/cover no-repeat;display:grid;place-items:center;flex:none;color:var(--verde)}
+.foto svg{width:56%;height:56%}
+
+/* Categorías como en el buscador */
+.cats{display:flex;gap:12px;overflow-x:auto;margin:18px -20px 0;padding:6px 20px 10px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);font-weight:600;flex:none;padding:0}
+.cat i{width:58px;height:58px;border-radius:18px;background:var(--card);box-shadow:var(--sombra);display:grid;place-items:center;color:var(--verde)}
+.cat i svg{width:28px;height:28px}
+.cat.on i{background:var(--verde);color:var(--sobre);box-shadow:var(--sombra-btn)}
+.cat.on{color:var(--ink)}
 
 /* Filas */
-.fila{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line);cursor:pointer}
+.fila{display:flex;gap:14px;align-items:center;padding:13px 0;border-top:1px solid var(--line);cursor:pointer}
 .fila:first-child{border-top:0}
-.ico{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:19px;background:var(--verde2);flex:none}
+.ico{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:var(--verde2);color:var(--verde);flex:none}
+.ico svg{width:24px;height:24px}
 .ico.terra{background:var(--terra2)}
 .txt{flex:1;min-width:0}
-.t{font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.t{font-weight:700;overflow:hidden;text-overflow:ellipsis}
 .txt .s{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.pill{font-size:12.5px;padding:4px 9px;border-radius:999px;font-weight:650;white-space:nowrap;flex:none}
+.pill{font-size:12px;padding:5px 10px;border-radius:999px;font-weight:800;white-space:nowrap;flex:none}
 .pill.ok{background:var(--verde2);color:var(--verde)}
 .pill.pronto{background:var(--ambar2);color:var(--ambar)}
 .pill.vencido{background:var(--rojo2);color:var(--rojo)}
-.pill.neutro{background:var(--line);color:var(--muted)}
-.vacio{text-align:center;color:var(--muted);padding:22px 12px;font-size:14.5px}
-.vacio b{display:block;font-size:30px;margin-bottom:4px}
+.pill.neutro{background:var(--bg);color:var(--muted)}
+.vacio{text-align:center;color:var(--muted);padding:24px 12px;font-size:14.5px}
+.vacio b{display:grid;place-items:center;width:60px;height:60px;margin:0 auto 10px;border-radius:20px;background:var(--verde2);color:var(--verde)}
+.vacio b svg{width:30px;height:30px}
 
-.seg{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;margin:4px -16px 12px;padding-left:16px;padding-right:16px;scrollbar-width:none}
+.seg{display:flex;gap:8px;overflow-x:auto;margin:6px -20px 14px;padding:4px 20px 10px;scrollbar-width:none}
 .seg::-webkit-scrollbar{display:none}
-.seg button{flex:none;border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;font-size:14.5px}
-.seg button.on{background:var(--verde);color:var(--bg);border-color:var(--verde);font-weight:600}
+.seg button{flex:none;border:0;background:var(--card);padding:10px 16px;border-radius:16px;font-size:14px;font-weight:700;color:var(--muted);box-shadow:var(--sombra)}
+.seg button.on{background:var(--verde);color:var(--sobre);box-shadow:var(--sombra-btn)}
 
-.datos{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;font-size:14.5px}
-.datos dt{color:var(--muted)}.datos dd{margin:0;text-align:right;overflow-wrap:anywhere}
-.contacto{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.datos{display:grid;grid-template-columns:auto 1fr;gap:9px 14px;font-size:14.5px;padding:10px 0}
+.datos dt{color:var(--muted)}.datos dd{margin:0;text-align:right;overflow-wrap:anywhere;font-weight:600}
+.contacto{display:flex;gap:14px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}
 .contacto:first-child{border-top:0}
-.tel{border:0;background:var(--verde2);color:var(--verde);border-radius:12px;padding:8px 12px;font-weight:600;font-size:14px;text-decoration:none;flex:none}
+.tel{border:0;background:var(--verde);color:var(--sobre);border-radius:14px;padding:9px 14px;font-weight:700;font-size:13.5px;text-decoration:none;flex:none;box-shadow:var(--sombra-btn)}
 
-.resumen{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.cifra{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;box-shadow:var(--sombra)}
-.cifra b{display:block;font-family:Fraunces,Georgia,serif;font-size:22px;font-weight:650}
-.cifra span{color:var(--muted);font-size:13px}
+.resumen{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cifra{background:var(--card);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sombra)}
+.cifra b{display:block;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.cifra span{color:var(--muted);font-size:13px;font-weight:600}
+.cifra.oscura{background:var(--verde);color:var(--sobre);box-shadow:var(--sombra-btn)}.cifra.oscura span{color:var(--sobre);opacity:.75}
 
 /* Comida */
-.barra{height:10px;border-radius:6px;background:var(--line);overflow:hidden;margin:10px 0 6px}
+.barra{height:10px;border-radius:6px;background:var(--verde2);overflow:hidden;margin:12px 0 8px}
 .barra i{display:block;height:100%;background:var(--verde);border-radius:6px;transition:width .4s}
 .barra.pronto i{background:var(--ambar)}.barra.vencido i{background:var(--rojo)}
-.grande{font-family:Fraunces,Georgia,serif;font-size:26px;font-weight:650}
-.botones{display:flex;gap:8px;margin-top:12px}
-.botones .btn{padding:11px 12px;font-size:15px}
+.grande{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums}
+.botones{display:flex;gap:10px;margin:14px 0 8px}
+.botones .btn{padding:13px 12px;font-size:15px}
 
 /* Peso */
-.grafica{width:100%;height:auto;display:block}
+.grafica{width:100%;height:auto;display:block;margin-bottom:8px}
 .grafica .area{fill:var(--verde2)}
-.grafica .lin{fill:none;stroke:var(--verde);stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
-.grafica .pt{fill:var(--card);stroke:var(--verde);stroke-width:2}
+.grafica .lin{fill:none;stroke:var(--verde);stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round}
+.grafica .pt{fill:var(--card);stroke:var(--verde);stroke-width:2.2}
 .grafica .rej{stroke:var(--line);stroke-width:1}
 .grafica text{fill:var(--muted);font-size:10px;font-family:inherit}
 
 /* Documentos */
-.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.doc{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;text-align:left;padding:0;box-shadow:var(--sombra)}
-.doc .mini{aspect-ratio:4/3;background:var(--verde2) center/cover no-repeat;display:grid;place-items:center;font-size:36px;position:relative}
-.doc .mini.pdf{background:var(--terra2)}
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.doc{background:var(--card);border:0;border-radius:var(--r);overflow:hidden;text-align:left;padding:8px;box-shadow:var(--sombra)}
+.doc .mini{aspect-ratio:4/3;background:var(--panel) center/cover no-repeat;display:grid;place-items:center;position:relative;border-radius:18px;color:var(--verde)}
+.doc .mini svg{width:40px;height:40px}
+.doc .mini.pdf{background:var(--verde2)}
 .doc .nube{position:absolute;right:7px;top:7px;font-size:11px;background:var(--card);border-radius:8px;padding:2px 6px;color:var(--muted)}
-.doc .pie{padding:8px 11px 10px}
+.doc .pie{padding:8px 6px 4px}
 .doc .t{font-size:14px;white-space:nowrap}
 .doc .s{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+.ajustes-link{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:26px 0 6px;border:0;background:none;color:var(--muted);font-weight:700;font-size:14px;padding:10px}
+.ajustes-link .estado{display:inline-block}
 /* Barra inferior y botón + */
-nav.tabs{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:center;padding:7px 6px calc(7px + env(safe-area-inset-bottom));z-index:6}
-nav.tabs .in{display:flex;width:100%;max-width:560px}
-nav.tabs button{border:0;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;flex:1;padding:4px 0}
-nav.tabs button svg{width:25px;height:25px}
-nav.tabs button.on{color:var(--verde);font-weight:600}
-.fab{position:fixed;right:max(18px,calc(50vw - 362px));bottom:calc(84px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:20px;background:var(--terra);color:#fff;border:0;display:grid;place-items:center;box-shadow:0 8px 20px color-mix(in srgb,var(--terra) 40%,transparent);z-index:6}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;padding:0 14px calc(10px + env(safe-area-inset-bottom));z-index:6;pointer-events:none}
+nav.tabs .in{display:flex;width:100%;max-width:520px;background:var(--card);border-radius:26px;box-shadow:0 12px 34px rgba(30,60,56,.16);padding:8px;pointer-events:auto}
+nav.tabs button{border:0;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;font-weight:700;flex:1;padding:6px 0;border-radius:18px}
+nav.tabs button svg{width:23px;height:23px}
+nav.tabs button.on{color:var(--sobre);background:var(--verde)}
+.fab{position:fixed;right:max(20px,calc(50vw - 360px));bottom:calc(98px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:20px;background:var(--verde);color:var(--sobre);border:0;display:grid;place-items:center;box-shadow:var(--sombra-btn);z-index:6}
 .fab svg{width:28px;height:28px}
 
 /* Hoja de formulario */
-.velo{position:fixed;inset:0;background:rgba(12,16,14,.42);z-index:20;display:none;align-items:flex-end;justify-content:center}
+.velo{position:fixed;inset:0;background:rgba(18,32,30,.40);z-index:20;display:none;align-items:flex-end;justify-content:center}
 .velo.abierto{display:flex}
-.hoja{background:var(--bg);width:100%;max-width:620px;max-height:92vh;max-height:92dvh;overflow:auto;-webkit-overflow-scrolling:touch;border-radius:24px 24px 0 0;padding:8px 18px calc(20px + env(safe-area-inset-bottom));animation:sube .26s cubic-bezier(.2,.8,.2,1)}
+.hoja{background:var(--bg);width:100%;max-width:620px;max-height:92vh;max-height:92dvh;overflow:auto;-webkit-overflow-scrolling:touch;border-radius:30px 30px 0 0;padding:8px 20px calc(20px + env(safe-area-inset-bottom));animation:sube .26s cubic-bezier(.2,.8,.2,1)}
 @keyframes sube{from{transform:translateY(40px);opacity:.4}}
-@media (min-width:700px){.velo{align-items:center}.hoja{border-radius:24px;max-height:86vh}}
-.asa{width:40px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 10px}
+@media (min-width:700px){.velo{align-items:center}.hoja{border-radius:30px;max-height:86vh}}
+.asa{width:40px;height:5px;border-radius:3px;background:var(--panel);margin:4px auto 12px}
 .hoja-tit{display:flex;align-items:center;gap:10px;margin-bottom:4px}
 .hoja-tit h3{font-size:22px;flex:1}
-.cerrar{border:0;background:var(--line);width:32px;height:32px;border-radius:50%;font-size:14px;color:var(--muted)}
-.subt{font-family:Fraunces,Georgia,serif;font-size:16px;margin:22px 2px 0;color:var(--verde)}
-label{display:block;font-size:13px;color:var(--muted);margin:12px 2px 5px;font-weight:600}
-input,select,textarea{width:100%;font:inherit;font-size:16px;padding:11px 12px;border-radius:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);outline:none;min-height:46px}
+.cerrar{border:0;background:var(--card);width:34px;height:34px;border-radius:50%;font-size:14px;color:var(--muted);box-shadow:var(--sombra)}
+.subt{font-size:15px;font-weight:800;margin:24px 4px 0;color:var(--verde)}
+label{display:block;font-size:12.5px;color:var(--muted);margin:12px 4px 6px;font-weight:700}
+input,select,textarea{width:100%;font:inherit;font-size:16px;padding:12px 14px;border-radius:16px;border:1.5px solid transparent;background:var(--card);color:var(--ink);outline:none;min-height:48px;box-shadow:0 4px 14px rgba(47,90,85,.06)}
 input:focus,select:focus,textarea:focus{border-color:var(--verde)}
 input[type=date]{-webkit-appearance:none;appearance:none;display:block}
 textarea{min-height:84px;resize:vertical}
-.dos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .dos>.campo{min-width:0}
-.btn{border:0;border-radius:15px;padding:14px 16px;font-weight:650;background:var(--verde);color:var(--bg);width:100%;text-align:center;text-decoration:none;display:block}
-.btn.sec{background:var(--card);color:var(--ink);border:1px solid var(--line)}
-.btn.peligro{background:none;color:var(--rojo)}
-.acciones{display:grid;gap:8px;margin-top:20px}
-.rapido{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
-.rapido button{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:16px 12px;text-align:left;display:flex;flex-direction:column;gap:6px;font-weight:600}
-.rapido button span{font-size:26px}
+.btn{border:0;border-radius:18px;padding:15px 16px;font-weight:800;background:var(--verde);color:var(--sobre);width:100%;text-align:center;text-decoration:none;display:block;box-shadow:var(--sombra-btn)}
+.btn.sec{background:var(--card);color:var(--verde);box-shadow:var(--sombra)}
+.btn.peligro{background:none;color:var(--rojo);box-shadow:none}
+.acciones{display:grid;gap:10px;margin-top:22px}
+.rapido{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.rapido button{border:0;background:var(--card);border-radius:22px;padding:16px 14px;text-align:left;display:flex;flex-direction:column;gap:10px;font-weight:700;box-shadow:var(--sombra)}
+.rapido button span{width:44px;height:44px;border-radius:14px;background:var(--verde2);color:var(--verde);display:grid;place-items:center}
+.rapido button span svg{width:24px;height:24px}
 .fotoedit{display:flex;align-items:center;gap:14px;margin:6px 0 2px}
-.fotoedit .foto{width:76px;height:76px;border-radius:24px;font-size:34px}
-.nota{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14px;color:var(--muted);margin-top:10px}
-.nota ol{margin:6px 0 0;padding-left:20px}
+.fotoedit .foto{width:76px;height:76px;border-radius:24px}
+.nota{background:var(--card);border-radius:18px;padding:12px 14px;font-size:14px;color:var(--muted);margin-top:12px;box-shadow:var(--sombra)}
 .adjuntos{margin-top:4px}
 
 /* Visor */
-.visor{position:fixed;inset:0;background:#0c0e0d;z-index:30;display:none;flex-direction:column;color:#eee}
+.visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
 .visor .barra-v{display:flex;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top) + 8px) 12px 8px}
-.visor .barra-v b{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.visor .barra-v button,.visor .barra-v a{border:0;background:#262b28;color:#eee;border-radius:12px;padding:8px 12px;font-size:14px;text-decoration:none;flex:none}
+.visor .barra-v b{flex:1;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.visor .barra-v button,.visor .barra-v a{border:0;background:#24302e;color:#eee;border-radius:12px;padding:8px 12px;font-size:14px;text-decoration:none;flex:none}
 .visor .cont{flex:1;display:grid;place-items:center;overflow:auto;min-height:0}
 .visor img{max-width:100%;max-height:100%;object-fit:contain}
 .visor iframe{width:100%;height:100%;border:0;background:#fff}
 .visor .msg{color:#bbb;text-align:center;padding:30px;font-size:15px}
 
-.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 12px);transform:translate(-50%,-80px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;font-size:14.5px;z-index:40;transition:transform .25s;max-width:90vw;text-align:center}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 12px);transform:translate(-50%,-80px);background:var(--verde);color:var(--sobre);padding:11px 18px;border-radius:16px;font-size:14.5px;font-weight:700;z-index:40;transition:transform .25s;max-width:90vw;text-align:center;box-shadow:var(--sombra-btn)}
 .toast.ver{transform:translate(-50%,0)}
 
 @media (min-width:820px){
-  .doscol{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+  .doscol{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+  .hero-foto{height:300px}
 }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 
 <header class="top">
   <h1 id="titulo">Mi Mascota</h1>
-  <span class="estado" id="estado" title="Sincronización"></span>
-  <button class="icon-btn" onclick="abrirAjustes()" aria-label="Ajustes">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
-  </button>
+  <span class="estado" id="estado" hidden></span>
 </header>
 
 <main>
@@ -224,7 +258,7 @@ textarea{min-height:84px;resize:vertical}
 
 <script>
 'use strict';
-const VERSION = 'v1';
+const VERSION = 'v2';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -250,6 +284,40 @@ const ext = m => m === 'application/pdf' ? '.pdf' : m && m.startsWith('image/') 
 
 let toastT;
 function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('ver'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('ver'), 2600); }
+
+
+/* ---------- iconos de línea ---------- */
+const SVG = {
+  perro: '<path d="M8 4.5 4.5 6 3.5 11l2.5 1.2M16 4.5 19.5 6l1 5-2.5 1.2"/><path d="M8 4.5c1.2-.6 2.6-1 4-1s2.8.4 4 1l2 7.7c0 4.3-2.7 7.3-6 7.3s-6-3-6-7.3z"/><circle cx="9.6" cy="11" r=".6" fill="currentColor"/><circle cx="14.4" cy="11" r=".6" fill="currentColor"/><path d="M10.6 14.6h2.8L12 16z" fill="currentColor"/><path d="M12 16v1.3"/>',
+  jeringa: '<path d="m18 2 4 4M15 5l4 4M17 7 8.5 15.5 5 16l.5-3.5L14 4"/><path d="m9.5 8.5 2 2M7 11l2 2M2 22l3.5-3.5"/>',
+  pastilla: '<rect x="2.6" y="8" width="18.8" height="8" rx="4" transform="rotate(-45 12 12)"/><path d="m8.5 8.5 7 7"/>',
+  escudo: '<path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>',
+  esteto: '<path d="M5 3v6a5 5 0 0 0 10 0V3"/><path d="M10 14v2.5a4.5 4.5 0 0 0 9 0V14"/><circle cx="19" cy="11.5" r="2.2"/><path d="M4 3h2M14 3h2"/>',
+  cuenco: '<path d="M3 11h18a9 7 0 0 1-18 0z"/><path d="M8 7.5c1-.9 2.4-1.4 4-1.4s3 .5 4 1.4"/><path d="M6 21h12"/>',
+  tarta: '<path d="M4 21h16M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7"/><path d="M5 16c1.5 1 2.5 1 3.5 0s2.5-1 3.5 0 2.5 1 3.5 0 2-1 3.5 0M12 12V8"/><path d="M12 3.5c.8 1 1.2 1.8 0 3-1.2-1.2-.8-2 0-3z"/>',
+  gota: '<path d="M12 3s6.5 7 6.5 11.3A6.5 6.5 0 0 1 5.5 14.3C5.5 10 12 3 12 3z"/><path d="M9 14.5a3 3 0 0 0 3 3"/>',
+  bascula: '<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M8 9.5a5.5 5.5 0 0 1 8 0"/><path d="m12 12 1.6-2.4"/>',
+  carro: '<path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/>',
+  doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+  calendario: '<rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><circle cx="12" cy="15" r="1" fill="currentColor"/>',
+  carpeta: '<path d="M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/>',
+  libro: '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/><circle cx="12" cy="10" r="3"/>',
+  matraz: '<path d="M9.5 3h5M10.5 3v6L5 18.5A1.7 1.7 0 0 0 6.5 21h11a1.7 1.7 0 0 0 1.5-2.5L13.5 9V3"/><path d="M7.5 15h9"/>',
+  informe: '<rect x="5" y="4.5" width="14" height="17" rx="2.5"/><path d="M9 3h6v3H9zM9 11h6M9 15h4"/>',
+  factura: '<path d="M6 3h12v18l-2.5-1.5L13 21l-2.5-1.5L8 21l-2-1.5z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+  camara: '<path d="M4 8h3l1.6-2.5h6.8L17 8h3a1 1 0 0 1 1 1v9.5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.3" r="3.6"/>',
+  clinica: '<path d="M4 21V8l8-4.5L20 8v13M2.5 21h19"/><path d="M12 9.5v6M9 12.5h6"/>',
+  urgencias: '<path d="M6.5 18v-5.5a5.5 5.5 0 0 1 11 0V18M4.5 18h15v3h-15z"/><path d="M12 3v2M4 6.5l1.4 1.4M20 6.5l-1.4 1.4"/>',
+  imagen: '<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m20.5 16-5-5-8 8.5"/>',
+  clip: '<path d="m20.5 11.5-8.3 8.3a5 5 0 0 1-7-7l8.3-8.3a3.3 3.3 0 0 1 4.7 4.7l-8.3 8.3a1.7 1.7 0 0 1-2.4-2.4l7.7-7.6"/>',
+  chip: '<path d="M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>',
+  macho: '<circle cx="10" cy="14" r="5.5"/><path d="M14 10l6-6M15 4h5v5"/>',
+  hembra: '<circle cx="12" cy="9" r="5.5"/><path d="M12 14.5V21M9 18h6"/>',
+};
+const ic = (k, c = 'ic') => `<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVG[k] || ''}</svg>`;
+const EMOJI = { '🐶': 'perro', '💉': 'jeringa', '💊': 'pastilla', '🛡️': 'escudo', '🩺': 'esteto', '🥣': 'cuenco', '🎂': 'tarta', '💧': 'gota', '⚖️': 'bascula', '📄': 'doc', '🗓️': 'calendario', '🛒': 'carro', '📁': 'carpeta', '📘': 'libro', '🧪': 'matraz', '📋': 'informe', '🧾': 'factura', '📷': 'camara', '🏥': 'clinica', '🚨': 'urgencias', '🖼️': 'imagen', '📎': 'clip' };
+const RE_EMOJI = new RegExp(Object.keys(EMOJI).map(e => e.replace(/[️]/g, '\\uFE0F?')).join('|'), 'gu');
+const conIconos = h => h.replace(RE_EMOJI, m => ic(EMOJI[m] || EMOJI[m + '️'] || EMOJI[m.replace('️', '')]));
 
 /* ---------- datos ---------- */
 const LISTAS = ['salud', 'consultas', 'medicacion', 'compras', 'peso', 'docs'];
@@ -385,6 +453,7 @@ function accionFab() {
 
 /* ---------- pintar ---------- */
 function render() {
+  const av = $('#avatar'); if (av) { av.style.backgroundImage = D.perfil.foto ? `url('${D.perfil.foto}')` : ''; av.innerHTML = D.perfil.foto ? '' : ic('perro'); }
   $('#titulo').textContent = TITULOS[tab] || (D.perfil.nombre ? D.perfil.nombre : 'Mi Mascota');
   ({ inicio: renderInicio, salud: renderSalud, comida: renderComida, peso: renderPeso, docs: renderDocs })[tab]();
 }
@@ -401,28 +470,24 @@ function renderInicio() {
     + vivos('salud').filter(c => (c.fecha || '').startsWith(anio)).reduce((s, c) => s + (Number(c.coste) || 0), 0);
   const gCom = vivos('compras').filter(c => (c.fecha || '').startsWith(anio)).reduce((s, c) => s + (Number(c.precio) || 0), 0);
 
-  let h = `<div class="card hero" onclick="editarPerfil()">
-    <div class="foto" style="${p.foto ? `background-image:url('${p.foto}')` : ''}">${p.foto ? '' : '🐶'}</div>
-    <div class="txt"><h2>${esc(p.nombre || 'Tu perro')}</h2>
-      <div class="s">${[p.raza, edad(p.nacimiento)].filter(Boolean).map(esc).join(' · ') || 'Toca aquí para rellenar su ficha'}</div>
-      <div class="chips">${ult ? `<span class="chip">⚖️ ${num(ult.kg)} kg</span>` : ''}${p.sexo ? `<span class="chip">${esc(p.sexo)}</span>` : ''}${p.chip ? `<span class="chip">Chip ···${esc(String(p.chip).slice(-4))}</span>` : ''}</div>
+  const sexoIc = p.sexo === 'Hembra' ? ic('hembra') : p.sexo === 'Macho' ? ic('macho') : '';
+  let h = `<div class="hero" onclick="editarPerfil()">
+    <div class="hero-foto" style="${p.foto ? `background-image:url('${p.foto}')` : ''}">${p.foto ? '' : ic('perro', 'silueta')}</div>
+    <div class="hero-card">
+      <div class="hc-top"><h2>${esc(p.nombre || 'Tu perro')}</h2><span class="sexo">${sexoIc}</span></div>
+      <div class="hc-sub"><span>${esc(p.raza || 'Toca para rellenar su ficha')}</span><span>${esc(edad(p.nacimiento))}</span></div>
+      ${(ult || p.chip) ? `<div class="hc-loc">${ult ? `<span>${ic('bascula')} ${num(ult.kg)} kg</span>` : ''}${p.chip ? `<span>${ic('chip')} Chip ···${esc(String(p.chip).slice(-4))}</span>` : ''}</div>` : ''}
     </div></div>`;
-
+  const pend = av.filter(a => !a.cumple && diasHasta(a.fecha) <= 14).length;
+  h += `<div class="cats">${[['salud', 'vacunas', 'Vacunas', 'jeringa'], ['salud', 'parasitos', 'Parásitos', 'pastilla'], ['salud', 'consultas', 'Consultas', 'esteto'], ['comida', '', 'Comida', 'cuenco'], ['peso', '', 'Peso', 'bascula'], ['docs', '', 'Papeles', 'carpeta']].map(([t, sub, n, i], k) => `<button class="cat ${k === 0 ? 'on' : ''}" onclick="irA('${t}'${sub ? `,'${sub}'` : ''})"><i>${ic(i)}</i>${n}</button>`).join('')}</div>`;
   h += `<div class="sec"><h2>Próximo</h2></div><div class="card">`;
   h += av.length ? av.slice(0, 6).map(a => fila({ ico: a.ico, terra: a.terra, t: a.titulo, s: a.cumple ? a.sub : `${a.sub} · ${fmt(a.fecha)}`, der: a.cumple ? `<span class="pill neutro">${diasHasta(a.fecha) === 0 ? '¡hoy!' : 'en ' + diasHasta(a.fecha) + ' días'}</span>` : pillFecha(a.fecha), abrir: a.abrir })).join('')
     : vacioHTML('🗓️', 'Cuando apuntes una vacuna o un antiparasitario con su próxima fecha, aparecerá aquí.');
   h += `</div>`;
 
-  if (meds.length) {
-    h += `<div class="sec"><h2>En tratamiento</h2></div><div class="card">` + meds.map(m => fila({ ico: '💧', t: m.nombre, s: [m.dosis, m.frecuencia, m.fin ? 'hasta el ' + fmt(m.fin) : 'sin fecha de fin'].filter(Boolean).join(' · '), abrir: `formMed(D.medicacion.find(x=>x.id==='${m.id}'))` })).join('') + `</div>`;
-  }
-
-  h += `<div class="doscol"><div>`;
   h += `<div class="sec"><h2>Última consulta</h2>${cons.length ? `<button class="link" onclick="irA('salud','consultas')">Ver todas</button>` : ''}</div><div class="card">`;
   h += cons.length ? filaConsulta(cons[0]) : vacioHTML('🩺', 'Aún no has apuntado ninguna visita al veterinario.');
-  h += `</div></div><div>`;
-  h += `<div class="sec"><h2>Gastos ${anio}</h2></div><div class="resumen"><div class="cifra"><b>${euros(gVet)}</b><span>Veterinario</span></div><div class="cifra"><b>${euros(gCom)}</b><span>Comida</span></div></div>`;
-  h += `</div></div>`;
+  h += `</div>`;
 
   const contactos = [];
   if (p.clinica || p.vet) contactos.push({ e: '🏥', t: p.clinica || p.vet, s: [p.clinica ? p.vet : '', p.dirVet].filter(Boolean).join(' · '), tel: p.telVet });
@@ -432,9 +497,11 @@ function renderInicio() {
     h += `<div class="sec"><h2>Contactos</h2></div><div class="card">` + contactos.map(c => `<div class="contacto"><div class="ico">${c.e}</div><div class="txt"><div class="t">${esc(c.t)}</div>${c.s ? `<div class="s">${esc(c.s)}</div>` : ''}</div>${c.tel ? `<a class="tel" href="tel:${esc(String(c.tel).replace(/\s/g, ''))}">Llamar</a>` : ''}</div>`).join('') + `</div>`;
   }
 
-  const datos = [['Nacimiento', fmt(p.nacimiento)], ['Raza', p.raza], ['Color', p.color], ['Microchip', p.chip], ['Pasaporte', p.pasaporte], ['Esterilizado', p.esterilizado], ['Alergias', p.alergias]].filter(x => x[1]);
+  const datos = [['Nacimiento', fmt(p.nacimiento)], ['Raza', p.raza], ['Color', p.color], ['Microchip', p.chip], ['Pasaporte', p.pasaporte], ['ADN canino', p.adn], ['Esterilizado', p.esterilizado], ['Alergias', p.alergias]].filter(x => x[1]);
   if (datos.length) h += `<div class="sec"><h2>Ficha</h2><button class="link" onclick="editarPerfil()">Editar</button></div><div class="card"><dl class="datos">${datos.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl></div>`;
-  $('#v-inicio').innerHTML = h;
+  h += `<button class="ajustes-link" onclick="abrirAjustes()"><span class="estado-txt" id="estado-txt"></span>Ajustes y sincronización</button>`;
+  $('#v-inicio').innerHTML = conIconos(h);
+  pintarEstado();
 }
 
 const SUBS = [['vacunas', 'Vacunas'], ['parasitos', 'Antiparasitarios'], ['consultas', 'Consultas'], ['medicacion', 'Medicación']];
@@ -473,7 +540,7 @@ function renderSalud() {
     if (act.length) h += `<div class="sec"><h2>Activa</h2></div><div class="card">${act.map(f).join('')}</div>`;
     if (ant.length) h += `<div class="sec"><h2>Anteriores</h2></div><div class="card">${ant.map(f).join('')}</div>`;
   }
-  $('#v-salud').innerHTML = h;
+  $('#v-salud').innerHTML = conIconos(h);
 }
 
 function renderComida() {
@@ -495,7 +562,7 @@ function renderComida() {
   if (c.premios || c.notas) h += `<div class="card">${c.premios ? `<div class="t">Premios y extras</div><div class="s" style="white-space:pre-wrap;margin-bottom:8px">${esc(c.premios)}</div>` : ''}${c.notas ? `<div class="t">Notas</div><div class="s" style="white-space:pre-wrap">${esc(c.notas)}</div>` : ''}</div>`;
   const comp = vivos('compras').sort(porFechaDesc);
   h += `<div class="sec"><h2>Compras</h2></div><div class="card">${comp.length ? comp.map(x => fila({ ico: '🛒', terra: 1, t: x.producto || 'Compra', s: [fmt(x.fecha), x.kg ? num(x.kg) + ' kg' : '', x.tienda].filter(Boolean).join(' · '), der: x.precio ? `<span class="pill neutro">${euros(x.precio)}</span>` : '', abrir: `formCompra(D.compras.find(y=>y.id==='${x.id}'))` })).join('') : vacioHTML('🛒', 'Apunta lo que compras (pienso, premios, juguetes) para llevar el gasto.')}</div>`;
-  $('#v-comida').innerHTML = h;
+  $('#v-comida').innerHTML = conIconos(h);
 }
 
 function grafica(ps) {
@@ -521,7 +588,7 @@ function renderPeso() {
     h += `<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px"><div><div class="s">Último peso · ${fmt(ult.fecha)}</div><div class="grande" style="font-size:34px">${num(ult.kg)} kg</div></div>${prev ? `<span class="pill ${Math.abs(dif) < .05 ? 'neutro' : 'ok'}">${dif > 0 ? '+' : ''}${num(Math.round(dif * 100) / 100)} kg</span>` : ''}</div>${grafica(ps.slice(-60))}</div>`;
   }
   h += `<div class="sec"><h2>Registros</h2></div><div class="card">${ps.length ? ps.slice().reverse().map(p => fila({ ico: '⚖️', t: num(p.kg) + ' kg', s: [fmt(p.fecha), p.nota].filter(Boolean).join(' · '), abrir: `formPeso(D.peso.find(x=>x.id==='${p.id}'))` })).join('') : vacioHTML('⚖️', 'Apunta su peso de vez en cuando (en casa o en el veterinario) y verás la evolución.')}</div>`;
-  $('#v-peso').innerHTML = h;
+  $('#v-peso').innerHTML = conIconos(h);
 }
 
 function tarjetaDoc(d) {
@@ -535,11 +602,11 @@ function renderDocs() {
   let h = usadas.length > 1 ? `<div class="seg">${['Todos', ...usadas].map(c => `<button class="${filtroDoc === c ? 'on' : ''}" onclick="filtroDoc='${c}';render()">${c}</button>`).join('')}</div>` : '<div style="height:6px"></div>';
   const L = filtroDoc === 'Todos' ? todos : todos.filter(d => d.categoria === filtroDoc);
   h += L.length ? `<div class="rejilla">${L.map(tarjetaDoc).join('')}</div>` : `<div class="card">${vacioHTML('📁', 'Guarda aquí el pasaporte, la cartilla, analíticas, facturas o el seguro. Pulsa + para hacer una foto o elegir un PDF.')}</div>`;
-  $('#v-docs').innerHTML = h;
+  $('#v-docs').innerHTML = conIconos(h);
 }
 
 /* ---------- hoja y formularios ---------- */
-function abrirHoja(h) { $('#hoja').innerHTML = h; $('#velo').classList.add('abierto'); $('#hoja').scrollTop = 0; }
+function abrirHoja(h) { $('#hoja').innerHTML = conIconos(h); $('#velo').classList.add('abierto'); $('#hoja').scrollTop = 0; }
 function cerrarHoja() { $('#velo').classList.remove('abierto'); $('#hoja').innerHTML = ''; }
 $('#velo').addEventListener('click', e => { if (e.target.id === 'velo') cerrarHoja(); });
 
@@ -600,13 +667,13 @@ function editarPerfil() {
   let foto = p.foto || '';
   formulario({
     titulo: 'Ficha', v: p,
-    html: `<div class="fotoedit"><div class="foto" id="fprev" style="${foto ? `background-image:url('${foto}')` : ''}">${foto ? '' : '🐶'}</div><div><button type="button" class="btn sec" style="padding:10px 14px" onclick="$('#ffoto').click()">${foto ? 'Cambiar foto' : 'Añadir foto'}</button><input type="file" id="ffoto" accept="image/*" hidden></div></div>`,
+    html: `<div class="fotoedit"><div class="foto" id="fprev" style="${foto ? `background-image:url('${foto}')` : ''}">${foto ? '' : ic('perro')}</div><div><button type="button" class="btn sec" style="padding:10px 14px" onclick="$('#ffoto').click()">${foto ? 'Cambiar foto' : 'Añadir foto'}</button><input type="file" id="ffoto" accept="image/*" hidden></div></div>`,
     campos: [
       { k: 'nombre', l: 'Nombre', ph: 'Nombre del perro' },
       { k: 'raza', l: 'Raza', half: 1 }, { k: 'sexo', l: 'Sexo', t: 'sel', op: ['', 'Macho', 'Hembra'], half: 1 },
       { k: 'nacimiento', l: 'Fecha de nacimiento', t: 'date', half: 1 }, { k: 'color', l: 'Color / capa', half: 1 },
       { k: 'chip', l: 'Microchip', half: 1 }, { k: 'pasaporte', l: 'Nº de pasaporte', half: 1 },
-      { k: 'esterilizado', l: 'Esterilizado', t: 'sel', op: ['', 'Sí', 'No'] },
+      { k: 'adn', l: 'Nº de ADN canino', half: 1 }, { k: 'esterilizado', l: 'Esterilizado', t: 'sel', op: ['', 'Sí', 'No'], half: 1 },
       { k: 'alergias', l: 'Alergias o problemas de salud', t: 'area', ph: 'Nada conocido' },
       { t: 'sep', l: 'Veterinario' },
       { k: 'clinica', l: 'Clínica', half: 1 }, { k: 'vet', l: 'Veterinario/a', half: 1 },
@@ -621,7 +688,7 @@ function editarPerfil() {
     iniciar: () => {
       $('#ffoto').onchange = async e => {
         const file = e.target.files[0]; if (!file) return;
-        try { const img = await cargarImagen(file); foto = recortarCuadrado(img, 360).toDataURL('image/jpeg', .82); const el = $('#fprev'); el.style.backgroundImage = `url('${foto}')`; el.textContent = ''; }
+        try { const img = await cargarImagen(file); foto = recortarCuadrado(img, 360).toDataURL('image/jpeg', .82); const el = $('#fprev'); el.style.backgroundImage = `url('${foto}')`; el.innerHTML = ''; }
         catch { toast('No se pudo leer la foto'); }
       };
     },
@@ -875,7 +942,9 @@ function cerrarVisor() { $('#visor').classList.remove('abierto'); $('#visor-cont
 
 /* ---------- sincronización con Google (Apps Script) ---------- */
 let syncTimer = null, sincronizando = false, otraVez = false;
-function estado(e) { $('#estado').className = 'estado ' + (e || ''); }
+let estadoActual = '';
+function estado(e) { estadoActual = e || ''; $('#estado').className = 'estado ' + estadoActual; pintarEstado(); }
+function pintarEstado() { const el = $('#estado-txt'); if (el) el.className = 'estado ' + estadoActual; }
 function programarSync(ms = 1500) { clearTimeout(syncTimer); if (CFG.url) syncTimer = setTimeout(() => sincronizar(), ms); }
 async function api(accion, extra = {}) {
   const r = await fetch(CFG.url, { method: 'POST', body: JSON.stringify({ clave: CFG.clave, accion, ...extra }) });

@@ -216,6 +216,17 @@ textarea{min-height:84px;resize:vertical}
 .estado-sync.mal{background:var(--rojo2)}.estado-sync.mal b{color:var(--rojo)}.estado-sync.mal span{color:var(--ink)}
 
 /* Pasaporte de vacunas */
+.filtros-pas{display:grid;gap:8px;margin:-4px -20px 14px}
+.chips-f{display:flex;gap:7px;overflow-x:auto;padding:2px 20px 4px;scrollbar-width:none}
+.chips-f::-webkit-scrollbar{display:none}
+.chips-f button{flex:none;border:0;border-radius:13px;padding:8px 13px;font-weight:800;font-size:14px;background:var(--card);color:var(--ink);box-shadow:var(--sombra);display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums}
+.chips-f button small{font-size:11px;font-weight:800;color:var(--muted);background:var(--bg);border-radius:8px;padding:1px 6px}
+.chips-f button.on{background:var(--verde);color:var(--sobre);box-shadow:var(--sombra-btn)}
+.chips-f button.on small{background:color-mix(in srgb,var(--sobre) 20%,transparent);color:var(--sobre)}
+.chips-f.vacs button{font-weight:700;font-size:13.5px;padding:7px 12px;border-radius:999px}
+.anio-tit{display:flex;align-items:center;gap:10px;margin:20px 4px 10px;font-weight:800;font-size:15px;color:var(--verde)}
+.anio-tit::after{content:"";flex:1;height:1px;background:var(--line)}
+
 .pas-estados{display:flex;gap:12px;overflow-x:auto;margin:0 -20px;padding:2px 20px 12px;scroll-snap-type:x mandatory;scrollbar-width:none}
 .pas-estados::-webkit-scrollbar{display:none}
 .pas-estado{flex:0 0 min(84%,330px);scroll-snap-align:start;text-align:left;border:2px solid transparent;background:var(--card);border-radius:var(--r);padding:14px 16px 12px;box-shadow:var(--sombra)}
@@ -337,7 +348,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v11';
+const VERSION = 'v12';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -627,9 +638,9 @@ function renderSalud() {
 
 
 /* ---------- pasaporte de vacunas ---------- */
-let filtroVac = 'Todas';
+let filtroVac = 'Todas', filtroAnio = '';
 const MARCAS = [
-  [/eurican/i, '#C8202F', '#fff'], [/rabigen|virbac/i, '#1F5FA6', '#fff'], [/versiguard|zoetis|vanguard/i, '#F4F1EA', '#B3262E'],
+  [/eurican.*pneumo/i, '#F2B6CF', '#5A1E3A'], [/eurican.*(dappi|lmulti)/i, '#2D5C9A', '#fff'], [/letifend|leti\b/i, '#3E8FCF', '#fff'], [/canigen/i, '#2E8B3E', '#fff'], [/eurican/i, '#C8202F', '#fff'], [/rabigen|virbac/i, '#1F5FA6', '#fff'], [/versiguard|zoetis|vanguard/i, '#F4F1EA', '#B3262E'],
   [/nobivac|msd/i, '#0E7C7B', '#fff'], [/canigen/i, '#2C6E3F', '#fff'], [/letifend|canileish/i, '#6B3FA0', '#fff'],
 ];
 const colorMarca = t => { for (const [re, bg, fg] of MARCAS) if (re.test(t || '')) return [bg, fg]; return ['var(--verde)', 'var(--sobre)']; };
@@ -668,7 +679,7 @@ function renderPasaporte() {
     const total = hasta && ult.fecha ? Math.max(1, diasEntre(ult.validaDesde || ult.fecha, hasta)) : 1;
     const pct = d === null ? 0 : Math.max(0, Math.min(100, d / total * 100));
     const est = d === null ? ['neutro', 'Sin fecha'] : d < 0 ? ['vencido', 'Caducada'] : d <= 30 ? ['pronto', `Renovar en ${d} d`] : ['ok', 'En vigor'];
-    return `<button class="pas-estado ${filtroVac === n ? 'on' : ''}" onclick="filtroVac=filtroVac==='${esc(n)}'?'Todas':'${esc(n)}';render()">
+    return `<button class="pas-estado ${filtroVac === n ? 'on' : ''}" onclick="filtroVac=filtroVac==='${esc(n)}'?'Todas':'${esc(n)}';filtroAnio='';render()">
       <div class="pe-top"><b>${esc(n)}</b><span class="pill ${est[0]}">${est[1]}</span></div>
       <div class="pe-hasta">${hasta ? `Válida hasta <strong>${fmt(hasta)}</strong>` : 'Sin fecha de validez'}</div>
       <div class="barra ${est[0] === 'vencido' ? 'vencido' : est[0] === 'pronto' ? 'pronto' : ''}"><i style="width:${pct}%"></i></div>
@@ -676,26 +687,39 @@ function renderPasaporte() {
       <div class="pe-pie">${grupos[n].length} ${grupos[n].length === 1 ? 'dosis' : 'dosis'} · desde ${aFecha(grupos[n].at(-1).fecha).getFullYear()}</div>
     </button>`;
   }).join('') + `</div>`;
-  // Hoja del pasaporte
-  const lista = filtroVac === 'Todas' ? vac : grupos[filtroVac];
-  h += `<div class="sec"><h2>${filtroVac === 'Todas' ? 'Pasaporte' : esc(filtroVac)}</h2><span class="s">${lista.length} ${lista.length === 1 ? 'registro' : 'registros'}</span></div>`;
-  h += `<div class="pas-hoja">` + lista.map((v, k) => {
+  // Hoja del pasaporte: filtros por vacuna y por año
+  const porVac = filtroVac === 'Todas' ? vac : (grupos[filtroVac] || []);
+  const anioDe = v => (v.fecha || '').slice(0, 4);
+  const anios = [...new Set(porVac.map(anioDe).filter(Boolean))].sort().reverse();
+  if (filtroAnio !== 'Todos' && !anios.includes(filtroAnio)) filtroAnio = anios[0] || 'Todos';
+  const lista = filtroAnio === 'Todos' ? porVac : porVac.filter(v => anioDe(v) === filtroAnio);
+  h += `<div class="sec"><h2>Pasaporte</h2><span class="s">${lista.length} ${lista.length === 1 ? 'vacunación' : 'vacunaciones'}</span></div>`;
+  h += `<div class="filtros-pas">
+    <div class="chips-f" role="tablist" aria-label="Año">${[...anios, 'Todos'].map(a => `<button class="${filtroAnio === a ? 'on' : ''}" onclick="filtroAnio='${a}';render()">${a}<small>${a === 'Todos' ? porVac.length : porVac.filter(v => anioDe(v) === a).length}</small></button>`).join('')}</div>
+    <div class="chips-f vacs" role="tablist" aria-label="Vacuna">${['Todas', ...nombres].map(n => `<button class="${filtroVac === n ? 'on' : ''}" onclick="filtroVac='${esc(n)}';render()">${esc(n)}<small>${n === 'Todas' ? vac.length : grupos[n].length}</small></button>`).join('')}</div>
+  </div>`;
+  const tarjeta = (v, k) => {
     const [bg, fg] = colorMarca(v.producto + ' ' + (v.laboratorio || ''));
-    const vigente = v.proxima && diasHasta(v.proxima) >= 0 && (!v.validaDesde || diasHasta(v.validaDesde) <= 0);
+    const vigente = v.proxima && diasHasta(v.proxima) >= 0 && (!v.validaDesde || diasHasta(v.validaDesde) <= 0) && diasHasta(v.fecha) <= 0;
     const peg = v.fotoPeg
       ? `<div class="peg foto" style="background-image:url('${v.fotoPeg}')"></div>`
       : `<div class="peg" style="--pc:${bg};--pf:${fg}"><div class="peg-top"><span class="peg-marca">${esc(v.producto || v.nombre || 'Vacuna')}</span>${v.laboratorio ? `<span class="peg-lab">${esc(v.laboratorio)}</span>` : ''}</div><div class="peg-pie"><span>Lote</span><b>${esc(v.lote || '—')}</b><span>CAD</span><b>${esc(v.caducidad || '—')}</b></div></div>`;
+    const filas = v.validaDesde
+      ? [['Vacunación', v.fecha], ['Válida desde', v.validaDesde], ['Válida hasta', v.proxima]]
+      : [['Vacunación', v.fecha], ['Válida hasta', v.proxima]];
     return `<button class="pas-item ${vigente ? 'vigente' : ''}" onclick="formSalud(D.salud.find(x=>x.id==='${v.id}'))">
       ${peg}
-      <ol class="pas-fechas">
-        <li><i>1</i><span>Vacunación</span><b>${fmtNum(v.fecha)}</b></li>
-        <li><i>2</i><span>Válida desde</span><b>${fmtNum(v.validaDesde)}</b></li>
-        <li><i>3</i><span>Válida hasta</span><b>${fmtNum(v.proxima)}</b></li>
-      </ol>
+      <ol class="pas-fechas">${filas.map(([t, f], j) => `<li><i>${j + 1}</i><span>${t}</span><b>${fmtNum(f)}</b></li>`).join('')}</ol>
       <div class="pas-pie"><span>${vigente ? '<em class="pas-vig">En vigor</em>' : ''}${esc(filtroVac === 'Todas' ? (v.nombre || '') : '')}</span><span>${esc(v.vet || '')}</span></div>
       ${sello(v.vet, k)}
     </button>`;
-  }).join('') + `</div>`;
+  };
+  if (filtroAnio === 'Todos') {
+    let k = 0;
+    h += anios.map(a => `<div class="anio-tit"><span>${a}</span></div><div class="pas-hoja">${porVac.filter(v => anioDe(v) === a).map(v => tarjeta(v, k++)).join('')}</div>`).join('');
+  } else {
+    h += `<div class="pas-hoja">` + lista.map(tarjeta).join('') + `</div>`;
+  }
   if (otros.length) h += `<div class="sec"><h2>Revisiones y test</h2></div><div class="card">${otros.map(s => filaSalud(s, L)).join('')}</div>`;
   return h;
 }
@@ -1235,10 +1259,10 @@ function exportar() {
 
 
 /* ---------- historial de rabia copiado del pasaporte (una sola vez; ids fijos para no duplicar entre dispositivos) ---------- */
-const HISTORIAL_RABIA = []; // datos retirados del historial publico
+const HISTORIAL_PASAPORTE = []; // datos retirados del historial publico
 (function importarRabia() {
   let n = 0;
-  for (const v of HISTORIAL_RABIA) if (!D.salud.some(x => x.id === v.id)) { D.salud.push({ ...v, upd: 1 }); n++; }
+  for (const v of HISTORIAL_PASAPORTE) if (!D.salud.some(x => x.id === v.id)) { D.salud.push({ ...v, upd: 1 }); n++; }
   if (n) guardarLocal();
 })();
 

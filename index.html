@@ -330,7 +330,6 @@ body.menu-a .mas-nav{display:flex}
   <button data-tab="inicio" class="on" onclick="irA('inicio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg>Inicio</button>
   <button data-tab="salud" onclick="irA('salud')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.4-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.8-7.5 10.2-7.5 10.2z"/><path d="M12 10.5v5M9.5 13h5" stroke-linecap="round"/></svg>Salud</button>
   <button class="mas-nav" onclick="accionFab()" aria-label="Añadir"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button>
-  <button data-tab="comida" onclick="irA('comida')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M8 8.5c.8-1 2.2-1.5 4-1.5s3.2.5 4 1.5"/></svg>Comida</button>
   <button data-tab="peso" onclick="irA('peso')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8 9.5a5.5 5.5 0 0 1 8 0l-2.5 2.5M12 12l1.5-2"/></svg>Peso</button>
   <button data-tab="docs" onclick="irA('docs')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>Documentos</button>
 </div></nav>
@@ -348,7 +347,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v13';
+const VERSION = 'v14';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -484,7 +483,7 @@ function avisos() {
   const L = vivos('salud');
   const r = L.filter(s => pendiente(s, L)).map(s => ({ fecha: s.proxima, titulo: s.nombre || TIPOS[s.tipo]?.n, sub: TIPOS[s.tipo]?.n || '', ico: TIPOS[s.tipo]?.ico || '🩺', abrir: `formSalud(D.salud.find(x=>x.id==='${s.id}'))` }));
   const p = pienso();
-  if (p) r.push({ fecha: p.fin, titulo: 'Se acaba el pienso', sub: D.comida.pienso || 'Pienso', ico: '🥣', terra: 1, abrir: `irA('comida')` });
+  if (false && p) r.push({ fecha: p.fin, titulo: 'Se acaba el pienso', sub: D.comida.pienso || 'Pienso', ico: '🥣', terra: 1, abrir: `irA('comida')` });
   const cu = proximoCumple();
   if (cu && diasHasta(cu.fecha) <= 45) r.push({ fecha: cu.fecha, titulo: `Cumple ${cu.anios} ${cu.anios === 1 ? 'año' : 'años'}`, sub: fmt(cu.fecha), ico: '🎂', terra: 1, abrir: 'editarPerfil()', cumple: 1 });
   return r.sort((a, b) => a.fecha.localeCompare(b.fecha));
@@ -695,8 +694,8 @@ function renderPasaporte() {
   const lista = filtroAnio === 'Todos' ? porVac : porVac.filter(v => anioDe(v) === filtroAnio);
   h += `<div class="sec"><h2>Pasaporte</h2><span class="s">${lista.length} ${lista.length === 1 ? 'vacunación' : 'vacunaciones'}</span></div>`;
   h += `<div class="filtros-pas">
-    <div class="chips-f" role="tablist" aria-label="Año">${[...anios, 'Todos'].map(a => `<button class="${filtroAnio === a ? 'on' : ''}" onclick="filtroAnio='${a}';render()">${a}<small>${a === 'Todos' ? porVac.length : porVac.filter(v => anioDe(v) === a).length}</small></button>`).join('')}</div>
-    <div class="chips-f vacs" role="tablist" aria-label="Vacuna">${['Todas', ...nombres].map(n => `<button class="${filtroVac === n ? 'on' : ''}" onclick="filtroVac='${esc(n)}';render()">${esc(n)}<small>${n === 'Todas' ? vac.length : grupos[n].length}</small></button>`).join('')}</div>
+    <div class="chips-f" role="tablist" aria-label="Año">${[...anios, 'Todos'].map(a => `<button class="${filtroAnio === a ? 'on' : ''}" onclick="filtroAnio='${a}';render()">${a}</button>`).join('')}</div>
+    <div class="chips-f vacs" role="tablist" aria-label="Vacuna">${['Todas', ...nombres].map(n => `<button class="${filtroVac === n ? 'on' : ''}" onclick="filtroVac='${esc(n)}';render()">${esc(n)}</button>`).join('')}</div>
   </div>`;
   const tarjeta = (v, k) => {
     const [bg, fg] = colorMarca(v.producto + ' ' + (v.laboratorio || ''));

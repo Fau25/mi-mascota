@@ -19,7 +19,7 @@
 /* Estilo «tarjetas flotantes»: fondo verde-gris frío, tarjetas blancas con sombra difusa, verde azulado como único color de marca */
 :root{
   /* Crema + azul petróleo oscuro; arena como tono de apoyo (pelo canela, sin marrones) */
-  --bg:#F3EDE2;--card:#FFFCF6;--ink:#1D2B33;--muted:#87857C;--line:#ECE4D6;
+  --bg:#F3EDE2;--card:#FFFCF6;--ink:#1D2B33;--muted:#6A675E;--line:#ECE4D6;
   --verde:#1F4B57;--verde2:#E9E1D2;--verde3:#2C6170;--terra:#1F4B57;--terra2:#EFE7DA;
   --ambar:#A9741C;--ambar2:#F8EDD6;--rojo:#B84535;--rojo2:#F8E2DC;
   --panel:#E0D3BD;--sobre:#FFFCF6;--vidrio:rgba(255,251,244,.58);--vidrio-borde:rgba(255,255,255,.55);--banda:#1F4B57;--banda-txt:#F6F0E6;
@@ -410,12 +410,12 @@ textarea{min-height:84px;resize:vertical}
 .f1c.oscura{background:var(--banda);color:var(--banda-txt);box-shadow:0 14px 30px rgba(20,40,48,.22)}
 .f1c-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
 .f1c.oscura .f1c-tit h3{color:var(--banda-txt)}
-.f1c.oscura .f1c-tit span,.f1c.oscura .f1c-grid span{color:var(--banda-txt);opacity:.62}
+.f1c.oscura .f1c-tit span,.f1c.oscura .f1c-grid span{color:var(--banda-txt);opacity:.82}
 .f1c.oscura .f1c-grid b{color:var(--banda-txt)}
 .f1c.oscura .f1c-dueno{border-top-color:color-mix(in srgb,var(--banda-txt) 22%,transparent)}
 .f1c.oscura .f1c-dueno .f1c-et{color:#9FD3C4}
 .f1c.oscura .f1c-dueno b{color:var(--banda-txt)}
-.f1c.oscura .f1c-dueno span{color:var(--banda-txt);opacity:.7}
+.f1c.oscura .f1c-dueno span{color:var(--banda-txt);opacity:.85}
 .f1c-qr{flex:none;width:76px;height:76px;padding:0;border:0;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 .f1c-qr svg{width:100%;height:100%;display:block}
 .f1c-qr.vacio{background:none;border:1.5px dashed color-mix(in srgb,var(--banda-txt) 45%,transparent);color:var(--banda-txt);font-weight:800;font-size:13px;box-shadow:none}
@@ -653,7 +653,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v27';
+const VERSION = 'v29';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -723,7 +723,14 @@ const LISTAS = ['salud', 'consultas', 'medicacion', 'compras', 'peso', 'docs'];
 const vacio = () => ({ perfil: { upd: 0 }, comida: { upd: 0 }, salud: [], consultas: [], medicacion: [], compras: [], peso: [], docs: [] });
 let D; try { D = Object.assign(vacio(), JSON.parse(localStorage.getItem('mm-datos') || '{}')); } catch { D = vacio(); }
 let CFG; try { CFG = JSON.parse(localStorage.getItem('mm-cfg') || '{}'); } catch { CFG = {}; }
-const guardarLocal = () => localStorage.setItem('mm-datos', JSON.stringify(D));
+let avisoEspacio = false;
+function guardarLocal() {
+  try { localStorage.setItem('mm-datos', JSON.stringify(D)); return true; }
+  catch (e) {
+    if (!avisoEspacio) { avisoEspacio = true; toast('No queda espacio en este dispositivo. Tus cambios siguen aquí y se guardarán en Google al sincronizar.'); }
+    return false;
+  }
+}
 const vivos = c => D[c].filter(x => !x.borrado);
 
 function guardarItem(c, obj) {
@@ -741,14 +748,32 @@ function borrarItem(c, id) {
   D[c][i] = { id: x.id, borrado: true, upd: Date.now(), ...(x.driveId ? { driveId: x.driveId } : {}) };
   cambio();
 }
-function guardarObj(k, cambios) { D[k] = { ...D[k], ...cambios, upd: Date.now() }; cambio(); }
-function cambio() { guardarLocal(); render(); programarSync(); }
+function guardarObj(k, cambios) {
+  const ahora = Date.now(), prev = D[k] || {}, t = { ...(prev._t || {}) };
+  for (const c of Object.keys(cambios)) if (JSON.stringify(prev[c] ?? '') !== JSON.stringify(cambios[c] ?? '')) t[c] = ahora;
+  D[k] = { ...prev, ...cambios, upd: ahora, _t: t };
+  cambio();
+}
+let nCambios = 0;
+function marcarPendiente() { nCambios++; try { localStorage.setItem('mm-pendiente', '1'); } catch { } }
+function cambio() { marcarPendiente(); guardarLocal(); render(); programarSync(); }
 
-// Igual que en Code.gs: gana la versión más reciente de cada elemento
+// Igual que en Code.gs: en listas gana la versión más reciente de cada elemento; en perfil/comida, campo a campo
+function unirObj(A, B) {
+  A = A || { upd: 0 }; B = B || { upd: 0 };
+  const tA = A._t || {}, tB = B._t || {}, r = {}, t = {};
+  const claves = new Set([...Object.keys(A), ...Object.keys(B)]); claves.delete('upd'); claves.delete('_t');
+  for (const c of claves) {
+    const a = tA[c] ?? (c in A ? (A.upd || 0) : -1), b = tB[c] ?? (c in B ? (B.upd || 0) : -1);
+    if (b > a) { if (c in B) r[c] = B[c]; t[c] = b; } else { if (c in A) r[c] = A[c]; t[c] = a; }
+  }
+  r.upd = Math.max(A.upd || 0, B.upd || 0); r._t = t;
+  return r;
+}
 function fusionar(a, b) {
   const r = vacio();
   a = a || {}; b = b || {};
-  for (const k of ['perfil', 'comida']) r[k] = ((b[k] && b[k].upd) || 0) > ((a[k] && a[k].upd) || 0) ? b[k] : (a[k] || { upd: 0 });
+  for (const k of ['perfil', 'comida']) r[k] = unirObj(a[k], b[k]);
   for (const c of LISTAS) {
     const m = new Map();
     for (const x of [...(a[c] || []), ...(b[c] || [])]) { const y = m.get(x.id); if (!y || (x.upd || 0) > (y.upd || 0)) m.set(x.id, x); }
@@ -863,7 +888,6 @@ function accionFab() {
 
 /* ---------- pintar ---------- */
 function render() {
-  const av = $('#avatar'); if (av) { av.style.backgroundImage = D.perfil.foto ? `url('${D.perfil.foto}')` : ''; av.innerHTML = D.perfil.foto ? '' : ic('perro'); }
   $('#titulo').textContent = TITULOS[tab] || (D.perfil.nombre ? D.perfil.nombre : 'Mi Mascota');
   ({ inicio: renderInicio, salud: renderSalud, comida: renderComida, peso: renderPeso, docs: renderDocs })[tab]();
 }
@@ -882,7 +906,7 @@ function renderInicio() {
 
   const sexoIc = p.sexo === 'Hembra' ? ic('hembra') : p.sexo === 'Macho' ? ic('macho') : '';
   let h = `<div class="hero" onclick="editarPerfil()">
-    <div class="hero-foto" style="${p.foto ? `background-image:url('${p.foto}')` : ''}">${p.foto ? '' : ic('perro', 'silueta')}</div>
+    ${(() => { const u = imgURL(p.foto, p.fotoDrive); return `<div class="hero-foto" style="${u ? `background-image:url('${u}')` : ''}">${u ? '' : ic('perro', 'silueta')}</div>`; })()}
     <div class="hero-card">
       <div class="hc-top"><h2>${esc(p.nombre || 'Tu perro')}</h2></div>
       <div class="hc-sub">${esc([p.raza || 'Toca para rellenar su ficha', anios(p.nacimiento)].filter(Boolean).join(' · '))}</div>
@@ -984,7 +1008,7 @@ function renderSalud() {
   } else {
     const meds = vivos('medicacion').sort((a, b) => (b.inicio || '').localeCompare(a.inicio || ''));
     const act = meds.filter(medActiva), ant = meds.filter(m => !medActiva(m));
-    const f = m => fila({ ico: '💧', t: m.nombre, s: [m.dosis, m.frecuencia, m.inicio ? fmt(m.inicio) + (m.fin ? ' → ' + fmt(m.fin) : '') : '', m.motivo].filter(Boolean).join(' · '), der: medActiva(m) ? '<span class="pill ok">activa</span>' : '', abrir: `formMed(D.medicacion.find(x=>x.id==='${m.id}'))` });
+    const f = m => fila({ ico: '💧', t: m.nombre, s: [m.consulta ? 'Desde consulta' : '', m.dosis, m.frecuencia, m.inicio ? fmt(m.inicio) + (m.fin ? ' → ' + fmt(m.fin) : '') : '', m.motivo].filter(Boolean).join(' · '), der: medActiva(m) ? '<span class="pill ok">activa</span>' : '', abrir: `formMed(D.medicacion.find(x=>x.id==='${m.id}'))` });
     if (!meds.length) h += `<div class="card">${vacioHTML('💧', 'Aquí van los tratamientos: antibióticos, antiinflamatorios, gotas… con dosis y duración.')}</div>`;
     if (act.length) h += `<div class="sec"><h2>Activa</h2></div><div class="card">${act.map(f).join('')}</div>`;
     if (ant.length) h += `<div class="sec"><h2>Anteriores</h2></div><div class="card">${ant.map(f).join('')}</div>`;
@@ -1065,8 +1089,9 @@ function renderPasaporte() {
     const [bg, fg] = colorMarca(v.producto + ' ' + (v.laboratorio || ''));
     const vigente = v.proxima && diasHasta(v.proxima) >= 0 && (!v.validaDesde || diasHasta(v.validaDesde) <= 0) && diasHasta(v.fecha) <= 0;
     const mV = window.MODO_VCARD || '2'; if (mV !== '0') return tarjetaVac(v, k, mV, bg, fg, vigente);
-    const peg = v.fotoPeg
-      ? `<div class="peg foto" style="background-image:url('${v.fotoPeg}')"></div>`
+    const pegU = imgURL(v.fotoPeg, v.fotoPegDrive);
+    const peg = pegU
+      ? `<div class="peg foto" style="background-image:url('${pegU}')"></div>`
       : `<div class="peg" style="--pc:${bg};--pf:${fg}"><div class="peg-top"><span class="peg-marca">${esc(v.producto || v.nombre || 'Vacuna')}</span>${v.laboratorio ? `<span class="peg-lab">${esc(v.laboratorio)}</span>` : ''}</div><div class="peg-pie"><span>Lote</span><b>${esc(v.lote || '—')}</b><span>CAD</span><b>${esc(v.caducidad || '—')}</b></div></div>`;
     const filas = v.validaDesde
       ? [['Vacunación', v.fecha], ['Válida desde', v.validaDesde], ['Válida hasta', v.proxima]]
@@ -1096,7 +1121,8 @@ function tarjetaVac(v, k, m, bg, fg, vigente) {
   const est = vigente ? ['ok', 'En vigor'] : caducada ? ['neutro', 'Caducada'] : ['pronto', 'Pendiente'];
   const corta = f => { if (!f) return '—'; const d = aFecha(f); return `${d.getDate()} ${MESES[d.getMonth()]} ${String(d.getFullYear()).slice(2)}`; };
   const marca = esc(v.producto || v.nombre || 'Vacuna'), tipo = esc(v.nombre || ''), lab = esc(v.laboratorio || '');
-  const fotoMini = v.fotoPeg ? `style="background-image:url('${v.fotoPeg}');background-size:cover"` : '';
+  const pegU = imgURL(v.fotoPeg, v.fotoPegDrive);
+  const fotoMini = pegU ? `style="background-image:url('${pegU}');background-size:cover"` : '';
   if (m === '1') {
     return `<button class="v1" onclick="${abrir}" style="--pc:${bg}"><i class="v1-barra"></i><div class="v1-cuerpo">
       <div class="v1-top"><span class="v1-tipo">${tipo}</span><span class="pill ${est[0]}">${est[1]}</span></div>
@@ -1113,7 +1139,7 @@ function tarjetaVac(v, k, m, bg, fg, vigente) {
   if (m === '3') {
     const ini = v.validaDesde || v.fecha, fin = v.proxima;
     let pct = 0; if (ini && fin) { const tot = Math.max(1, diasEntre(ini, fin)); pct = Math.max(0, Math.min(100, (tot - Math.max(0, diasHasta(fin))) / tot * 100)); }
-    return `<button class="v3" onclick="${abrir}"><div class="v3-cab"><div class="v3-mini" style="--pc:${bg};--pf:${fg}" ${fotoMini}>${v.fotoPeg ? '' : marca.slice(0, 1)}</div><div class="v3-txt"><b>${marca}</b><span>${tipo}${lab ? ' · ' + lab : ''}</span></div><span class="pill ${est[0]}">${est[1]}</span></div>
+    return `<button class="v3" onclick="${abrir}"><div class="v3-cab"><div class="v3-mini" style="--pc:${bg};--pf:${fg}" ${fotoMini}>${pegU ? '' : marca.slice(0, 1)}</div><div class="v3-txt"><b>${marca}</b><span>${tipo}${lab ? ' · ' + lab : ''}</span></div><span class="pill ${est[0]}">${est[1]}</span></div>
       <div class="v3-hasta"><span>Válida hasta</span><b>${v.proxima ? fmt(v.proxima) : '—'}</b></div>
       <div class="v3-barra ${caducada ? 'fin' : ''}"><i style="width:${pct.toFixed(0)}%"></i></div>
       <div class="v3-ext"><span>${corta(ini)}</span><span>${corta(fin)}</span></div>
@@ -1123,7 +1149,7 @@ function tarjetaVac(v, k, m, bg, fg, vigente) {
   const barras = Array.from({ length: 34 }, (_, i) => `<i style="width:${[1, 2, 1, 3, 1, 2][(i * 7 + (v.lote || '').length) % 6]}px"></i>`).join('');
   const filas = v.validaDesde ? [['Vacunación', v.fecha], ['Desde', v.validaDesde], ['Hasta', v.proxima]] : [['Vacunación', v.fecha], ['Hasta', v.proxima]];
   return `<button class="v4" onclick="${abrir}">
-    ${v.fotoPeg ? `<div class="v4-peg foto" style="background-image:url('${v.fotoPeg}')"></div>` : `<div class="v4-peg" style="--pc:${bg};--pf:${fg}"><div class="v4-band"><b>${marca}</b>${lab ? `<span>${lab}</span>` : ''}</div><div class="v4-datos"><div><span>LOTE</span><b>${esc(v.lote || '—')}</b></div><div><span>CAD</span><b>${esc(v.caducidad || '—')}</b></div><div class="v4-cod">${barras}</div></div></div>`}
+    ${pegU ? `<div class="v4-peg foto" style="background-image:url('${pegU}')"></div>` : `<div class="v4-peg" style="--pc:${bg};--pf:${fg}"><div class="v4-band"><b>${marca}</b>${lab ? `<span>${lab}</span>` : ''}</div><div class="v4-datos"><div><span>LOTE</span><b>${esc(v.lote || '—')}</b></div><div><span>CAD</span><b>${esc(v.caducidad || '—')}</b></div><div class="v4-cod">${barras}</div></div></div>`}
     <div class="v4-fechas" style="grid-template-columns:repeat(${filas.length},1fr)">${filas.map(([t, f], j) => `<div><span><em>${j + 1}</em>${t}</span><b>${corta(f)}</b></div>`).join('')}</div>
     <div class="v4-pie"><span class="pill ${est[0]}">${est[1]}</span><b>${tipo}</b></div>
     ${sello(v.vet, k)}</button>`;
@@ -1306,10 +1332,11 @@ function verQR() {
 }
 function editarPerfil(ir) {
   const p = D.perfil;
-  let foto = p.foto || '';
+  let foto = p.foto || '', fotoDrive = p.fotoDrive || '';
+  const fotoU = imgURL(foto, fotoDrive);
   formulario({
     titulo: 'Ficha', v: p,
-    html: `<div class="fotoedit"><div class="foto" id="fprev" style="${foto ? `background-image:url('${foto}')` : ''}">${foto ? '' : ic('perro')}</div><div><button type="button" class="btn sec" style="padding:10px 14px" onclick="$('#ffoto').click()">${foto ? 'Cambiar foto' : 'Añadir foto'}</button><input type="file" id="ffoto" accept="image/*" hidden></div></div>`,
+    html: `<div class="fotoedit"><div class="foto" id="fprev" style="${fotoU ? `background-image:url('${fotoU}')` : ''}">${fotoU ? '' : ic('perro')}</div><div><button type="button" class="btn sec" style="padding:10px 14px" onclick="$('#ffoto').click()">${foto ? 'Cambiar foto' : 'Añadir foto'}</button><input type="file" id="ffoto" accept="image/*" hidden></div></div>`,
     campos: [
       { k: 'nombre', l: 'Nombre', ph: 'Nombre del perro' },
       { k: 'raza', l: 'Raza', half: 1 }, { k: 'sexo', l: 'Sexo', t: 'sel', op: ['', 'Macho', 'Hembra'], half: 1 },
@@ -1337,11 +1364,11 @@ function editarPerfil(ir) {
       if (ir === 'dueno' || ir === 'qr') setTimeout(() => { const el = $(ir === 'qr' ? '#f_adnQR' : '#f_duenoNombre'); if (el) { el.scrollIntoView({ block: 'center' }); if (ir === 'qr') el.focus(); } }, 60);
       $('#ffoto').onchange = async e => {
         const file = e.target.files[0]; if (!file) return;
-        try { const img = await cargarImagen(file); foto = lienzo(img, 1440).toDataURL('image/jpeg', .86); const el = $('#fprev'); el.style.backgroundImage = `url('${foto}')`; el.innerHTML = ''; }
+        try { const img = await cargarImagen(file); foto = await guardarImagen(lienzo(img, 1440), .86); fotoDrive = ''; const el = $('#fprev'); el.style.backgroundImage = `url('${imgURL(foto)}')`; el.innerHTML = ''; }
         catch { toast('No se pudo leer la foto'); }
       };
     },
-    guardar: v => guardarObj('perfil', { ...v, foto }),
+    guardar: v => guardarObj('perfil', { ...v, foto, fotoDrive }),
   });
 }
 
@@ -1370,10 +1397,11 @@ function formContacto(id) {
 function formSalud(s, tipoDef) {
   const nuevo = !s;
   s = s || { tipo: tipoDef || 'vacuna', fecha: hoy() };
-  let fotoPeg = s.fotoPeg || '';
+  let fotoPeg = s.fotoPeg || '', fotoPegDrive = s.fotoPegDrive || '';
+  const fotoPegU = imgURL(fotoPeg, fotoPegDrive);
   formulario({
     titulo: nuevo ? (s.tipo === 'vacuna' ? 'Nueva vacuna' : 'Nuevo registro') : (s.nombre || 'Editar'), v: s,
-    html: `<div class="peg-edit"><div class="peg foto ${fotoPeg ? '' : 'vacia'}" id="pegPrev" style="${fotoPeg ? `background-image:url('${fotoPeg}')` : ''}">${fotoPeg ? '' : '<span>Foto de la pegatina<br><small>opcional</small></span>'}</div><div class="peg-edit-btns"><button type="button" class="btn sec" onclick="$('#fpeg').click()">${fotoPeg ? 'Cambiar foto' : 'Hacer foto'}</button>${fotoPeg ? '<button type="button" class="btn peligro" id="quitarPeg">Quitar foto</button>' : ''}<input type="file" id="fpeg" accept="image/*" hidden></div></div>`,
+    html: `<div class="peg-edit"><div class="peg foto ${fotoPegU ? '' : 'vacia'}" id="pegPrev" style="${fotoPegU ? `background-image:url('${fotoPegU}')` : ''}">${fotoPeg ? '' : '<span>Foto de la pegatina<br><small>opcional</small></span>'}</div><div class="peg-edit-btns"><button type="button" class="btn sec" onclick="$('#fpeg').click()">${fotoPeg ? 'Cambiar foto' : 'Hacer foto'}</button>${fotoPeg ? '<button type="button" class="btn peligro" id="quitarPeg">Quitar foto</button>' : ''}<input type="file" id="fpeg" accept="image/*" hidden></div></div>`,
     campos: [
       { k: 'tipo', l: 'Tipo', t: 'sel', op: Object.entries(TIPOS).map(([k, v]) => [k, v.n]) },
       { k: 'nombre', l: 'Vacuna contra / nombre', ph: 'Rabia, Polivalente, Milbemax…', list: SUGERENCIAS },
@@ -1401,13 +1429,13 @@ function formSalud(s, tipoDef) {
       f.dispatchEvent(new Event('input'));
       $('#fpeg').onchange = async e => {
         const file = e.target.files[0]; if (!file) return;
-        try { const img = await cargarImagen(file); fotoPeg = lienzo(img, 900).toDataURL('image/jpeg', .82); const el = $('#pegPrev'); el.style.backgroundImage = `url('${fotoPeg}')`; el.innerHTML = ''; el.classList.remove('vacia'); }
+        try { const img = await cargarImagen(file); fotoPeg = await guardarImagen(lienzo(img, 900), .82); fotoPegDrive = ''; const el = $('#pegPrev'); el.style.backgroundImage = `url('${imgURL(fotoPeg)}')`; el.innerHTML = ''; el.classList.remove('vacia'); }
         catch { toast('No se pudo leer la foto'); }
       };
-      const q = $('#quitarPeg'); if (q) q.onclick = () => { fotoPeg = ''; const el = $('#pegPrev'); el.style.backgroundImage = ''; el.classList.add('vacia'); el.innerHTML = '<span>Foto de la pegatina<br><small>opcional</small></span>'; q.remove(); };
+      const q = $('#quitarPeg'); if (q) q.onclick = () => { fotoPeg = ''; fotoPegDrive = ''; const el = $('#pegPrev'); el.style.backgroundImage = ''; el.classList.add('vacia'); el.innerHTML = '<span>Foto de la pegatina<br><small>opcional</small></span>'; q.remove(); };
     },
     extra: nuevo ? [] : [{ t: 'Apuntar la siguiente dosis', fn: () => renovar(s) }],
-    guardar: v => { guardarItem('salud', { ...s, ...v, coste: v.coste, fotoPeg }); toast('Guardado'); },
+    guardar: v => { guardarItem('salud', { ...s, ...v, coste: v.coste, fotoPeg, fotoPegDrive }); toast('Guardado'); },
     borrar: nuevo ? null : () => borrarItem('salud', s.id),
   });
 }
@@ -1460,7 +1488,7 @@ function medDeTratamiento(c) {
   else if ((mm = sinCada.match(/(\d+)\s*mes(es)?/i))) dias = +mm[1] * 30;
   const frec = (t.match(/cada\s+\d+\s*(h|horas?)\b/i) || t.match(/cada\s+\d+\s*d[ií]as?\b/i) || [''])[0];
   const dosis = (t.match(/\d+(?:[.,]\d+)?\s*(ml|mg|gotas?|comprimidos?|pastillas?|cápsulas?)\b/i) || [''])[0];
-  const comunes = /^(Reposo|Limpiar|Revisión|Revision|Paseos|Dieta|Evitar|Volver|Control|Tratamiento|Aplicar|Dar|Cada|Durante|Con|Sin|Pienso)$/i;
+  const comunes = /^(Reposo|Limpiar|Limpieza|Revisión|Revision|Paseos?|Dieta|Evitar|Volver|Control|Tratamiento|Aplicar|Dar|Cada|Durante|Con|Sin|Pienso|Antibiótico|Antibiotico|Antiinflamatorio|Analgésico|Analgesico|Pomada|Crema|Gotas|Pastillas?|Comprimidos?|Cápsulas?|Jarabe|Champú|Champu|Colirio|Spray|Inyección|Vacuna|Collar|Pipeta|Oído|Oreja|Ojos?|Herida|Correa|Comida|Agua|Baños?|Cura|Curas|Vendaje|Ayuno|Luego|Después|Despues|Mañana|Noche|Semana|Días?)$/i;
   const nombres = [...t.matchAll(/\b([A-ZÁÉÍÓÚ][a-záéíóúñ]{3,}(?:\s+(?:Plus|Forte|Retard))?)\b/g)].map(x => x[1]).filter(w => !comunes.test(w));
   return {
     id: 'med-' + c.id, consulta: c.id, auto: true,
@@ -1578,6 +1606,61 @@ const aBlob = (c, q) => new Promise(r => c.toBlob(r, 'image/jpeg', q));
 const blobA64 = b => new Promise((ok, ko) => { const fr = new FileReader(); fr.onload = () => ok(fr.result.split(',')[1]); fr.onerror = ko; fr.readAsDataURL(b); });
 const a64Blob = (s, mime) => { const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new Blob([u], { type: mime }); };
 
+/* Fotos (perfil y pegatinas): se guardan en IndexedDB y en Drive; en los datos solo va la referencia «img:<id>» */
+const IMG = {}, IMG_CARGANDO = {};
+function imgURL(ref, driveId) {
+  if (!ref) return '';
+  if (ref.startsWith('data:')) return ref;
+  if (!ref.startsWith('img:')) return '';
+  const id = ref.slice(4);
+  if (IMG[id]) return IMG[id];
+  if (!IMG_CARGANDO[id]) {
+    IMG_CARGANDO[id] = (async () => {
+      let b = await idb.get('img-' + id).catch(() => null);
+      if (!b && driveId && CFG.url) { try { const r = await api('bajarDoc', { driveId }); b = a64Blob(r.base64, r.mime || 'image/jpeg'); await idb.set('img-' + id, b); } catch { } }
+      if (b) { IMG[id] = URL.createObjectURL(b); render(); } else delete IMG_CARGANDO[id];
+    })();
+  }
+  return '';
+}
+async function guardarImagen(canvas, q) {
+  const b = await aBlob(canvas, q), id = uid();
+  await idb.set('img-' + id, b);
+  IMG[id] = URL.createObjectURL(b);
+  return 'img:' + id;
+}
+async function dataABlob(u) { return (await fetch(u)).blob(); }
+// Paso único: fotos antiguas guardadas dentro de los datos → IndexedDB
+async function migrarFotos() {
+  let hay = false;
+  if ((D.perfil.foto || '').startsWith('data:')) {
+    const b = await dataABlob(D.perfil.foto), id = uid(); await idb.set('img-' + id, b); IMG[id] = URL.createObjectURL(b);
+    const t = { ...(D.perfil._t || {}) }, ahora = Date.now(); t.foto = t.fotoDrive = ahora;
+    D.perfil = { ...D.perfil, foto: 'img:' + id, fotoDrive: '', upd: ahora, _t: t }; hay = true;
+  }
+  for (let i = 0; i < D.salud.length; i++) {
+    const v = D.salud[i];
+    if ((v.fotoPeg || '').startsWith('data:')) {
+      const b = await dataABlob(v.fotoPeg), id = uid(); await idb.set('img-' + id, b); IMG[id] = URL.createObjectURL(b);
+      D.salud[i] = { ...v, fotoPeg: 'img:' + id, fotoPegDrive: '', upd: Date.now() }; hay = true;
+    }
+  }
+  if (hay) cambio();
+}
+async function subirImagenes() {
+  const subir = async (ref, nombre) => { const b = await idb.get('img-' + ref.slice(4)).catch(() => null); if (!b) return null; return api('subirDoc', { nombre, mime: 'image/jpeg', base64: await blobA64(b), carpeta: 'Fotos' }); };
+  const p = D.perfil;
+  if ((p.foto || '').startsWith('img:') && !p.fotoDrive) {
+    const r = await subir(p.foto, `Foto ${p.nombre || 'perro'}.jpg`);
+    if (r && D.perfil.foto === p.foto) { const t = { ...(D.perfil._t || {}) }; t.fotoDrive = Date.now(); D.perfil = { ...D.perfil, fotoDrive: r.driveId, upd: Date.now(), _t: t }; marcarPendiente(); guardarLocal(); }
+  }
+  for (const v of D.salud.filter(x => !x.borrado && (x.fotoPeg || '').startsWith('img:') && !x.fotoPegDrive)) {
+    const r = await subir(v.fotoPeg, `Pegatina ${v.nombre || ''} ${v.fecha || ''}.jpg`);
+    const i = D.salud.findIndex(x => x.id === v.id);
+    if (r && i >= 0 && D.salud[i].fotoPeg === v.fotoPeg) { D.salud[i] = { ...D.salud[i], fotoPegDrive: r.driveId, upd: Date.now() }; marcarPendiente(); guardarLocal(); }
+  }
+}
+
 async function prepararArchivo(file) {
   const id = uid();
   let blob = file, mime = file.type || (/\.pdf$/i.test(file.name) ? 'application/pdf' : 'application/octet-stream'), thumb = '';
@@ -1670,30 +1753,38 @@ async function api(accion, extra = {}) {
   let j;
   try { j = await r.json(); }
   catch { throw new Error('Google pide iniciar sesión. En «Implementar», el acceso debe ser «Cualquier usuario» (no «con cuenta de Google»).'); }
-  if (j.error) throw new Error(j.error === 'Contraseña incorrecta' ? 'Contraseña incorrecta: debe ser la misma que pusiste en CLAVE dentro del script.' : j.error);
+  if (j.error) throw new Error(j.error === 'Contraseña incorrecta' ? 'Contraseña incorrecta: debe ser la misma que pusiste en CLAVE dentro del script.' : /intentos/i.test(j.error) ? 'Demasiados intentos con contraseña incorrecta. Espera 10 minutos y revisa la contraseña.' : j.error);
   return j;
 }
 async function sincronizar(manual) {
   if (!CFG.url) { estado(''); if (manual) toast('Configura primero la dirección del script'); return; }
   if (!navigator.onLine) { estado('error'); return; }
+  // Si la contraseña falló, no reintentar solo (evita bloquear el script) hasta que se cambie en Ajustes
+  let claveMala = false; try { claveMala = localStorage.getItem('mm-clave-mala') === '1'; } catch { }
+  if (claveMala && !manual) { estado('error'); return; }
   if (sincronizando) { otraVez = true; return; }
   sincronizando = true; estado('sync');
   try {
+    await subirImagenes();
     for (const d of D.docs.filter(x => !x.borrado && !x.driveId)) {
       const b = await idb.get(d.id).catch(() => null); if (!b) continue;
       const r = await api('subirDoc', { nombre: `${d.fecha || hoy()} ${d.nombre || 'documento'}${ext(d.mime)}`, mime: d.mime, base64: await blobA64(b) });
       const i = D.docs.findIndex(x => x.id === d.id);
-      if (i >= 0 && !D.docs[i].borrado) { D.docs[i] = { ...D.docs[i], driveId: r.driveId, url: r.url, upd: Date.now() }; guardarLocal(); }
+      if (i >= 0 && !D.docs[i].borrado) { D.docs[i] = { ...D.docs[i], driveId: r.driveId, url: r.url, upd: Date.now() }; marcarPendiente(); guardarLocal(); }
     }
-    const r = await api('sincronizar', { datos: D });
+    // Con cambios pendientes se envía todo; si no, solo se leen los datos (más rápido y sin reescribir Drive ni el calendario)
+    let pendiente = manual; try { pendiente = pendiente || localStorage.getItem('mm-pendiente') === '1'; } catch { pendiente = true; }
+    const n0 = nCambios;
+    const r = pendiente ? await api('sincronizar', { datos: D }) : await api('cargar');
     D = Object.assign(vacio(), fusionar(D, r.datos));
+    if (pendiente && nCambios === n0) { try { localStorage.removeItem('mm-pendiente'); } catch { } }
     guardarLocal(); localStorage.setItem('mm-ultima', Date.now()); localStorage.removeItem('mm-error');
     if (r.calendario) localStorage.setItem('mm-aviso-cal', r.calendario); else localStorage.removeItem('mm-aviso-cal');
     render(); estado('ok');
     if (manual) toast('Sincronizado');
   } catch (e) {
     estado('error');
-    try { localStorage.setItem('mm-error', navigator.onLine ? e.message : 'Sin conexión a internet.'); } catch { }
+    try { localStorage.setItem('mm-error', navigator.onLine ? e.message : 'Sin conexión a internet.'); if (/contraseña|intentos/i.test(e.message)) localStorage.setItem('mm-clave-mala', '1'); } catch { }
     if (manual) toast('No se pudo sincronizar');
   } finally {
     sincronizando = false;
@@ -1733,7 +1824,7 @@ function abrirAjustes() {
 async function guardarAjustes() {
   CFG = { url: $('#cfgUrl').value.trim(), clave: $('#cfgClave').value };
   localStorage.setItem('mm-cfg', JSON.stringify(CFG));
-  localStorage.removeItem('mm-error');
+  localStorage.removeItem('mm-error'); localStorage.removeItem('mm-clave-mala');
   render();
   const el = $('#estadoSync');
   if (!CFG.url) { estado(''); if (el) el.outerHTML = htmlEstadoSync(); return; }
@@ -1749,20 +1840,14 @@ function exportar() {
 
 
 
-/* ---------- historial de rabia copiado del pasaporte (una sola vez; ids fijos para no duplicar entre dispositivos) ---------- */
-const HISTORIAL_PASAPORTE = []; // datos retirados del historial publico
-setTimeout(() => vivos('consultas').forEach(c => aplicarTratamiento(c, false)), 0);
-(function importarRabia() {
-  let n = 0;
-  for (const v of HISTORIAL_PASAPORTE) if (!D.salud.some(x => x.id === v.id)) { D.salud.push({ ...v, upd: 1 }); n++; }
-  if (n) guardarLocal();
-})();
+/* El historial del pasaporte ya está en los datos sincronizados (Drive); se quitó del código público. */
 
 /* ---------- arranque ---------- */
 document.body.classList.add('menu-a');
 pintarTema();
 render();
 estado(CFG.url ? '' : '');
+migrarFotos().catch(() => { });
 if (CFG.url) sincronizar();
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { render(); sincronizar(); } });
 setInterval(() => { if (document.visibilityState === 'visible' && CFG.url) sincronizar(); }, 30000);

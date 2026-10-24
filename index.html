@@ -506,6 +506,26 @@ textarea{min-height:84px;resize:vertical}
 .cc-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .cc-cab b{font-size:15.5px;font-weight:800}
 .cc-sub{font-size:13px;color:var(--muted)}
+
+/* Fechas · 1 chip suave */
+.fu1{font-size:14px;font-weight:800;color:var(--verde);background:var(--verde2);padding:7px 12px;border-radius:999px;font-variant-numeric:tabular-nums;white-space:nowrap}
+/* 2 · número sobre mes (widget) */
+.fu2{display:grid;justify-items:center;min-width:46px;line-height:1}
+.fu2 b{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.fu2 i{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--verde);margin-top:3px}
+/* 3 · relativo */
+.fu3{display:grid;justify-items:end;text-align:right;line-height:1.2}
+.fu3 b{font-size:14.5px;font-weight:800}
+.fu3 i{font-style:normal;font-size:12px;color:var(--muted);font-weight:600}
+/* 4 · tarjeta con día de la semana */
+.fu4{display:grid;justify-items:center;width:50px;padding:6px 0 5px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);line-height:1}
+.fu4 i{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.1em;color:var(--rojo)}
+.fu4 b{font-size:21px;font-weight:800;margin:2px 0 1px;font-variant-numeric:tabular-nums}
+.fu4 em{font-style:normal;font-size:10.5px;font-weight:700;color:var(--muted)}
+/* 5 · pastilla bicolor */
+.fu5{display:inline-flex;align-items:stretch;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(30,50,55,.12);font-variant-numeric:tabular-nums}
+.fu5 b{background:var(--verde);color:var(--sobre);font-size:17px;font-weight:800;padding:6px 10px;min-width:38px;text-align:center}
+.fu5 i{font-style:normal;background:var(--card);color:var(--verde);font-size:12px;font-weight:800;letter-spacing:.1em;padding:0 10px;display:flex;align-items:center}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -581,7 +601,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v24';
+const VERSION = 'v25';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -1052,6 +1072,20 @@ function grafica(ps, W = 340, H = 150) {
   const pf = ps.length > 24 ? '' : pts.map(q => `<circle class="pt" cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="3.2"/>`).join('');
   return `<svg class="grafica" viewBox="0 0 ${W} ${H}" role="img" aria-label="Evolución del peso">${rej}<path class="area" d="${area}" opacity=".8"/><path class="lin" d="${lin}"/>${pf}<text x="${pl}" y="${H - 6}">${fmtCorto(ps[0].fecha)}</text><text x="${W - pr}" y="${H - 6}" text-anchor="end">${fmtCorto(ps.at(-1).fecha)}</text></svg>`;
 }
+
+/* ---------- propuestas de fecha ---------- */
+function fechaUI(d) {
+  const m = window.MODO_FECHA || '1', MESC = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  const DIAS = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
+  const otroAnio = d.getFullYear() !== new Date().getFullYear();
+  const dd = Math.round((aFecha(hoy()) - d) / 864e5);
+  const rel = dd === 0 ? 'Hoy' : dd === 1 ? 'Ayer' : dd < 7 ? `Hace ${dd} días` : dd < 35 ? `Hace ${Math.round(dd / 7)} sem` : dd < 365 ? (Math.round(dd / 30.4) === 1 ? 'Hace 1 mes' : `Hace ${Math.round(dd / 30.4)} meses`) : `Hace ${Math.floor(dd / 365)} ${Math.floor(dd / 365) === 1 ? 'año' : 'años'}`;
+  if (m === '1') return `<span class="fu1">${d.getDate()} ${MESC[d.getMonth()]}${otroAnio ? ` ${String(d.getFullYear()).slice(2)}` : ''}</span>`;
+  if (m === '2') return `<span class="fu2"><b>${d.getDate()}</b><i>${MESC[d.getMonth()].toUpperCase()}${otroAnio ? ' ' + String(d.getFullYear()).slice(2) : ''}</i></span>`;
+  if (m === '3') return `<span class="fu3"><b>${rel}</b><i>${d.getDate()} ${MESC[d.getMonth()]} ${d.getFullYear()}</i></span>`;
+  if (m === '4') return `<span class="fu4"><i>${DIAS[d.getDay()]}</i><b>${d.getDate()}</b><em>${MESC[d.getMonth()]}${otroAnio ? ' ' + String(d.getFullYear()).slice(2) : ''}</em></span>`;
+  return `<span class="fu5"><b>${d.getDate()}</b><i>${MESC[d.getMonth()].toUpperCase()}${otroAnio ? ' ' + String(d.getFullYear()).slice(2) : ''}</i></span>`;
+}
 let verPesos = false;
 function renderPeso() {
   const ps = pesos(), ult = ps.at(-1), prev = ps.at(-2);
@@ -1070,7 +1104,7 @@ function renderPeso() {
     const difTxt = dif === null ? '' : dif === 0 ? '=' : (dif > 0 ? '▲ ' : '▼ ') + num(Math.abs(dif));
     const abrir = `formPeso(D.peso.find(x=>x.id==='${p.id}'))`;
     if (mP === 'a') return `<button class="pa-fila" onclick="${abrir}"><div class="pa-kg"><b>${num(p.kg)}</b><span>kg</span>${difTxt ? `<em class="${dif > 0 ? 'sube' : dif < 0 ? 'baja' : ''}">${difTxt}</em>` : ''}</div><div class="pa-cal"><span>${MES[d.getMonth()]}</span><b>${d.getDate()}</b><i>${d.getFullYear()}</i></div></button>`;
-    if (mP === 'b') return `<button class="pb-fila" onclick="${abrir}"><div class="pb-kg">${num(p.kg)} <span>kg</span>${p.nota ? `<small>${esc(p.nota)}</small>` : ''}</div><div class="pb-fecha"><b>${d.getDate()}</b><em>${MES[d.getMonth()]}</em>${d.getFullYear() !== new Date().getFullYear() ? `<span>${d.getFullYear()}</span>` : ''}</div></button>`;
+    if (mP === 'b') return `<button class="pb-fila" onclick="${abrir}"><div class="pb-kg">${num(p.kg)} <span>kg</span>${p.nota ? `<small>${esc(p.nota)}</small>` : ''}</div>${fechaUI(d)}</button>`;
     const pct = kgMax > kgMin ? (p.kg - kgMin) / (kgMax - kgMin) : .5;
     return `<button class="pc-fila" onclick="${abrir}"><div class="pc-kg"><b>${num(p.kg)} kg</b><div class="pc-barra"><i style="width:${(15 + pct * 85).toFixed(0)}%"></i></div></div><div class="pc-fecha"><b>${pad(d.getDate())}</b><span>${MES[d.getMonth()]}<br>${d.getFullYear()}</span></div></button>`;
   };

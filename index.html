@@ -225,6 +225,22 @@ textarea{min-height:84px;resize:vertical}
   .doscol{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
   .hero-foto{height:440px}
 }
+
+/* ---------- Menú A: barra fija abajo, opaca, con + central ---------- */
+body.menu-a{padding-bottom:calc(74px + env(safe-area-inset-bottom))}
+body.menu-a .fab{display:none}
+body.menu-a nav.tabs{background:color-mix(in srgb,var(--card) 72%,transparent);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border-top:1px solid var(--vidrio-borde);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left,0px));pointer-events:auto;box-shadow:0 -6px 20px rgba(38,46,52,.06)}
+body.menu-a nav.tabs .in{background:none;box-shadow:none;border-radius:0;padding:0;align-items:center}
+body.menu-a nav.tabs button{background:none;gap:3px;padding:6px 0}
+body.menu-a nav.tabs button svg{width:24px;height:24px;padding:3px 12px;box-sizing:content-box;border-radius:14px}
+body.menu-a nav.tabs button.on{color:var(--verde);background:none}
+body.menu-a nav.tabs button.on svg{background:var(--verde2)}
+.mas-nav span{width:50px;height:50px;border-radius:17px;background:var(--verde);color:var(--sobre);display:grid;place-items:center;box-shadow:var(--sombra-btn)}
+.mas-nav span svg{width:26px!important;height:26px!important;padding:0!important;background:none!important}
+body.menu-a .banda{margin-bottom:calc(-98px - env(safe-area-inset-bottom));padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+
+body.menu-a .mas-nav{display:flex}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -250,6 +266,7 @@ textarea{min-height:84px;resize:vertical}
 <nav class="tabs"><div class="in">
   <button data-tab="inicio" class="on" onclick="irA('inicio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg>Inicio</button>
   <button data-tab="salud" onclick="irA('salud')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.4-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.8-7.5 10.2-7.5 10.2z"/><path d="M12 10.5v5M9.5 13h5" stroke-linecap="round"/></svg>Salud</button>
+  <button class="mas-nav" onclick="accionFab()" aria-label="Añadir"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button>
   <button data-tab="comida" onclick="irA('comida')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M8 8.5c.8-1 2.2-1.5 4-1.5s3.2.5 4 1.5"/></svg>Comida</button>
   <button data-tab="peso" onclick="irA('peso')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8 9.5a5.5 5.5 0 0 1 8 0l-2.5 2.5M12 12l1.5-2"/></svg>Peso</button>
   <button data-tab="docs" onclick="irA('docs')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>Documentos</button>
@@ -268,7 +285,7 @@ textarea{min-height:84px;resize:vertical}
 
 <script>
 'use strict';
-const VERSION = 'v6';
+const VERSION = 'v7';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -1018,7 +1035,9 @@ function exportar() {
   setTimeout(() => URL.revokeObjectURL(a.href), 3000);
 }
 
+
 /* ---------- arranque ---------- */
+document.body.classList.add('menu-a');
 render();
 estado(CFG.url ? '' : '');
 if (CFG.url) sincronizar();

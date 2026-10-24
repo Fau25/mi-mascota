@@ -386,6 +386,19 @@ textarea{min-height:84px;resize:vertical}
 .tj-vacio{margin:6px 0 0;font-size:13px;opacity:.8;grid-column:1/-1}
 .tj-notas{margin-top:auto;padding:0 18px 12px;font-size:10px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tj-ayuda{text-align:center;font-size:12.5px;color:var(--muted);margin:10px 0 0}
+
+/* Ficha (chapa sin medalla) */
+.f1c{background:var(--card);border-radius:var(--r);box-shadow:var(--sombra);padding:18px 18px 16px;display:grid;gap:14px}
+.f1c-tit h3{font-size:30px;line-height:1.05;letter-spacing:-.02em}
+.f1c-tit span{display:block;color:var(--muted);font-size:17px;font-weight:700;margin-top:3px}
+.f1c-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.f1c-grid span{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.f1c-grid b{display:block;font-size:14.5px;font-weight:800;overflow-wrap:anywhere}
+.mono{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-weight:600!important;letter-spacing:.02em}
+.f1c-dueno{border-top:1.5px dashed var(--line);padding-top:12px;display:grid;gap:1px;font-size:14px;cursor:pointer}
+.f1c-dueno .f1c-et{font-size:11px;font-weight:800;color:var(--verde);text-transform:uppercase;letter-spacing:.08em}
+.f1c-dueno b{font-size:15px}
+.f1c-dueno span{color:var(--muted)}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -461,7 +474,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v20';
+const VERSION = 'v21';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -708,32 +721,16 @@ function renderInicio() {
   (p.contactos || []).forEach(c => contactos.push({ e: '👤', t: c.nombre || 'Contacto', s: [c.rol, c.notas].filter(Boolean).join(' · '), tel: c.tel, abrir: `formContacto('${c.id}')` }));
   h += `<div class="sec"><h2>Contactos</h2><button class="link" onclick="formContacto()">Añadir</button></div><div class="card">` + (contactos.length ? contactos.map(c => `<div class="contacto" ${c.abrir ? `onclick="${c.abrir}" style="cursor:pointer"` : ''}><div class="ico">${c.e}</div><div class="txt"><div class="t">${esc(c.t)}</div>${c.s ? `<div class="s">${esc(c.s)}</div>` : ''}</div>${c.tel ? `<a class="tel" href="tel:${esc(String(c.tel).replace(/\s/g, ''))}" onclick="event.stopPropagation()">Llamar</a>` : ''}</div>`).join('') : vacioHTML('👤', 'Añade a quien quieras tener a mano: paseador, cuidador, peluquería, residencia, familiares…')) + `</div>`;
 
-  const grupos3 = t => String(t || '').replace(/\s+/g, '').replace(/(.{3})(?=.)/g, '$1 ');
-  const corta = f => { if (!f) return '—'; const d = aFecha(f); return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${String(d.getFullYear()).slice(2)}`; };
-  const campo = (l, v, cls = '') => `<div class="tj-c ${cls}"><span>${l}</span><b>${esc(v || '—')}</b></div>`;
-  const extra = [p.pasaporte ? `Pasaporte ${p.pasaporte}` : '', p.adn ? `ADN ${p.adn}` : ''].filter(Boolean).join(' · ');
-  const notas = [p.esterilizado ? `Esterilizado: ${p.esterilizado}` : '', p.color ? `Color: ${p.color}` : '', p.alergias ? `Alergias: ${p.alergias}` : ''].filter(Boolean).join(' · ');
+  const datosFicha = [['Microchip', p.chip, 1], ['Pasaporte', p.pasaporte, 1], ['ADN canino', p.adn, 1], ['Nacimiento', p.nacimiento ? fmt(p.nacimiento) : ''], ['Esterilizado', p.esterilizado], ['Color', p.color], ['Alergias', p.alergias]].filter(x => x[1]);
+  const tieneDueno = p.duenoNombre || p.duenoTel || p.duenoDni || p.duenoDir || p.duenoEmail;
   h += `<div class="sec"><h2>Ficha</h2><button class="link" onclick="editarPerfil()">Editar</button></div>
-  <div class="tarjeta" id="tarjeta" onclick="this.classList.toggle('girada')" role="button" aria-label="Ficha de ${esc(p.nombre || 'tu perro')}. Toca para ver tus datos">
-    <div class="tj-in">
-      <div class="tj-cara tj-frente">
-        <div class="tj-top"><span class="tj-marca">MI MASCOTA</span><span class="tj-tipo">FICHA CANINA</span></div>
-        <div class="tj-chip"><i></i></div>
-        <div class="tj-num">${p.chip ? esc(grupos3(p.chip)) : '<em>Microchip sin apuntar</em>'}</div>
-        ${extra ? `<div class="tj-extra">${esc(extra)}</div>` : ''}
-        <div class="tj-pie">${campo('Nombre', (p.nombre || '').toUpperCase(), 'ancho')}${campo('Nacimiento', corta(p.nacimiento))}${campo('Raza', p.raza)}</div>
-        <svg class="tj-huella" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="6" cy="9" rx="2" ry="2.6"/><ellipse cx="10" cy="5.6" rx="2" ry="2.7"/><ellipse cx="14.4" cy="5.6" rx="2" ry="2.7"/><ellipse cx="18.2" cy="9" rx="2" ry="2.6"/><path d="M12 11c-3 0-6 3.4-6 6.2 0 1.8 1.4 2.6 3 2.2 1.1-.3 2-.7 3-.7s1.9.4 3 .7c1.6.4 3-.4 3-2.2C18 14.4 15 11 12 11z"/></svg>
-      </div>
-      <div class="tj-cara tj-dorso">
-        <div class="tj-banda"></div>
-        <div class="tj-dueno">${p.duenoNombre || p.duenoTel || p.duenoDni || p.duenoDir || p.duenoEmail
-          ? `${campo('Titular', p.duenoNombre, 'ancho')}${campo('DNI', p.duenoDni)}${campo('Teléfono', p.duenoTel)}${campo('Email', p.duenoEmail, 'ancho')}${campo('Dirección', p.duenoDir, 'ancho')}`
-          : `<p class="tj-vacio">Añade tus datos en «Editar» para tenerlos aquí, por si alguien encuentra a ${esc(p.nombre || 'tu perro')}.</p>`}</div>
-        ${notas ? `<div class="tj-notas">${esc(notas)}</div>` : ''}
-      </div>
-    </div>
-  </div>
-  <p class="tj-ayuda">Toca la tarjeta para ver ${p.duenoNombre ? 'tus datos' : 'el reverso'}</p>`;
+  <div class="f1c">
+    <div class="f1c-tit"><h3>${esc(p.nombre || 'Tu perro')}</h3><span>${esc(p.raza || 'Toca «Editar» para rellenar su ficha')}</span></div>
+    ${datosFicha.length ? `<div class="f1c-grid">${datosFicha.map(([l, v, m]) => `<div><span>${l}</span><b class="${m ? 'mono' : ''}">${esc(v)}</b></div>`).join('')}</div>` : ''}
+    <div class="f1c-dueno" onclick="editarPerfil('dueno')">${tieneDueno
+      ? `<span class="f1c-et">Si me encuentras</span><b>${esc(p.duenoNombre || '')}</b><span>${esc([p.duenoTel, p.duenoDir].filter(Boolean).join(' · '))}</span>${p.duenoDni || p.duenoEmail ? `<span>${esc([p.duenoDni ? 'DNI ' + p.duenoDni : '', p.duenoEmail].filter(Boolean).join(' · '))}</span>` : ''}`
+      : `<span class="f1c-et">Tus datos</span><span>Añádelos en «Editar» por si alguien encuentra a ${esc(p.nombre || 'tu perro')}.</span>`}</div>
+  </div>`;
   h += `<button class="ajustes-link" onclick="abrirAjustes()"><span class="estado-txt" id="estado-txt"></span>Ajustes y sincronización</button>`;
   $('#v-inicio').innerHTML = conIconos(h);
   pintarEstado();

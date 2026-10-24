@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F5EFE5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141916" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Mascota">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>Mi Mascota</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5EFE5;--card:#FFFCF7;--ink:#22302A;--muted:#6F776F;--line:#E7DFD2;
+  --verde:#2F5D50;--verde2:#E1EBE4;--terra:#C4613A;--terra2:#F6E3D8;
+  --ambar:#9A6514;--ambar2:#FAEFD9;--rojo:#B23A2B;--rojo2:#F7DEDA;
+  --sombra:0 1px 2px rgba(40,30,20,.05),0 6px 18px rgba(40,30,20,.06);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#141916;--card:#1D2420;--ink:#ECE6DA;--muted:#9BA39C;--line:#2C352F;
+  --verde:#8DC2AB;--verde2:#22332B;--terra:#E38A62;--terra2:#3A2A22;
+  --ambar:#E5B460;--ambar2:#352C1C;--rojo:#EE8473;--rojo2:#3B2522;
+  --sombra:none;color-scheme:dark;
+}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+body{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+h1,h2,h3,.serif{font-family:Fraunces,Georgia,serif;font-weight:650;letter-spacing:-.01em;margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--verde)}
+
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;display:flex;align-items:center;gap:10px;max-width:760px;margin:0 auto}
+header.top h1{font-size:27px;flex:1}
+.estado{width:9px;height:9px;border-radius:50%;background:var(--muted);opacity:.35;flex:none}
+.estado.ok{background:var(--verde);opacity:1}
+.estado.sync{background:var(--ambar);opacity:1;animation:lat 1s infinite}
+.estado.error{background:var(--rojo);opacity:1}
+@keyframes lat{50%{opacity:.25}}
+.icon-btn{border:1px solid var(--line);background:var(--card);width:40px;height:40px;border-radius:13px;display:grid;place-items:center;box-shadow:var(--sombra);flex:none}
+.icon-btn svg{width:20px;height:20px}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px 24px}
+.vista{display:none}.vista.activa{display:block;animation:entra .22s ease}
+@keyframes entra{from{opacity:0;transform:translateY(6px)}}
+.card{background:var(--card);border-radius:20px;padding:14px 16px;box-shadow:var(--sombra);margin-bottom:12px;border:1px solid var(--line)}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:22px 2px 9px}
+.sec h2{font-size:19px}
+.link{border:0;background:none;color:var(--verde);font-weight:600;font-size:14.5px;padding:4px 0}
+.s{color:var(--muted);font-size:13.5px}
+
+/* Ficha */
+.hero{display:flex;gap:16px;align-items:center;padding:16px;cursor:pointer;background:linear-gradient(135deg,var(--card),color-mix(in srgb,var(--verde2) 70%,var(--card)))}
+.foto{width:96px;height:96px;border-radius:30px;background:var(--verde2) center/cover no-repeat;display:grid;place-items:center;font-size:44px;flex:none;border:3px solid var(--card);box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.hero h2{font-size:30px;line-height:1.05}
+.hero .s{font-size:14.5px;margin-top:3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.chip{font-size:12.5px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--ink)}
+
+/* Filas */
+.fila{display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line);cursor:pointer}
+.fila:first-child{border-top:0}
+.ico{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:19px;background:var(--verde2);flex:none}
+.ico.terra{background:var(--terra2)}
+.txt{flex:1;min-width:0}
+.t{font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.txt .s{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pill{font-size:12.5px;padding:4px 9px;border-radius:999px;font-weight:650;white-space:nowrap;flex:none}
+.pill.ok{background:var(--verde2);color:var(--verde)}
+.pill.pronto{background:var(--ambar2);color:var(--ambar)}
+.pill.vencido{background:var(--rojo2);color:var(--rojo)}
+.pill.neutro{background:var(--line);color:var(--muted)}
+.vacio{text-align:center;color:var(--muted);padding:22px 12px;font-size:14.5px}
+.vacio b{display:block;font-size:30px;margin-bottom:4px}
+
+.seg{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;margin:4px -16px 12px;padding-left:16px;padding-right:16px;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{flex:none;border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;font-size:14.5px}
+.seg button.on{background:var(--verde);color:var(--bg);border-color:var(--verde);font-weight:600}
+
+.datos{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;font-size:14.5px}
+.datos dt{color:var(--muted)}.datos dd{margin:0;text-align:right;overflow-wrap:anywhere}
+.contacto{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.contacto:first-child{border-top:0}
+.tel{border:0;background:var(--verde2);color:var(--verde);border-radius:12px;padding:8px 12px;font-weight:600;font-size:14px;text-decoration:none;flex:none}
+
+.resumen{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cifra{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;box-shadow:var(--sombra)}
+.cifra b{display:block;font-family:Fraunces,Georgia,serif;font-size:22px;font-weight:650}
+.cifra span{color:var(--muted);font-size:13px}
+
+/* Comida */
+.barra{height:10px;border-radius:6px;background:var(--line);overflow:hidden;margin:10px 0 6px}
+.barra i{display:block;height:100%;background:var(--verde);border-radius:6px;transition:width .4s}
+.barra.pronto i{background:var(--ambar)}.barra.vencido i{background:var(--rojo)}
+.grande{font-family:Fraunces,Georgia,serif;font-size:26px;font-weight:650}
+.botones{display:flex;gap:8px;margin-top:12px}
+.botones .btn{padding:11px 12px;font-size:15px}
+
+/* Peso */
+.grafica{width:100%;height:auto;display:block}
+.grafica .area{fill:var(--verde2)}
+.grafica .lin{fill:none;stroke:var(--verde);stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+.grafica .pt{fill:var(--card);stroke:var(--verde);stroke-width:2}
+.grafica .rej{stroke:var(--line);stroke-width:1}
+.grafica text{fill:var(--muted);font-size:10px;font-family:inherit}
+
+/* Documentos */
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.doc{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;text-align:left;padding:0;box-shadow:var(--sombra)}
+.doc .mini{aspect-ratio:4/3;background:var(--verde2) center/cover no-repeat;display:grid;place-items:center;font-size:36px;position:relative}
+.doc .mini.pdf{background:var(--terra2)}
+.doc .nube{position:absolute;right:7px;top:7px;font-size:11px;background:var(--card);border-radius:8px;padding:2px 6px;color:var(--muted)}
+.doc .pie{padding:8px 11px 10px}
+.doc .t{font-size:14px;white-space:nowrap}
+.doc .s{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Barra inferior y botón + */
+nav.tabs{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:center;padding:7px 6px calc(7px + env(safe-area-inset-bottom));z-index:6}
+nav.tabs .in{display:flex;width:100%;max-width:560px}
+nav.tabs button{border:0;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;flex:1;padding:4px 0}
+nav.tabs button svg{width:25px;height:25px}
+nav.tabs button.on{color:var(--verde);font-weight:600}
+.fab{position:fixed;right:max(18px,calc(50vw - 362px));bottom:calc(84px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:20px;background:var(--terra);color:#fff;border:0;display:grid;place-items:center;box-shadow:0 8px 20px color-mix(in srgb,var(--terra) 40%,transparent);z-index:6}
+.fab svg{width:28px;height:28px}
+
+/* Hoja de formulario */
+.velo{position:fixed;inset:0;background:rgba(12,16,14,.42);z-index:20;display:none;align-items:flex-end;justify-content:center}
+.velo.abierto{display:flex}
+.hoja{background:var(--bg);width:100%;max-width:620px;max-height:92vh;max-height:92dvh;overflow:auto;-webkit-overflow-scrolling:touch;border-radius:24px 24px 0 0;padding:8px 18px calc(20px + env(safe-area-inset-bottom));animation:sube .26s cubic-bezier(.2,.8,.2,1)}
+@keyframes sube{from{transform:translateY(40px);opacity:.4}}
+@media (min-width:700px){.velo{align-items:center}.hoja{border-radius:24px;max-height:86vh}}
+.asa{width:40px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 10px}
+.hoja-tit{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.hoja-tit h3{font-size:22px;flex:1}
+.cerrar{border:0;background:var(--line);width:32px;height:32px;border-radius:50%;font-size:14px;color:var(--muted)}
+.subt{font-family:Fraunces,Georgia,serif;font-size:16px;margin:22px 2px 0;color:var(--verde)}
+label{display:block;font-size:13px;color:var(--muted);margin:12px 2px 5px;font-weight:600}
+input,select,textarea{width:100%;font:inherit;font-size:16px;padding:11px 12px;border-radius:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);outline:none;min-height:46px}
+input:focus,select:focus,textarea:focus{border-color:var(--verde)}
+input[type=date]{-webkit-appearance:none;appearance:none;display:block}
+textarea{min-height:84px;resize:vertical}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dos>.campo{min-width:0}
+.btn{border:0;border-radius:15px;padding:14px 16px;font-weight:650;background:var(--verde);color:var(--bg);width:100%;text-align:center;text-decoration:none;display:block}
+.btn.sec{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.peligro{background:none;color:var(--rojo)}
+.acciones{display:grid;gap:8px;margin-top:20px}
+.rapido{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.rapido button{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:16px 12px;text-align:left;display:flex;flex-direction:column;gap:6px;font-weight:600}
+.rapido button span{font-size:26px}
+.fotoedit{display:flex;align-items:center;gap:14px;margin:6px 0 2px}
+.fotoedit .foto{width:76px;height:76px;border-radius:24px;font-size:34px}
+.nota{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:14px;color:var(--muted);margin-top:10px}
+.nota ol{margin:6px 0 0;padding-left:20px}
+.adjuntos{margin-top:4px}
+
+/* Visor */
+.visor{position:fixed;inset:0;background:#0c0e0d;z-index:30;display:none;flex-direction:column;color:#eee}
+.visor.abierto{display:flex}
+.visor .barra-v{display:flex;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top) + 8px) 12px 8px}
+.visor .barra-v b{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.visor .barra-v button,.visor .barra-v a{border:0;background:#262b28;color:#eee;border-radius:12px;padding:8px 12px;font-size:14px;text-decoration:none;flex:none}
+.visor .cont{flex:1;display:grid;place-items:center;overflow:auto;min-height:0}
+.visor img{max-width:100%;max-height:100%;object-fit:contain}
+.visor iframe{width:100%;height:100%;border:0;background:#fff}
+.visor .msg{color:#bbb;text-align:center;padding:30px;font-size:15px}
+
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 12px);transform:translate(-50%,-80px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;font-size:14.5px;z-index:40;transition:transform .25s;max-width:90vw;text-align:center}
+.toast.ver{transform:translate(-50%,0)}
+
+@media (min-width:820px){
+  .doscol{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1 id="titulo">Mi Mascota</h1>
+  <span class="estado" id="estado" title="Sincronización"></span>
+  <button class="icon-btn" onclick="abrirAjustes()" aria-label="Ajustes">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+  </button>
+</header>
+
+<main>
+  <section class="vista activa" id="v-inicio"></section>
+  <section class="vista" id="v-salud"></section>
+  <section class="vista" id="v-comida"></section>
+  <section class="vista" id="v-peso"></section>
+  <section class="vista" id="v-docs"></section>
+</main>
+
+<button class="fab" id="fab" onclick="accionFab()" aria-label="Añadir">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+
+<nav class="tabs"><div class="in">
+  <button data-tab="inicio" class="on" onclick="irA('inicio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg>Inicio</button>
+  <button data-tab="salud" onclick="irA('salud')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.4-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.8-7.5 10.2-7.5 10.2z"/><path d="M12 10.5v5M9.5 13h5" stroke-linecap="round"/></svg>Salud</button>
+  <button data-tab="comida" onclick="irA('comida')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M8 8.5c.8-1 2.2-1.5 4-1.5s3.2.5 4 1.5"/></svg>Comida</button>
+  <button data-tab="peso" onclick="irA('peso')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8 9.5a5.5 5.5 0 0 1 8 0l-2.5 2.5M12 12l1.5-2"/></svg>Peso</button>
+  <button data-tab="docs" onclick="irA('docs')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>Documentos</button>
+</div></nav>
+
+<div class="velo" id="velo"><div class="hoja" id="hoja"></div></div>
+
+<div class="visor" id="visor">
+  <div class="barra-v" id="visor-barra"></div>
+  <div class="cont" id="visor-cont"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="fdoc" accept="image/*,application/pdf" multiple hidden>
+<input type="file" id="fadj" accept="image/*,application/pdf" multiple hidden>
+
+<script>
+'use strict';
+const VERSION = 'v1';
+
+/* ---------- utilidades ---------- */
+const $ = s => document.querySelector(s);
+const pad = n => String(n).padStart(2, '0');
+const deFecha = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const hoy = () => deFecha(new Date());
+const aFecha = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const sumarDias = (s, n) => { const d = aFecha(s); d.setDate(d.getDate() + n); return deFecha(d); };
+const sumarMeses = (s, n) => { const d = aFecha(s); const dia = d.getDate(); d.setDate(1); d.setMonth(d.getMonth() + n); const ult = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); d.setDate(Math.min(dia, ult)); return deFecha(d); };
+const diasEntre = (a, b) => Math.round((aFecha(b) - aFecha(a)) / 864e5);
+const diasHasta = s => diasEntre(hoy(), s);
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const fmt = s => { if (!s) return ''; const d = aFecha(s); return `${d.getDate()} ${MESES[d.getMonth()]} ${d.getFullYear()}`; };
+const fmtCorto = s => { if (!s) return ''; const d = aFecha(s); return `${d.getDate()} ${MESES[d.getMonth()]}`; };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const norm = s => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+const num = n => Number(n).toLocaleString('es-ES', { maximumFractionDigits: 2 });
+const euros = n => Number(n || 0).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+const porFechaDesc = (a, b) => (b.fecha || '').localeCompare(a.fecha || '');
+const base = n => n.replace(/\.[^.]+$/, '');
+const ext = m => m === 'application/pdf' ? '.pdf' : m && m.startsWith('image/') ? '.jpg' : '';
+
+let toastT;
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('ver'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('ver'), 2600); }
+
+/* ---------- datos ---------- */
+const LISTAS = ['salud', 'consultas', 'medicacion', 'compras', 'peso', 'docs'];
+const vacio = () => ({ perfil: { upd: 0 }, comida: { upd: 0 }, salud: [], consultas: [], medicacion: [], compras: [], peso: [], docs: [] });
+let D; try { D = Object.assign(vacio(), JSON.parse(localStorage.getItem('mm-datos') || '{}')); } catch { D = vacio(); }
+let CFG; try { CFG = JSON.parse(localStorage.getItem('mm-cfg') || '{}'); } catch { CFG = {}; }
+const guardarLocal = () => localStorage.setItem('mm-datos', JSON.stringify(D));
+const vivos = c => D[c].filter(x => !x.borrado);
+
+function guardarItem(c, obj) {
+  obj = { ...obj, upd: Date.now() };
+  if (!obj.id) obj.id = uid();
+  const i = D[c].findIndex(x => x.id === obj.id);
+  if (i >= 0) D[c][i] = obj; else D[c].push(obj);
+  cambio();
+  return obj;
+}
+function borrarItem(c, id) {
+  const i = D[c].findIndex(x => x.id === id);
+  if (i < 0) return;
+  const x = D[c][i];
+  D[c][i] = { id: x.id, borrado: true, upd: Date.now(), ...(x.driveId ? { driveId: x.driveId } : {}) };
+  cambio();
+}
+function guardarObj(k, cambios) { D[k] = { ...D[k], ...cambios, upd: Date.now() }; cambio(); }
+function cambio() { guardarLocal(); render(); programarSync(); }
+
+// Igual que en Code.gs: gana la versión más reciente de cada elemento
+function fusionar(a, b) {
+  const r = vacio();
+  a = a || {}; b = b || {};
+  for (const k of ['perfil', 'comida']) r[k] = ((b[k] && b[k].upd) || 0) > ((a[k] && a[k].upd) || 0) ? b[k] : (a[k] || { upd: 0 });
+  for (const c of LISTAS) {
+    const m = new Map();
+    for (const x of [...(a[c] || []), ...(b[c] || [])]) { const y = m.get(x.id); if (!y || (x.upd || 0) > (y.upd || 0)) m.set(x.id, x); }
+    r[c] = [...m.values()];
+  }
+  return r;
+}
+
+/* ---------- lógica ---------- */
+const TIPOS = {
+  vacuna: { n: 'Vacuna', ico: '💉', meses: 12 },
+  interna: { n: 'Antiparasitario interno', ico: '💊', meses: 3 },
+  externa: { n: 'Antiparasitario externo', ico: '🛡️', meses: 1 },
+  otro: { n: 'Otro (revisión, test…)', ico: '🩺', meses: 12 },
+};
+const SUGERENCIAS = ['Rabia', 'Polivalente', 'Leptospirosis', 'Tos de las perreras', 'Leishmaniosis', 'Test de leishmania', 'Revisión anual', 'Milbemax', 'Drontal', 'Bravecto', 'NexGard', 'Simparica', 'Advantix', 'Frontline', 'Collar Seresto', 'Collar Scalibor'];
+const CATS = ['Pasaporte y cartilla', 'Analíticas', 'Informes', 'Recetas', 'Facturas', 'Seguro', 'Fotos', 'Otros'];
+const ICO_CAT = { 'Pasaporte y cartilla': '📘', 'Analíticas': '🧪', 'Informes': '📋', 'Recetas': '💊', 'Facturas': '🧾', 'Seguro': '🛡️', 'Fotos': '📷', 'Otros': '📄' };
+
+// Un registro sigue "pendiente" si tiene próxima fecha y no hay otro posterior con el mismo nombre
+function pendiente(s, lista) {
+  if (!s.proxima) return false;
+  return !lista.some(o => o.id !== s.id && norm(o.nombre) === norm(s.nombre) && (o.fecha || '') > (s.fecha || ''));
+}
+function pienso() {
+  const c = D.comida;
+  if (!(c.racionG > 0 && c.sacoKg > 0 && c.sacoFecha)) return null;
+  const dias = Math.floor(c.sacoKg * 1000 / c.racionG);
+  const fin = sumarDias(c.sacoFecha, dias);
+  const quedan = diasHasta(fin);
+  return { dias, fin, quedan, pct: Math.max(0, Math.min(1, quedan / dias)) };
+}
+function proximoCumple() {
+  const n = D.perfil.nacimiento; if (!n) return null;
+  const h = aFecha(hoy()), a = aFecha(n);
+  let c = new Date(h.getFullYear(), a.getMonth(), a.getDate());
+  if (c < h) c = new Date(h.getFullYear() + 1, a.getMonth(), a.getDate());
+  return { fecha: deFecha(c), anios: c.getFullYear() - a.getFullYear() };
+}
+function avisos() {
+  const L = vivos('salud');
+  const r = L.filter(s => pendiente(s, L)).map(s => ({ fecha: s.proxima, titulo: s.nombre || TIPOS[s.tipo]?.n, sub: TIPOS[s.tipo]?.n || '', ico: TIPOS[s.tipo]?.ico || '🩺', abrir: `formSalud(D.salud.find(x=>x.id==='${s.id}'))` }));
+  const p = pienso();
+  if (p) r.push({ fecha: p.fin, titulo: 'Se acaba el pienso', sub: D.comida.pienso || 'Pienso', ico: '🥣', terra: 1, abrir: `irA('comida')` });
+  const cu = proximoCumple();
+  if (cu && diasHasta(cu.fecha) <= 45) r.push({ fecha: cu.fecha, titulo: `Cumple ${cu.anios} ${cu.anios === 1 ? 'año' : 'años'}`, sub: fmt(cu.fecha), ico: '🎂', terra: 1, abrir: 'editarPerfil()', cumple: 1 });
+  return r.sort((a, b) => a.fecha.localeCompare(b.fecha));
+}
+function pillFecha(f) {
+  const d = diasHasta(f);
+  let cls = 'ok', t;
+  if (d < 0) { cls = 'vencido'; t = d === -1 ? 'ayer' : `hace ${-d} días`; }
+  else if (d === 0) { cls = 'vencido'; t = 'hoy'; }
+  else if (d === 1) { cls = 'pronto'; t = 'mañana'; }
+  else if (d <= 14) { cls = 'pronto'; t = `en ${d} días`; }
+  else t = d <= 45 ? `en ${d} días` : fmtCorto(f) + (aFecha(f).getFullYear() !== new Date().getFullYear() ? ' ' + aFecha(f).getFullYear() : '');
+  return `<span class="pill ${cls}">${t}</span>`;
+}
+function edad(n) {
+  if (!n) return '';
+  const a = aFecha(n), h = aFecha(hoy());
+  let m = (h.getFullYear() - a.getFullYear()) * 12 + h.getMonth() - a.getMonth();
+  if (h.getDate() < a.getDate()) m--;
+  if (m < 0) return '';
+  const y = Math.floor(m / 12), mm = m % 12;
+  if (y === 0) return `${mm} ${mm === 1 ? 'mes' : 'meses'}`;
+  return `${y} ${y === 1 ? 'año' : 'años'}` + (mm ? ` y ${mm} ${mm === 1 ? 'mes' : 'meses'}` : '');
+}
+const pesos = () => vivos('peso').filter(p => p.kg > 0 && p.fecha).sort((a, b) => a.fecha.localeCompare(b.fecha));
+const medActiva = m => !m.fin || m.fin >= hoy();
+
+/* ---------- navegación ---------- */
+let tab = 'inicio', subSalud = 'vacunas', filtroDoc = 'Todos';
+const TITULOS = { inicio: null, salud: 'Salud', comida: 'Comida', peso: 'Peso', docs: 'Documentos' };
+function irA(t, sub) {
+  tab = t; if (sub) subSalud = sub;
+  document.querySelectorAll('.vista').forEach(v => v.classList.toggle('activa', v.id === 'v-' + t));
+  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  render(); scrollTo(0, 0);
+}
+function accionFab() {
+  if (tab === 'salud') {
+    if (subSalud === 'vacunas') return formSalud(null, 'vacuna');
+    if (subSalud === 'parasitos') return formSalud(null, 'interna');
+    if (subSalud === 'consultas') return formConsulta();
+    return formMed();
+  }
+  if (tab === 'comida') return formCompra();
+  if (tab === 'peso') return formPeso();
+  if (tab === 'docs') return $('#fdoc').click();
+  abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>Añadir</h3><button class="cerrar" onclick="cerrarHoja()">✕</button></div>
+  <div class="rapido">
+    <button onclick="formSalud(null,'vacuna')"><span>💉</span>Vacuna</button>
+    <button onclick="formSalud(null,'interna')"><span>💊</span>Antiparasitario</button>
+    <button onclick="formConsulta()"><span>🩺</span>Consulta</button>
+    <button onclick="formMed()"><span>💧</span>Medicación</button>
+    <button onclick="formPeso()"><span>⚖️</span>Peso</button>
+    <button onclick="cerrarHoja();$('#fdoc').click()"><span>📄</span>Documento</button>
+  </div>`);
+}
+
+/* ---------- pintar ---------- */
+function render() {
+  $('#titulo').textContent = TITULOS[tab] || (D.perfil.nombre ? D.perfil.nombre : 'Mi Mascota');
+  ({ inicio: renderInicio, salud: renderSalud, comida: renderComida, peso: renderPeso, docs: renderDocs })[tab]();
+}
+const fila = ({ ico, terra, t, s, der, abrir }) => `<div class="fila" onclick="${esc(abrir || '')}"><div class="ico ${terra ? 'terra' : ''}">${ico}</div><div class="txt"><div class="t">${esc(t)}</div>${s ? `<div class="s">${esc(s)}</div>` : ''}</div>${der || ''}</div>`;
+const vacioHTML = (e, t) => `<div class="vacio"><b>${e}</b>${t}</div>`;
+
+function renderInicio() {
+  const p = D.perfil, ps = pesos(), ult = ps.at(-1);
+  const av = avisos();
+  const meds = vivos('medicacion').filter(medActiva);
+  const cons = vivos('consultas').sort(porFechaDesc);
+  const anio = String(new Date().getFullYear());
+  const gVet = vivos('consultas').filter(c => (c.fecha || '').startsWith(anio)).reduce((s, c) => s + (Number(c.coste) || 0), 0)
+    + vivos('salud').filter(c => (c.fecha || '').startsWith(anio)).reduce((s, c) => s + (Number(c.coste) || 0), 0);
+  const gCom = vivos('compras').filter(c => (c.fecha || '').startsWith(anio)).reduce((s, c) => s + (Number(c.precio) || 0), 0);
+
+  let h = `<div class="card hero" onclick="editarPerfil()">
+    <div class="foto" style="${p.foto ? `background-image:url('${p.foto}')` : ''}">${p.foto ? '' : '🐶'}</div>
+    <div class="txt"><h2>${esc(p.nombre || 'Tu perro')}</h2>
+      <div class="s">${[p.raza, edad(p.nacimiento)].filter(Boolean).map(esc).join(' · ') || 'Toca aquí para rellenar su ficha'}</div>
+      <div class="chips">${ult ? `<span class="chip">⚖️ ${num(ult.kg)} kg</span>` : ''}${p.sexo ? `<span class="chip">${esc(p.sexo)}</span>` : ''}${p.chip ? `<span class="chip">Chip ···${esc(String(p.chip).slice(-4))}</span>` : ''}</div>
+    </div></div>`;
+
+  h += `<div class="sec"><h2>Próximo</h2></div><div class="card">`;
+  h += av.length ? av.slice(0, 6).map(a => fila({ ico: a.ico, terra: a.terra, t: a.titulo, s: a.cumple ? a.sub : `${a.sub} · ${fmt(a.fecha)}`, der: a.cumple ? `<span class="pill neutro">${diasHasta(a.fecha) === 0 ? '¡hoy!' : 'en ' + diasHasta(a.fecha) + ' días'}</span>` : pillFecha(a.fecha), abrir: a.abrir })).join('')
+    : vacioHTML('🗓️', 'Cuando apuntes una vacuna o un antiparasitario con su próxima fecha, aparecerá aquí.');
+  h += `</div>`;
+
+  if (meds.length) {
+    h += `<div class="sec"><h2>En tratamiento</h2></div><div class="card">` + meds.map(m => fila({ ico: '💧', t: m.nombre, s: [m.dosis, m.frecuencia, m.fin ? 'hasta el ' + fmt(m.fin) : 'sin fecha de fin'].filter(Boolean).join(' · '), abrir: `formMed(D.medicacion.find(x=>x.id==='${m.id}'))` })).join('') + `</div>`;
+  }
+
+  h += `<div class="doscol"><div>`;
+  h += `<div class="sec"><h2>Última consulta</h2>${cons.length ? `<button class="link" onclick="irA('salud','consultas')">Ver todas</button>` : ''}</div><div class="card">`;
+  h += cons.length ? filaConsulta(cons[0]) : vacioHTML('🩺', 'Aún no has apuntado ninguna visita al veterinario.');
+  h += `</div></div><div>`;
+  h += `<div class="sec"><h2>Gastos ${anio}</h2></div><div class="resumen"><div class="cifra"><b>${euros(gVet)}</b><span>Veterinario</span></div><div class="cifra"><b>${euros(gCom)}</b><span>Comida</span></div></div>`;
+  h += `</div></div>`;
+
+  const contactos = [];
+  if (p.clinica || p.vet) contactos.push({ e: '🏥', t: p.clinica || p.vet, s: [p.clinica ? p.vet : '', p.dirVet].filter(Boolean).join(' · '), tel: p.telVet });
+  if (p.urgencias) contactos.push({ e: '🚨', t: 'Urgencias 24 h', s: '', tel: p.urgencias });
+  if (p.seguro) contactos.push({ e: '🛡️', t: p.seguro, s: p.poliza ? 'Póliza ' + p.poliza : '', tel: p.telSeguro });
+  if (contactos.length) {
+    h += `<div class="sec"><h2>Contactos</h2></div><div class="card">` + contactos.map(c => `<div class="contacto"><div class="ico">${c.e}</div><div class="txt"><div class="t">${esc(c.t)}</div>${c.s ? `<div class="s">${esc(c.s)}</div>` : ''}</div>${c.tel ? `<a class="tel" href="tel:${esc(String(c.tel).replace(/\s/g, ''))}">Llamar</a>` : ''}</div>`).join('') + `</div>`;
+  }
+
+  const datos = [['Nacimiento', fmt(p.nacimiento)], ['Raza', p.raza], ['Color', p.color], ['Microchip', p.chip], ['Pasaporte', p.pasaporte], ['Esterilizado', p.esterilizado], ['Alergias', p.alergias]].filter(x => x[1]);
+  if (datos.length) h += `<div class="sec"><h2>Ficha</h2><button class="link" onclick="editarPerfil()">Editar</button></div><div class="card"><dl class="datos">${datos.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl></div>`;
+  $('#v-inicio').innerHTML = h;
+}
+
+const SUBS = [['vacunas', 'Vacunas'], ['parasitos', 'Antiparasitarios'], ['consultas', 'Consultas'], ['medicacion', 'Medicación']];
+function filaSalud(s, L) {
+  const pend = pendiente(s, L);
+  return fila({
+    ico: TIPOS[s.tipo]?.ico || '🩺', t: s.nombre || TIPOS[s.tipo]?.n,
+    s: [fmt(s.fecha), s.tipo === 'interna' || s.tipo === 'externa' ? (s.tipo === 'interna' ? 'Interno' : 'Externo') : '', s.producto].filter(Boolean).join(' · '),
+    der: pend ? pillFecha(s.proxima) : s.proxima ? '<span class="pill neutro">renovada</span>' : '',
+    abrir: `formSalud(D.salud.find(x=>x.id==='${s.id}'))`,
+  });
+}
+function filaConsulta(c) {
+  const adj = vivos('docs').filter(d => d.consulta === c.id).length;
+  return fila({ ico: '🩺', t: c.motivo || 'Consulta', s: [fmt(c.fecha), c.diagnostico, adj ? `📎 ${adj}` : ''].filter(Boolean).join(' · '), der: c.coste ? `<span class="pill neutro">${euros(c.coste)}</span>` : '', abrir: `formConsulta(D.consultas.find(x=>x.id==='${c.id}'))` });
+}
+function renderSalud() {
+  let h = `<div class="seg">${SUBS.map(([k, n]) => `<button class="${subSalud === k ? 'on' : ''}" onclick="subSalud='${k}';render()">${n}</button>`).join('')}</div>`;
+  if (subSalud === 'vacunas' || subSalud === 'parasitos') {
+    const L = vivos('salud');
+    const tipos = subSalud === 'vacunas' ? ['vacuna', 'otro'] : ['interna', 'externa'];
+    const items = L.filter(s => tipos.includes(s.tipo)).sort(porFechaDesc);
+    const pend = items.filter(s => pendiente(s, L)).sort((a, b) => a.proxima.localeCompare(b.proxima));
+    const hist = items.filter(s => !pendiente(s, L));
+    if (!items.length) h += `<div class="card">${vacioHTML(subSalud === 'vacunas' ? '💉' : '💊', subSalud === 'vacunas' ? 'Apunta sus vacunas con el botón +. Si pones la próxima dosis, te avisaré en el calendario.' : 'Apunta pastillas, pipetas y collares con el botón +. Te avisaré cuando toque el siguiente.')}</div>`;
+    if (pend.length) h += `<div class="sec"><h2>Próximas</h2></div><div class="card">${pend.map(s => filaSalud(s, L)).join('')}</div>`;
+    if (hist.length) h += `<div class="sec"><h2>Historial</h2></div><div class="card">${hist.map(s => filaSalud(s, L)).join('')}</div>`;
+  } else if (subSalud === 'consultas') {
+    const cons = vivos('consultas').sort(porFechaDesc);
+    h += `<div class="card">${cons.length ? cons.map(filaConsulta).join('') : vacioHTML('🩺', 'Apunta cada visita: motivo, diagnóstico, tratamiento y coste. Puedes adjuntarle informes y facturas.')}</div>`;
+  } else {
+    const meds = vivos('medicacion').sort((a, b) => (b.inicio || '').localeCompare(a.inicio || ''));
+    const act = meds.filter(medActiva), ant = meds.filter(m => !medActiva(m));
+    const f = m => fila({ ico: '💧', t: m.nombre, s: [m.dosis, m.frecuencia, m.inicio ? fmt(m.inicio) + (m.fin ? ' → ' + fmt(m.fin) : '') : '', m.motivo].filter(Boolean).join(' · '), der: medActiva(m) ? '<span class="pill ok">activa</span>' : '', abrir: `formMed(D.medicacion.find(x=>x.id==='${m.id}'))` });
+    if (!meds.length) h += `<div class="card">${vacioHTML('💧', 'Aquí van los tratamientos: antibióticos, antiinflamatorios, gotas… con dosis y duración.')}</div>`;
+    if (act.length) h += `<div class="sec"><h2>Activa</h2></div><div class="card">${act.map(f).join('')}</div>`;
+    if (ant.length) h += `<div class="sec"><h2>Anteriores</h2></div><div class="card">${ant.map(f).join('')}</div>`;
+  }
+  $('#v-salud').innerHTML = h;
+}
+
+function renderComida() {
+  const c = D.comida, p = pienso();
+  let h = `<div class="sec" style="margin-top:6px"><h2>Pienso actual</h2><button class="link" onclick="formComida()">Editar</button></div><div class="card">`;
+  if (!c.pienso && !c.racionG) {
+    h += vacioHTML('🥣', 'Apunta qué come, la ración diaria y el tamaño del saco, y te avisaré antes de que se acabe.') + `<button class="btn" onclick="formComida()">Configurar pienso</button>`;
+  } else {
+    h += `<div class="t" style="font-size:18px">${esc(c.pienso || 'Pienso')}</div><div class="s">${[c.racionG ? `${num(c.racionG)} g al día` : '', c.tomas ? `${c.tomas} ${c.tomas == 1 ? 'toma' : 'tomas'}` : '', c.sacoKg ? `saco de ${num(c.sacoKg)} kg` : ''].filter(Boolean).join(' · ')}</div>`;
+    if (p) {
+      const cls = p.quedan < 0 ? 'vencido' : p.quedan <= 7 ? 'pronto' : '';
+      h += `<div class="barra ${cls}"><i style="width:${Math.round(p.pct * 100)}%"></i></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><span class="grande">${p.quedan < 0 ? 'Agotado' : p.quedan === 0 ? 'Se acaba hoy' : `${p.quedan} ${p.quedan === 1 ? 'día' : 'días'}`}</span><span class="s">${p.quedan < 0 ? 'desde el ' + fmt(p.fin) : 'hasta el ' + fmt(p.fin)}</span></div>
+      <div class="s">Saco abierto el ${fmt(c.sacoFecha)} · dura unos ${p.dias} días</div>`;
+    } else h += `<div class="s" style="margin-top:8px">Pon la ración y el tamaño del saco para calcular cuánto queda.</div>`;
+    h += `<div class="botones"><button class="btn" onclick="formSaco()">Abrir saco nuevo</button></div>`;
+  }
+  h += `</div>`;
+  if (c.premios || c.notas) h += `<div class="card">${c.premios ? `<div class="t">Premios y extras</div><div class="s" style="white-space:pre-wrap;margin-bottom:8px">${esc(c.premios)}</div>` : ''}${c.notas ? `<div class="t">Notas</div><div class="s" style="white-space:pre-wrap">${esc(c.notas)}</div>` : ''}</div>`;
+  const comp = vivos('compras').sort(porFechaDesc);
+  h += `<div class="sec"><h2>Compras</h2></div><div class="card">${comp.length ? comp.map(x => fila({ ico: '🛒', terra: 1, t: x.producto || 'Compra', s: [fmt(x.fecha), x.kg ? num(x.kg) + ' kg' : '', x.tienda].filter(Boolean).join(' · '), der: x.precio ? `<span class="pill neutro">${euros(x.precio)}</span>` : '', abrir: `formCompra(D.compras.find(y=>y.id==='${x.id}'))` })).join('') : vacioHTML('🛒', 'Apunta lo que compras (pienso, premios, juguetes) para llevar el gasto.')}</div>`;
+  $('#v-comida').innerHTML = h;
+}
+
+function grafica(ps) {
+  if (ps.length < 2) return '';
+  const W = 340, H = 150, pl = 32, pr = 12, pt = 12, pb = 24;
+  const xs = ps.map(p => aFecha(p.fecha).getTime()), ys = ps.map(p => Number(p.kg));
+  let x0 = Math.min(...xs), x1 = Math.max(...xs); if (x1 === x0) x1 = x0 + 864e5;
+  let y0 = Math.min(...ys), y1 = Math.max(...ys); const m = Math.max(.4, (y1 - y0) * .2); y0 -= m; y1 += m;
+  const X = t => pl + (t - x0) / (x1 - x0) * (W - pl - pr), Y = v => pt + (1 - (v - y0) / (y1 - y0)) * (H - pt - pb);
+  const pts = ps.map((p, i) => [X(xs[i]), Y(ys[i])]);
+  const lin = pts.map((q, i) => (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join('');
+  const area = lin + `L${pts.at(-1)[0].toFixed(1)} ${H - pb}L${pts[0][0].toFixed(1)} ${H - pb}Z`;
+  let rej = '';
+  for (let i = 0; i < 3; i++) { const v = y0 + (y1 - y0) * (i + .5) / 3, y = Y(v); rej += `<line class="rej" x1="${pl}" x2="${W - pr}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}"/><text x="${pl - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end">${num(Math.round(v * 10) / 10)}</text>`; }
+  const pf = ps.length > 24 ? '' : pts.map(q => `<circle class="pt" cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="3.2"/>`).join('');
+  return `<svg class="grafica" viewBox="0 0 ${W} ${H}" role="img" aria-label="Evolución del peso">${rej}<path class="area" d="${area}" opacity=".8"/><path class="lin" d="${lin}"/>${pf}<text x="${pl}" y="${H - 6}">${fmtCorto(ps[0].fecha)}</text><text x="${W - pr}" y="${H - 6}" text-anchor="end">${fmtCorto(ps.at(-1).fecha)}</text></svg>`;
+}
+function renderPeso() {
+  const ps = pesos(), ult = ps.at(-1), prev = ps.at(-2);
+  let h = '';
+  if (ult) {
+    const dif = prev ? ult.kg - prev.kg : 0;
+    h += `<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px"><div><div class="s">Último peso · ${fmt(ult.fecha)}</div><div class="grande" style="font-size:34px">${num(ult.kg)} kg</div></div>${prev ? `<span class="pill ${Math.abs(dif) < .05 ? 'neutro' : 'ok'}">${dif > 0 ? '+' : ''}${num(Math.round(dif * 100) / 100)} kg</span>` : ''}</div>${grafica(ps.slice(-60))}</div>`;
+  }
+  h += `<div class="sec"><h2>Registros</h2></div><div class="card">${ps.length ? ps.slice().reverse().map(p => fila({ ico: '⚖️', t: num(p.kg) + ' kg', s: [fmt(p.fecha), p.nota].filter(Boolean).join(' · '), abrir: `formPeso(D.peso.find(x=>x.id==='${p.id}'))` })).join('') : vacioHTML('⚖️', 'Apunta su peso de vez en cuando (en casa o en el veterinario) y verás la evolución.')}</div>`;
+  $('#v-peso').innerHTML = h;
+}
+
+function tarjetaDoc(d) {
+  const imagen = d.thumb && (d.mime || '').startsWith('image/');
+  return `<button class="doc" onclick="verDoc('${d.id}')"><div class="mini ${d.mime === 'application/pdf' ? 'pdf' : ''}" style="${imagen ? `background-image:url('${d.thumb}')` : ''}">${imagen ? '' : (d.mime === 'application/pdf' ? '📄' : ICO_CAT[d.categoria] || '📄')}${CFG.url && !d.driveId ? '<span class="nube">sin subir</span>' : ''}</div><div class="pie"><div class="t">${esc(d.nombre || 'Documento')}</div><div class="s">${esc([fmt(d.fecha), d.categoria].filter(Boolean).join(' · '))}</div></div></button>`;
+}
+function renderDocs() {
+  const todos = vivos('docs').sort(porFechaDesc);
+  const usadas = CATS.filter(c => todos.some(d => d.categoria === c));
+  if (filtroDoc !== 'Todos' && !usadas.includes(filtroDoc)) filtroDoc = 'Todos';
+  let h = usadas.length > 1 ? `<div class="seg">${['Todos', ...usadas].map(c => `<button class="${filtroDoc === c ? 'on' : ''}" onclick="filtroDoc='${c}';render()">${c}</button>`).join('')}</div>` : '<div style="height:6px"></div>';
+  const L = filtroDoc === 'Todos' ? todos : todos.filter(d => d.categoria === filtroDoc);
+  h += L.length ? `<div class="rejilla">${L.map(tarjetaDoc).join('')}</div>` : `<div class="card">${vacioHTML('📁', 'Guarda aquí el pasaporte, la cartilla, analíticas, facturas o el seguro. Pulsa + para hacer una foto o elegir un PDF.')}</div>`;
+  $('#v-docs').innerHTML = h;
+}
+
+/* ---------- hoja y formularios ---------- */
+function abrirHoja(h) { $('#hoja').innerHTML = h; $('#velo').classList.add('abierto'); $('#hoja').scrollTop = 0; }
+function cerrarHoja() { $('#velo').classList.remove('abierto'); $('#hoja').innerHTML = ''; }
+$('#velo').addEventListener('click', e => { if (e.target.id === 'velo') cerrarHoja(); });
+
+function campo(c, val) {
+  const id = 'f_' + c.k;
+  val = val ?? c.def ?? '';
+  let inp;
+  if (c.t === 'area') inp = `<textarea id="${id}" name="${c.k}" placeholder="${esc(c.ph || '')}">${esc(val)}</textarea>`;
+  else if (c.t === 'sel') inp = `<select id="${id}" name="${c.k}">${c.op.map(o => { const [ov, ol] = Array.isArray(o) ? o : [o, o]; return `<option value="${esc(ov)}" ${String(ov) === String(val) ? 'selected' : ''}>${esc(ol)}</option>`; }).join('')}</select>`;
+  else {
+    const tipo = c.t === 'number' ? 'text' : (c.t || 'text');
+    const extra = c.t === 'number' ? 'inputmode="decimal"' : c.t === 'tel' ? 'inputmode="tel"' : '';
+    inp = `<input id="${id}" name="${c.k}" type="${tipo}" ${extra} value="${esc(c.t === 'number' && val !== '' ? String(val).replace('.', ',') : val)}" placeholder="${esc(c.ph || '')}" ${c.list ? `list="dl_${c.k}"` : ''}>`;
+    if (c.list) inp += `<datalist id="dl_${c.k}">${c.list.map(x => `<option value="${esc(x)}">`).join('')}</datalist>`;
+  }
+  return `<div class="campo"><label for="${id}">${esc(c.l)}</label>${inp}</div>`;
+}
+
+function formulario(o) {
+  const v = o.v || {};
+  let h = `<div class="asa"></div><div class="hoja-tit"><h3>${esc(o.titulo)}</h3><button type="button" class="cerrar" onclick="cerrarHoja()" aria-label="Cerrar">✕</button></div>${o.html || ''}<form id="frm" autocomplete="off" novalidate>`;
+  let buf = [];
+  const flush = () => { if (buf.length) { h += buf.length === 2 ? `<div class="dos">${buf.join('')}</div>` : buf[0]; buf = []; } };
+  for (const c of o.campos) {
+    if (c.t === 'sep') { flush(); h += `<div class="subt">${esc(c.l)}</div>`; continue; }
+    const html = campo(c, v[c.k]);
+    if (c.half) { buf.push(html); if (buf.length === 2) flush(); } else { flush(); h += html; }
+  }
+  flush();
+  h += `${o.htmlFin || ''}<div class="acciones"><button class="btn" type="submit">Guardar</button>${(o.extra || []).map((e, i) => `<button type="button" class="btn sec" data-extra="${i}">${esc(e.t)}</button>`).join('')}${o.borrar ? '<button type="button" class="btn peligro" data-borrar>Borrar</button>' : ''}</div></form>`;
+  abrirHoja(h);
+  const f = $('#frm');
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const r = {};
+    for (const c of o.campos) {
+      if (c.t === 'sep') continue;
+      let x = f.elements[c.k].value.trim();
+      if (c.t === 'number') { x = x === '' ? '' : parseFloat(x.replace(/\./g, '').replace(',', '.')); if (Number.isNaN(x)) x = ''; }
+      r[c.k] = x;
+    }
+    if (o.validar) { const err = o.validar(r); if (err) return toast(err); }
+    const btn = f.querySelector('[type=submit]'); btn.disabled = true;
+    try { if ((await o.guardar(r)) !== false) cerrarHoja(); } finally { btn.disabled = false; }
+  });
+  f.querySelectorAll('[data-extra]').forEach(b => b.onclick = () => o.extra[b.dataset.extra].fn(f));
+  const bb = f.querySelector('[data-borrar]');
+  if (bb) bb.onclick = () => { if (confirm('¿Borrar este registro?')) { o.borrar(); cerrarHoja(); } };
+  if (o.alCambiar) { f.addEventListener('input', e => o.alCambiar(f, e.target.name)); f.addEventListener('change', e => o.alCambiar(f, e.target.name)); }
+  if (o.iniciar) o.iniciar(f);
+  return f;
+}
+// Para números con decimales (8,5 kg) en campos de texto
+const leerNum = s => { const x = parseFloat(String(s).replace(/\./g, '').replace(',', '.')); return Number.isNaN(x) ? '' : x; };
+
+function editarPerfil() {
+  const p = D.perfil;
+  let foto = p.foto || '';
+  formulario({
+    titulo: 'Ficha', v: p,
+    html: `<div class="fotoedit"><div class="foto" id="fprev" style="${foto ? `background-image:url('${foto}')` : ''}">${foto ? '' : '🐶'}</div><div><button type="button" class="btn sec" style="padding:10px 14px" onclick="$('#ffoto').click()">${foto ? 'Cambiar foto' : 'Añadir foto'}</button><input type="file" id="ffoto" accept="image/*" hidden></div></div>`,
+    campos: [
+      { k: 'nombre', l: 'Nombre', ph: 'Nombre del perro' },
+      { k: 'raza', l: 'Raza', half: 1 }, { k: 'sexo', l: 'Sexo', t: 'sel', op: ['', 'Macho', 'Hembra'], half: 1 },
+      { k: 'nacimiento', l: 'Fecha de nacimiento', t: 'date', half: 1 }, { k: 'color', l: 'Color / capa', half: 1 },
+      { k: 'chip', l: 'Microchip', half: 1 }, { k: 'pasaporte', l: 'Nº de pasaporte', half: 1 },
+      { k: 'esterilizado', l: 'Esterilizado', t: 'sel', op: ['', 'Sí', 'No'] },
+      { k: 'alergias', l: 'Alergias o problemas de salud', t: 'area', ph: 'Nada conocido' },
+      { t: 'sep', l: 'Veterinario' },
+      { k: 'clinica', l: 'Clínica', half: 1 }, { k: 'vet', l: 'Veterinario/a', half: 1 },
+      { k: 'telVet', l: 'Teléfono', t: 'tel', half: 1 }, { k: 'urgencias', l: 'Urgencias 24 h', t: 'tel', half: 1 },
+      { k: 'dirVet', l: 'Dirección' },
+      { t: 'sep', l: 'Seguro' },
+      { k: 'seguro', l: 'Compañía', half: 1 }, { k: 'poliza', l: 'Nº de póliza', half: 1 },
+      { k: 'telSeguro', l: 'Teléfono del seguro', t: 'tel' },
+      { t: 'sep', l: 'Otros' },
+      { k: 'notas', l: 'Notas', t: 'area', ph: 'Carácter, miedos, cosas a tener en cuenta…' },
+    ],
+    iniciar: () => {
+      $('#ffoto').onchange = async e => {
+        const file = e.target.files[0]; if (!file) return;
+        try { const img = await cargarImagen(file); foto = recortarCuadrado(img, 360).toDataURL('image/jpeg', .82); const el = $('#fprev'); el.style.backgroundImage = `url('${foto}')`; el.textContent = ''; }
+        catch { toast('No se pudo leer la foto'); }
+      };
+    },
+    guardar: v => guardarObj('perfil', { ...v, foto }),
+  });
+}
+
+function formSalud(s, tipoDef) {
+  const nuevo = !s;
+  s = s || { tipo: tipoDef || 'vacuna', fecha: hoy() };
+  formulario({
+    titulo: nuevo ? (TIPOS[s.tipo]?.n === 'Vacuna' ? 'Nueva vacuna' : 'Nuevo registro') : (s.nombre || 'Editar'), v: s,
+    campos: [
+      { k: 'tipo', l: 'Tipo', t: 'sel', op: Object.entries(TIPOS).map(([k, v]) => [k, v.n]) },
+      { k: 'nombre', l: 'Nombre', ph: 'Rabia, Polivalente, Milbemax…', list: SUGERENCIAS },
+      { k: 'fecha', l: 'Fecha', t: 'date', half: 1 }, { k: 'proxima', l: 'Próxima vez', t: 'date', half: 1 },
+      { k: 'producto', l: 'Producto / marca', half: 1 }, { k: 'lote', l: 'Lote', half: 1 },
+      { k: 'vet', l: 'Dónde', ph: D.perfil.clinica || 'Clínica', half: 1 }, { k: 'coste', l: 'Coste (€)', t: 'number', half: 1 },
+      { k: 'notas', l: 'Notas', t: 'area' },
+    ],
+    htmlFin: `<div class="s" id="ayudaProx" style="margin:8px 2px 0"></div>`,
+    alCambiar: (f, k) => {
+      if (k === 'proxima') { f.elements.proxima.dataset.tocado = 1; }
+      if ((k === 'fecha' || k === 'tipo') && !f.elements.proxima.dataset.tocado) {
+        const m = TIPOS[f.elements.tipo.value].meses, fe = f.elements.fecha.value;
+        f.elements.proxima.value = m && fe ? sumarMeses(fe, m) : '';
+      }
+      const pr = f.elements.proxima.value;
+      $('#ayudaProx').textContent = pr ? (CFG.url ? `Te avisaré en Google Calendar una semana antes y el día anterior (${fmt(pr)}).` : `Aparecerá en "Próximo" el ${fmt(pr)}.`) : 'Sin próxima fecha no habrá aviso.';
+    },
+    iniciar: f => { if (s.proxima || !nuevo) f.elements.proxima.dataset.tocado = 1; else f.elements.proxima.value = sumarMeses(s.fecha, TIPOS[s.tipo].meses); f.dispatchEvent(new Event('input')); },
+    extra: nuevo ? [] : [{ t: 'Apuntar la siguiente dosis', fn: () => renovar(s) }],
+    guardar: v => { guardarItem('salud', { ...s, ...v, coste: v.coste }); toast('Guardado'); },
+    borrar: nuevo ? null : () => borrarItem('salud', s.id),
+  });
+}
+function renovar(s) {
+  let meses = TIPOS[s.tipo]?.meses || 12;
+  if (s.proxima && s.fecha) meses = Math.max(1, Math.round(diasEntre(s.fecha, s.proxima) / 30.44));
+  const f = hoy();
+  formSalud(null, s.tipo);
+  const fr = $('#frm');
+  Object.entries({ nombre: s.nombre || '', producto: s.producto || '', vet: s.vet || '', fecha: f, proxima: sumarMeses(f, meses) }).forEach(([k, v]) => fr.elements[k].value = v);
+  fr.elements.proxima.dataset.tocado = 1;
+  fr.dispatchEvent(new Event('input'));
+}
+
+function formConsulta(c) {
+  const nuevo = !c;
+  c = c || { id: uid(), fecha: hoy(), vet: D.perfil.clinica || '' , _nuevo: 1 };
+  const adj = vivos('docs').filter(d => d.consulta === c.id).sort(porFechaDesc);
+  formulario({
+    titulo: nuevo ? 'Nueva consulta' : (c.motivo || 'Consulta'), v: c,
+    campos: [
+      { k: 'fecha', l: 'Fecha', t: 'date', half: 1 }, { k: 'coste', l: 'Coste (€)', t: 'number', half: 1 },
+      { k: 'motivo', l: 'Motivo', ph: 'Cojea, revisión, vómitos…' },
+      { k: 'vet', l: 'Clínica / veterinario' },
+      { k: 'diagnostico', l: 'Diagnóstico', t: 'area' },
+      { k: 'tratamiento', l: 'Tratamiento indicado', t: 'area' },
+      { k: 'notas', l: 'Notas', t: 'area', ph: 'Próxima revisión, recomendaciones…' },
+    ],
+    htmlFin: `<div class="subt">Documentos</div><div class="card adjuntos" style="margin-top:8px">${adj.length ? adj.map(d => fila({ ico: d.mime === 'application/pdf' ? '📄' : '🖼️', t: d.nombre, s: d.categoria, abrir: `verDoc('${d.id}')` })).join('') : '<div class="s" style="padding:6px 0">Sin documentos. Guarda la consulta y añade informes o facturas.</div>'}</div>`,
+    extra: [{ t: '📎 Adjuntar informe o factura', fn: f => { guardarDesdeForm(f, c); adjuntarA = c.id; $('#fadj').click(); } }],
+    guardar: v => { const x = { ...c, ...v }; delete x._nuevo; guardarItem('consultas', x); toast('Guardado'); },
+    borrar: nuevo ? null : () => borrarItem('consultas', c.id),
+  });
+}
+function guardarDesdeForm(f, c) {
+  const x = { ...c }; delete x._nuevo;
+  for (const k of ['fecha', 'motivo', 'vet', 'diagnostico', 'tratamiento', 'notas']) x[k] = f.elements[k].value.trim();
+  x.coste = leerNum(f.elements.coste.value);
+  guardarItem('consultas', x);
+}
+
+function formMed(m) {
+  const nuevo = !m; m = m || { inicio: hoy() };
+  formulario({
+    titulo: nuevo ? 'Nueva medicación' : m.nombre, v: m,
+    campos: [
+      { k: 'nombre', l: 'Medicamento', ph: 'Nombre' },
+      { k: 'dosis', l: 'Dosis', ph: '1 pastilla, 5 gotas…', half: 1 }, { k: 'frecuencia', l: 'Frecuencia', ph: 'cada 12 h', half: 1 },
+      { k: 'inicio', l: 'Desde', t: 'date', half: 1 }, { k: 'fin', l: 'Hasta', t: 'date', half: 1 },
+      { k: 'motivo', l: 'Para qué' },
+      { k: 'notas', l: 'Notas', t: 'area', ph: 'Con comida, no mezclar con…' },
+    ],
+    validar: v => !v.nombre && 'Pon el nombre del medicamento',
+    guardar: v => { guardarItem('medicacion', { ...m, ...v }); toast('Guardado'); },
+    borrar: nuevo ? null : () => borrarItem('medicacion', m.id),
+  });
+}
+
+function formPeso(p) {
+  const nuevo = !p; p = p || { fecha: hoy() };
+  formulario({
+    titulo: nuevo ? 'Nuevo peso' : 'Editar peso', v: p,
+    campos: [{ k: 'kg', l: 'Peso (kg)', t: 'number', ph: '12,5', half: 1 }, { k: 'fecha', l: 'Fecha', t: 'date', half: 1 }, { k: 'nota', l: 'Nota', ph: 'En el veterinario, en casa…' }],
+    iniciar: f => { if (nuevo) setTimeout(() => f.elements.kg.focus(), 250); },
+    validar: v => !(v.kg > 0) && 'Escribe el peso',
+    guardar: v => { guardarItem('peso', { ...p, ...v }); toast('Guardado'); },
+    borrar: nuevo ? null : () => borrarItem('peso', p.id),
+  });
+}
+
+function formComida() {
+  formulario({
+    titulo: 'Pienso y alimentación', v: D.comida,
+    campos: [
+      { k: 'pienso', l: 'Pienso', ph: 'Marca y variedad' },
+      { k: 'racionG', l: 'Ración diaria (g)', t: 'number', half: 1 }, { k: 'tomas', l: 'Tomas al día', t: 'number', half: 1 },
+      { k: 'sacoKg', l: 'Tamaño del saco (kg)', t: 'number', half: 1 }, { k: 'sacoFecha', l: 'Saco abierto el', t: 'date', half: 1 },
+      { k: 'precio', l: 'Precio del saco (€)', t: 'number', half: 1 }, { k: 'tienda', l: 'Dónde lo compras', half: 1 },
+      { k: 'premios', l: 'Premios y extras', t: 'area', ph: 'Snacks, latas, huesos…' },
+      { k: 'notas', l: 'Notas', t: 'area', ph: 'Alimentos prohibidos, cambios de dieta…' },
+    ],
+    guardar: v => { guardarObj('comida', v); toast('Guardado'); },
+  });
+}
+function formSaco() {
+  const c = D.comida;
+  formulario({
+    titulo: 'Abrir saco nuevo', v: { fecha: hoy(), kg: c.sacoKg, precio: c.precio, producto: c.pienso, tienda: c.tienda },
+    html: '<div class="s" style="margin:0 2px">Se reinicia la cuenta de días y, si pones el precio, se apunta la compra.</div>',
+    campos: [
+      { k: 'producto', l: 'Pienso' },
+      { k: 'fecha', l: 'Abierto el', t: 'date', half: 1 }, { k: 'kg', l: 'Kilos', t: 'number', half: 1 },
+      { k: 'precio', l: 'Precio (€)', t: 'number', half: 1 }, { k: 'tienda', l: 'Tienda', half: 1 },
+    ],
+    validar: v => !(v.kg > 0) && 'Pon los kilos del saco',
+    guardar: v => {
+      D.comida = { ...D.comida, pienso: v.producto || c.pienso, sacoKg: v.kg, sacoFecha: v.fecha, precio: v.precio || c.precio, tienda: v.tienda || c.tienda, upd: Date.now() };
+      if (v.precio) guardarItem('compras', { fecha: v.fecha, producto: v.producto, kg: v.kg, precio: v.precio, tienda: v.tienda }); else cambio();
+      toast('Saco nuevo apuntado');
+    },
+  });
+}
+function formCompra(x) {
+  const nuevo = !x; x = x || { fecha: hoy(), producto: D.comida.pienso || '', tienda: D.comida.tienda || '' };
+  formulario({
+    titulo: nuevo ? 'Nueva compra' : 'Editar compra', v: x,
+    campos: [
+      { k: 'producto', l: 'Qué', ph: 'Pienso, premios, juguete…' },
+      { k: 'fecha', l: 'Fecha', t: 'date', half: 1 }, { k: 'precio', l: 'Precio (€)', t: 'number', half: 1 },
+      { k: 'kg', l: 'Kilos (si es pienso)', t: 'number', half: 1 }, { k: 'tienda', l: 'Tienda', half: 1 },
+    ],
+    guardar: v => { guardarItem('compras', { ...x, ...v }); toast('Guardado'); },
+    borrar: nuevo ? null : () => borrarItem('compras', x.id),
+  });
+}
+
+/* ---------- documentos y archivos ---------- */
+const idb = (() => {
+  let p;
+  const abrir = () => p || (p = new Promise((ok, ko) => { const r = indexedDB.open('mi-mascota', 1); r.onupgradeneeded = () => r.result.createObjectStore('archivos'); r.onsuccess = () => ok(r.result); r.onerror = () => ko(r.error); }));
+  const tx = async (modo, fn) => { const db = await abrir(); return new Promise((ok, ko) => { const t = db.transaction('archivos', modo); const q = fn(t.objectStore('archivos')); t.oncomplete = () => ok(q && q.result); t.onerror = () => ko(t.error); }); };
+  return { get: k => tx('readonly', s => s.get(k)), set: (k, v) => tx('readwrite', s => s.put(v, k)), del: k => tx('readwrite', s => s.delete(k)) };
+})();
+async function cargarImagen(file) {
+  const url = URL.createObjectURL(file);
+  try { const img = new Image(); img.src = url; await img.decode(); return img; }
+  finally { setTimeout(() => URL.revokeObjectURL(url), 2000); }
+}
+function lienzo(img, max) {
+  const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+  const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+  const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height); return c;
+}
+function recortarCuadrado(img, lado) {
+  const s = Math.min(img.naturalWidth, img.naturalHeight), c = document.createElement('canvas'); c.width = c.height = lado;
+  c.getContext('2d').drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, lado, lado); return c;
+}
+const aBlob = (c, q) => new Promise(r => c.toBlob(r, 'image/jpeg', q));
+const blobA64 = b => new Promise((ok, ko) => { const fr = new FileReader(); fr.onload = () => ok(fr.result.split(',')[1]); fr.onerror = ko; fr.readAsDataURL(b); });
+const a64Blob = (s, mime) => { const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new Blob([u], { type: mime }); };
+
+async function prepararArchivo(file) {
+  const id = uid();
+  let blob = file, mime = file.type || (/\.pdf$/i.test(file.name) ? 'application/pdf' : 'application/octet-stream'), thumb = '';
+  if (mime.startsWith('image/')) {
+    const img = await cargarImagen(file);
+    blob = await aBlob(lienzo(img, 2000), .85); mime = 'image/jpeg';
+    thumb = lienzo(img, 360).toDataURL('image/jpeg', .7);
+  }
+  if (blob.size > 25e6) throw new Error('grande');
+  await idb.set(id, blob);
+  return { id, mime, tam: blob.size, thumb, localKey: id };
+}
+
+let adjuntarA = null;
+$('#fdoc').addEventListener('change', e => { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) formDoc({ categoria: filtroDoc !== 'Todos' ? filtroDoc : 'Otros', fecha: hoy() }, fs); });
+$('#fadj').addEventListener('change', e => { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) formDoc({ categoria: 'Informes', fecha: hoy(), consulta: adjuntarA }, fs, adjuntarA); });
+
+function formDoc(d, files, volverA) {
+  const nuevo = !d.id, multi = files && files.length > 1;
+  const cons = vivos('consultas').sort(porFechaDesc);
+  const volver = () => { if (volverA) setTimeout(() => formConsulta(D.consultas.find(x => x.id === volverA)), 50); };
+  formulario({
+    titulo: nuevo ? (multi ? `Añadir ${files.length} documentos` : 'Añadir documento') : 'Editar documento',
+    v: { ...d, nombre: d.nombre ?? (files && !multi ? base(files[0].name).replace(/^(IMG|DSC|PHOTO)[-_ ]?\d+$/i, '') : '') },
+    html: files ? `<div class="s" style="margin:0 2px 4px">${files.map(f => esc(f.name)).join(', ')}</div>` : '',
+    campos: [
+      ...(multi ? [] : [{ k: 'nombre', l: 'Nombre', ph: 'Cartilla, analítica de sangre…' }]),
+      { k: 'categoria', l: 'Categoría', t: 'sel', op: CATS, half: 1 }, { k: 'fecha', l: 'Fecha', t: 'date', half: 1 },
+      { k: 'consulta', l: 'Consulta relacionada', t: 'sel', op: [['', '— Ninguna —'], ...cons.map(c => [c.id, `${fmt(c.fecha)} · ${c.motivo || 'Consulta'}`])] },
+      { k: 'notas', l: 'Notas', t: 'area' },
+    ],
+    guardar: async v => {
+      if (!files) { guardarItem('docs', { ...d, ...v }); volver(); return; }
+      toast('Guardando…');
+      let n = 0;
+      for (const file of files) {
+        try {
+          const meta = await prepararArchivo(file);
+          D.docs.push({ ...meta, ...v, nombre: (!multi && v.nombre) || base(file.name), upd: Date.now() });
+          n++;
+        } catch (err) { toast(err.message === 'grande' ? `${file.name} pesa demasiado (máx. 25 MB)` : `No se pudo leer ${file.name}`); }
+      }
+      cambio(); if (n) toast(n === 1 ? 'Documento guardado' : `${n} documentos guardados`);
+      volver();
+    },
+    borrar: nuevo ? null : () => { borrarItem('docs', d.id); idb.del(d.id).catch(() => { }); cerrarVisor(); },
+  });
+}
+
+let urlVisor = null;
+async function verDoc(id) {
+  const d = D.docs.find(x => x.id === id); if (!d) return;
+  cerrarHoja();
+  const barra = $('#visor-barra'), cont = $('#visor-cont');
+  barra.innerHTML = `<button onclick="cerrarVisor()">✕</button><b>${esc(d.nombre)}</b><button onclick="cerrarVisor();formDoc(D.docs.find(x=>x.id==='${d.id}'))">Editar</button>`;
+  cont.innerHTML = '<div class="msg">Abriendo…</div>';
+  $('#visor').classList.add('abierto');
+  let b = await idb.get(d.id).catch(() => null);
+  if (!b && d.driveId && CFG.url) {
+    try { const r = await api('bajarDoc', { driveId: d.driveId }); b = a64Blob(r.base64, r.mime || d.mime); await idb.set(d.id, b); }
+    catch (e) { }
+  }
+  if (!$('#visor').classList.contains('abierto')) return;
+  if (!b) { cont.innerHTML = `<div class="msg">Este documento no está en este dispositivo${CFG.url ? ' y no se pudo descargar ahora.' : '.<br>Configura la sincronización en Ajustes para verlo en todos tus dispositivos.'}${d.url ? `<br><br><a href="${esc(d.url)}" target="_blank" rel="noopener" style="color:#8DC2AB">Abrir en Google Drive</a>` : ''}</div>`; return; }
+  if (urlVisor) URL.revokeObjectURL(urlVisor);
+  urlVisor = URL.createObjectURL(b);
+  cont.innerHTML = (d.mime || b.type || '').startsWith('image/') ? `<img src="${urlVisor}" alt="">` : `<iframe src="${urlVisor}" title="${esc(d.nombre)}"></iframe>`;
+  const archivo = new File([b], (d.nombre || 'documento') + ext(d.mime || b.type), { type: d.mime || b.type });
+  const btns = [];
+  if (navigator.canShare && navigator.canShare({ files: [archivo] })) btns.push(`<button id="vshare">Compartir</button>`);
+  else btns.push(`<a href="${urlVisor}" download="${esc(archivo.name)}">Descargar</a>`);
+  if (d.url) btns.push(`<a href="${esc(d.url)}" target="_blank" rel="noopener">Drive</a>`);
+  barra.insertAdjacentHTML('beforeend', btns.join(''));
+  const sh = $('#vshare'); if (sh) sh.onclick = () => navigator.share({ files: [archivo], title: d.nombre }).catch(() => { });
+}
+function cerrarVisor() { $('#visor').classList.remove('abierto'); $('#visor-cont').innerHTML = ''; if (urlVisor) { URL.revokeObjectURL(urlVisor); urlVisor = null; } }
+
+/* ---------- sincronización con Google (Apps Script) ---------- */
+let syncTimer = null, sincronizando = false, otraVez = false;
+function estado(e) { $('#estado').className = 'estado ' + (e || ''); }
+function programarSync(ms = 1500) { clearTimeout(syncTimer); if (CFG.url) syncTimer = setTimeout(() => sincronizar(), ms); }
+async function api(accion, extra = {}) {
+  const r = await fetch(CFG.url, { method: 'POST', body: JSON.stringify({ clave: CFG.clave, accion, ...extra }) });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const j = await r.json();
+  if (j.error) throw new Error(j.error);
+  return j;
+}
+async function sincronizar(manual) {
+  if (!CFG.url) { estado(''); if (manual) toast('Configura primero la dirección del script'); return; }
+  if (!navigator.onLine) { estado('error'); return; }
+  if (sincronizando) { otraVez = true; return; }
+  sincronizando = true; estado('sync');
+  try {
+    for (const d of D.docs.filter(x => !x.borrado && !x.driveId)) {
+      const b = await idb.get(d.id).catch(() => null); if (!b) continue;
+      const r = await api('subirDoc', { nombre: `${d.fecha || hoy()} ${d.nombre || 'documento'}${ext(d.mime)}`, mime: d.mime, base64: await blobA64(b) });
+      const i = D.docs.findIndex(x => x.id === d.id);
+      if (i >= 0 && !D.docs[i].borrado) { D.docs[i] = { ...D.docs[i], driveId: r.driveId, url: r.url, upd: Date.now() }; guardarLocal(); }
+    }
+    const r = await api('sincronizar', { datos: D });
+    D = Object.assign(vacio(), fusionar(D, r.datos));
+    guardarLocal(); localStorage.setItem('mm-ultima', Date.now());
+    render(); estado('ok');
+    if (manual) toast('Sincronizado');
+  } catch (e) {
+    estado('error');
+    if (manual) toast('No se pudo sincronizar: ' + e.message);
+  } finally {
+    sincronizando = false;
+    if (otraVez) { otraVez = false; programarSync(500); }
+  }
+}
+
+function abrirAjustes() {
+  const ult = Number(localStorage.getItem('mm-ultima') || 0);
+  abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>Ajustes</h3><button class="cerrar" onclick="cerrarHoja()">✕</button></div>
+  <div class="subt">Sincronizar con Google</div>
+  <label for="cfgUrl">Dirección del script (termina en /exec)</label><input id="cfgUrl" value="${esc(CFG.url || '')}" placeholder="https://script.google.com/macros/s/…/exec" autocapitalize="off" autocorrect="off" spellcheck="false">
+  <label for="cfgClave">Contraseña de la app</label><input id="cfgClave" type="password" value="${esc(CFG.clave || '')}" autocapitalize="off" autocorrect="off">
+  <div class="s" style="margin:8px 2px">${CFG.url ? (ult ? 'Última sincronización: ' + new Date(ult).toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' }) : 'Aún no se ha sincronizado') : 'Sin configurar: los datos solo están en este dispositivo.'}</div>
+  <div class="acciones" style="margin-top:10px"><button class="btn" onclick="guardarAjustes()">Guardar y sincronizar</button></div>
+  <div class="nota">Con la sincronización activa, los datos se guardan en tu Google Drive (carpeta «Mi Mascota»), los documentos se suben a «Mi Mascota/Documentos» y los avisos se crean en un calendario «Mi Mascota».</div>
+  <div class="subt">Copia de seguridad</div>
+  <div class="acciones" style="margin-top:10px"><button class="btn sec" onclick="exportar()">Descargar copia (sin archivos)</button><button class="btn sec" onclick="$('#fimp').click()">Restaurar una copia</button></div>
+  <input type="file" id="fimp" accept="application/json,.json" hidden>
+  <div class="s" style="text-align:center;margin-top:22px">Mi Mascota · ${VERSION}</div>`);
+  $('#fimp').onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try { const x = JSON.parse(await f.text()); D = Object.assign(vacio(), fusionar(D, x.datos || x)); cambio(); toast('Copia restaurada'); cerrarHoja(); }
+    catch { toast('Ese archivo no es una copia válida'); }
+  };
+}
+function guardarAjustes() {
+  CFG = { url: $('#cfgUrl').value.trim(), clave: $('#cfgClave').value };
+  localStorage.setItem('mm-cfg', JSON.stringify(CFG));
+  cerrarHoja(); render();
+  if (CFG.url) sincronizar(true); else estado('');
+}
+function exportar() {
+  const b = new Blob([JSON.stringify({ app: 'Mi Mascota', version: VERSION, fecha: new Date().toISOString(), datos: D }, null, 1)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `mi-mascota-copia-${hoy()}.json`; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+}
+
+/* ---------- arranque ---------- */
+render();
+estado(CFG.url ? '' : '');
+if (CFG.url) sincronizar();
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { render(); sincronizar(); } });
+setInterval(() => { if (document.visibilityState === 'visible' && CFG.url) sincronizar(); }, 30000);
+addEventListener('online', () => sincronizar());
+if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => { });
+</script>
+</body>
+</html>

@@ -207,6 +207,10 @@ textarea{min-height:84px;resize:vertical}
 .nota{background:var(--card);border-radius:18px;padding:12px 14px;font-size:14px;color:var(--muted);margin-top:12px;box-shadow:var(--sombra)}
 .adjuntos{margin-top:4px}
 
+.estado-sync{border-radius:16px;padding:12px 14px;margin:12px 0 0;display:flex;flex-direction:column;gap:3px;font-size:14px;background:var(--card);box-shadow:var(--sombra)}
+.estado-sync b{font-size:14.5px}.estado-sync span{color:var(--muted);line-height:1.4}
+.estado-sync.bien{background:var(--verde2)}.estado-sync.bien b{color:var(--verde)}
+.estado-sync.mal{background:var(--rojo2)}.estado-sync.mal b{color:var(--rojo)}.estado-sync.mal span{color:var(--ink)}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -285,7 +289,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v8';
+const VERSION = 'v9';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -972,10 +976,15 @@ function estado(e) { estadoActual = e || ''; $('#estado').className = 'estado ' 
 function pintarEstado() { const el = $('#estado-txt'); if (el) el.className = 'estado ' + estadoActual; }
 function programarSync(ms = 1500) { clearTimeout(syncTimer); if (CFG.url) syncTimer = setTimeout(() => sincronizar(), ms); }
 async function api(accion, extra = {}) {
-  const r = await fetch(CFG.url, { method: 'POST', body: JSON.stringify({ clave: CFG.clave, accion, ...extra }) });
-  if (!r.ok) throw new Error('HTTP ' + r.status);
-  const j = await r.json();
-  if (j.error) throw new Error(j.error);
+  let r;
+  try { r = await fetch(CFG.url, { method: 'POST', body: JSON.stringify({ clave: CFG.clave, accion, ...extra }) }); }
+  catch { throw new Error('No se puede contactar con el script. Revisa que la dirección esté bien copiada y termine en /exec.'); }
+  if (r.status === 404) throw new Error('La dirección del script no existe. Copia de nuevo la URL de la implementación (termina en /exec).');
+  if (!r.ok) throw new Error('El script respondió con un error (' + r.status + ').');
+  let j;
+  try { j = await r.json(); }
+  catch { throw new Error('Google pide iniciar sesión. En «Implementar», el acceso debe ser «Cualquier usuario» (no «con cuenta de Google»).'); }
+  if (j.error) throw new Error(j.error === 'Contraseña incorrecta' ? 'Contraseña incorrecta: debe ser la misma que pusiste en CLAVE dentro del script.' : j.error);
   return j;
 }
 async function sincronizar(manual) {
@@ -992,25 +1001,37 @@ async function sincronizar(manual) {
     }
     const r = await api('sincronizar', { datos: D });
     D = Object.assign(vacio(), fusionar(D, r.datos));
-    guardarLocal(); localStorage.setItem('mm-ultima', Date.now());
+    guardarLocal(); localStorage.setItem('mm-ultima', Date.now()); localStorage.removeItem('mm-error');
+    if (r.calendario) localStorage.setItem('mm-aviso-cal', r.calendario); else localStorage.removeItem('mm-aviso-cal');
     render(); estado('ok');
     if (manual) toast('Sincronizado');
   } catch (e) {
     estado('error');
-    if (manual) toast('No se pudo sincronizar: ' + e.message);
+    try { localStorage.setItem('mm-error', navigator.onLine ? e.message : 'Sin conexión a internet.'); } catch { }
+    if (manual) toast('No se pudo sincronizar');
   } finally {
     sincronizando = false;
     if (otraVez) { otraVez = false; programarSync(500); }
   }
 }
 
+function htmlEstadoSync() {
+  const ult = Number(localStorage.getItem('mm-ultima') || 0), err = localStorage.getItem('mm-error'), cal = localStorage.getItem('mm-aviso-cal');
+  const cuando = ult ? new Date(ult).toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+  let cls = 'neutro', tit, txt = '';
+  if (!CFG.url) { tit = 'Sin configurar'; txt = 'Los datos solo están en este dispositivo.'; }
+  else if (err) { cls = 'mal'; tit = 'No se pudo sincronizar'; txt = err + (cuando ? `<br>Última vez que funcionó: ${cuando}.` : ''); }
+  else if (ult) { cls = 'bien'; tit = 'Sincronización funcionando'; txt = `Última vez: ${cuando}.` + (cal ? `<br>Pero los avisos del calendario fallan: ${esc(cal)}. Ejecuta «autorizar» otra vez en el script.` : ''); }
+  else { tit = 'Aún no se ha sincronizado'; txt = 'Pulsa «Guardar y sincronizar».'; }
+  return `<div class="estado-sync ${cls}" id="estadoSync"><b>${tit}</b><span>${txt}</span></div>`;
+}
 function abrirAjustes() {
   const ult = Number(localStorage.getItem('mm-ultima') || 0);
   abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>Ajustes</h3><button class="cerrar" onclick="cerrarHoja()">✕</button></div>
   <div class="subt">Sincronizar con Google</div>
   <label for="cfgUrl">Dirección del script (termina en /exec)</label><input id="cfgUrl" value="${esc(CFG.url || '')}" placeholder="https://script.google.com/macros/s/…/exec" autocapitalize="off" autocorrect="off" spellcheck="false">
   <label for="cfgClave">Contraseña de la app</label><input id="cfgClave" type="password" value="${esc(CFG.clave || '')}" autocapitalize="off" autocorrect="off">
-  <div class="s" style="margin:8px 2px">${CFG.url ? (ult ? 'Última sincronización: ' + new Date(ult).toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' }) : 'Aún no se ha sincronizado') : 'Sin configurar: los datos solo están en este dispositivo.'}</div>
+  ${htmlEstadoSync()}
   <div class="acciones" style="margin-top:10px"><button class="btn" onclick="guardarAjustes()">Guardar y sincronizar</button></div>
   <div class="nota">Con la sincronización activa, los datos se guardan en tu Google Drive (carpeta «Mi Mascota»), los documentos se suben a «Mi Mascota/Documentos» y los avisos se crean en un calendario «Mi Mascota».</div>
   <div class="subt">Copia de seguridad</div>
@@ -1023,11 +1044,16 @@ function abrirAjustes() {
     catch { toast('Ese archivo no es una copia válida'); }
   };
 }
-function guardarAjustes() {
+async function guardarAjustes() {
   CFG = { url: $('#cfgUrl').value.trim(), clave: $('#cfgClave').value };
   localStorage.setItem('mm-cfg', JSON.stringify(CFG));
-  cerrarHoja(); render();
-  if (CFG.url) sincronizar(true); else estado('');
+  localStorage.removeItem('mm-error');
+  render();
+  const el = $('#estadoSync');
+  if (!CFG.url) { estado(''); if (el) el.outerHTML = htmlEstadoSync(); return; }
+  if (el) el.outerHTML = '<div class="estado-sync" id="estadoSync"><b>Comprobando…</b><span>Conectando con tu Google.</span></div>';
+  await sincronizar(true);
+  const el2 = $('#estadoSync'); if (el2) el2.outerHTML = htmlEstadoSync();
 }
 function exportar() {
   const b = new Blob([JSON.stringify({ app: 'Mi Mascota', version: VERSION, fecha: new Date().toISOString(), datos: D }, null, 1)], { type: 'application/json' });

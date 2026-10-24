@@ -48,8 +48,11 @@ a{color:var(--verde)}
 
 header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:calc(env(safe-area-inset-top) + 12px) 20px 10px;display:flex;align-items:center;gap:12px;max-width:760px;margin:0 auto}
 header.top h1{font-size:24px;flex:1;text-align:center}
-.estado{width:9px;height:9px;border-radius:50%;background:var(--muted);opacity:.35;flex:none}
-.estado.ok{background:var(--verde);opacity:1}
+.estado{width:10px;height:10px;border-radius:50%;background:var(--muted);opacity:.35;flex:none;border:0;padding:0}
+header.top h1 .estado{display:inline-block;vertical-align:middle;margin:0 0 0 8px;width:11px;height:11px;position:relative;top:-2px}
+header.top h1 .estado::after{content:"";position:absolute;inset:-12px}
+.estado.ok{box-shadow:0 0 0 3px color-mix(in srgb,var(--verde) 22%,transparent)}
+.estado.ok{background:#2E9E6A;opacity:1}
 .estado.sync{background:var(--ambar);opacity:1;animation:lat 1s infinite}
 .estado.error{background:var(--rojo);opacity:1}
 @keyframes lat{50%{opacity:.25}}
@@ -78,9 +81,9 @@ main{max-width:760px;margin:0 auto;padding:4px 20px 24px}
 .hc-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .hc-top h2{font-size:26px}
 .sexo{color:var(--verde);display:grid;place-items:center}.sexo svg{width:24px;height:24px}
-.hc-sub{display:flex;justify-content:space-between;gap:10px;color:var(--ink);font-size:14.5px;margin-top:2px;font-weight:600}
+.hc-sub{color:var(--ink);font-size:15px;margin-top:2px;font-weight:700;overflow-wrap:anywhere}
 .hc-sub span:last-child{color:var(--ink);opacity:.7;font-weight:600}
-.hc-loc{display:flex;gap:14px;flex-wrap:wrap;color:var(--ink);opacity:.8;font-size:13.5px;margin-top:8px}
+.hc-loc{display:flex;gap:6px 16px;flex-wrap:wrap;font-variant-numeric:tabular-nums;color:var(--ink);opacity:.8;font-size:13.5px;margin-top:8px}
 .hc-loc span{display:flex;align-items:center;gap:5px}.hc-loc .ic{color:var(--verde)}
 .foto{width:96px;height:96px;border-radius:30px;background:var(--verde2) center/cover no-repeat;display:grid;place-items:center;flex:none;color:var(--verde)}
 .foto svg{width:56%;height:56%}
@@ -251,8 +254,7 @@ body.menu-a .mas-nav{display:flex}
 <body>
 
 <header class="top">
-  <h1 id="titulo">Mi Mascota</h1>
-  <span class="estado" id="estado" hidden></span>
+  <h1><span id="titulo">Mi Mascota</span><button class="estado" id="estado" onclick="abrirAjustes()" aria-label="Estado de la sincronización"></button></h1>
 </header>
 
 <main>
@@ -289,7 +291,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v9';
+const VERSION = 'v10';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -342,11 +344,12 @@ const SVG = {
   imagen: '<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m20.5 16-5-5-8 8.5"/>',
   clip: '<path d="m20.5 11.5-8.3 8.3a5 5 0 0 1-7-7l8.3-8.3a3.3 3.3 0 0 1 4.7 4.7l-8.3 8.3a1.7 1.7 0 0 1-2.4-2.4l7.7-7.6"/>',
   chip: '<path d="M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>',
+  persona: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.8-3.8 3.8-6 7.5-6s6.7 2.2 7.5 6"/>',
   macho: '<circle cx="10" cy="14" r="5.5"/><path d="M14 10l6-6M15 4h5v5"/>',
   hembra: '<circle cx="12" cy="9" r="5.5"/><path d="M12 14.5V21M9 18h6"/>',
 };
 const ic = (k, c = 'ic') => `<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVG[k] || ''}</svg>`;
-const EMOJI = { '🐶': 'perro', '💉': 'jeringa', '💊': 'pastilla', '🛡️': 'escudo', '🩺': 'esteto', '🥣': 'cuenco', '🎂': 'tarta', '💧': 'gota', '⚖️': 'bascula', '📄': 'doc', '🗓️': 'calendario', '🛒': 'carro', '📁': 'carpeta', '📘': 'libro', '🧪': 'matraz', '📋': 'informe', '🧾': 'factura', '📷': 'camara', '🏥': 'clinica', '🚨': 'urgencias', '🖼️': 'imagen', '📎': 'clip' };
+const EMOJI = { '🐶': 'perro', '💉': 'jeringa', '💊': 'pastilla', '🛡️': 'escudo', '🩺': 'esteto', '🥣': 'cuenco', '🎂': 'tarta', '💧': 'gota', '⚖️': 'bascula', '📄': 'doc', '🗓️': 'calendario', '🛒': 'carro', '📁': 'carpeta', '📘': 'libro', '🧪': 'matraz', '📋': 'informe', '🧾': 'factura', '📷': 'camara', '🏥': 'clinica', '🚨': 'urgencias', '🖼️': 'imagen', '📎': 'clip', '👤': 'persona' };
 const RE_EMOJI = new RegExp(Object.keys(EMOJI).map(e => e.replace(/[️]/g, '\\uFE0F?')).join('|'), 'gu');
 const conIconos = h => h.replace(RE_EMOJI, m => ic(EMOJI[m] || EMOJI[m + '️'] || EMOJI[m.replace('️', '')]));
 
@@ -450,6 +453,7 @@ function edad(n) {
   return `${y} ${y === 1 ? 'año' : 'años'}` + (mm ? ` y ${mm} ${mm === 1 ? 'mes' : 'meses'}` : '');
 }
 const pesos = () => vivos('peso').filter(p => p.kg > 0 && p.fecha).sort((a, b) => a.fecha.localeCompare(b.fecha));
+const anios = n => { const e = edad(n); if (!e) return ''; return e.replace(/ y \d+ mes(es)?$/, ''); };
 const medActiva = m => !m.fin || m.fin >= hoy();
 
 /* ---------- navegación ---------- */
@@ -505,9 +509,9 @@ function renderInicio() {
   let h = `<div class="hero" onclick="editarPerfil()">
     <div class="hero-foto" style="${p.foto ? `background-image:url('${p.foto}')` : ''}">${p.foto ? '' : ic('perro', 'silueta')}</div>
     <div class="hero-card">
-      <div class="hc-top"><h2>${esc(p.nombre || 'Tu perro')}</h2><span class="sexo">${sexoIc}</span></div>
-      <div class="hc-sub"><span>${esc(p.raza || 'Toca para rellenar su ficha')}</span><span>${esc(edad(p.nacimiento))}</span></div>
-      ${(ult || p.chip) ? `<div class="hc-loc">${ult ? `<span>${ic('bascula')} ${num(ult.kg)} kg</span>` : ''}${p.chip ? `<span>${ic('chip')} Chip ···${esc(String(p.chip).slice(-4))}</span>` : ''}</div>` : ''}
+      <div class="hc-top"><h2>${esc(p.nombre || 'Tu perro')}</h2></div>
+      <div class="hc-sub">${esc([p.raza || 'Toca para rellenar su ficha', anios(p.nacimiento)].filter(Boolean).join(' · '))}</div>
+      ${(ult || p.chip) ? `<div class="hc-loc">${ult ? `<span>${ic('bascula')} ${num(ult.kg)} kg</span>` : ''}${p.chip ? `<span>${ic('chip')} ${esc(p.chip)}</span>` : ''}</div>` : ''}
     </div></div>`;
   h += `<div class="sec"><h2>Próximo</h2></div><div class="card">`;
   h += av.length ? av.slice(0, 6).map(a => fila({ ico: a.ico, terra: a.terra, t: a.titulo, s: a.cumple ? a.sub : `${a.sub} · ${fmt(a.fecha)}`, der: a.cumple ? `<span class="pill neutro">${diasHasta(a.fecha) === 0 ? '¡hoy!' : 'en ' + diasHasta(a.fecha) + ' días'}</span>` : pillFecha(a.fecha), abrir: a.abrir })).join('')
@@ -522,12 +526,13 @@ function renderInicio() {
   if (p.clinica || p.vet) contactos.push({ e: '🏥', t: p.clinica || p.vet, s: [p.clinica ? p.vet : '', p.dirVet].filter(Boolean).join(' · '), tel: p.telVet });
   if (p.urgencias) contactos.push({ e: '🚨', t: 'Urgencias 24 h', s: '', tel: p.urgencias });
   if (p.seguro) contactos.push({ e: '🛡️', t: p.seguro, s: p.poliza ? 'Póliza ' + p.poliza : '', tel: p.telSeguro });
-  if (contactos.length) {
-    h += `<div class="sec"><h2>Contactos</h2></div><div class="card">` + contactos.map(c => `<div class="contacto"><div class="ico">${c.e}</div><div class="txt"><div class="t">${esc(c.t)}</div>${c.s ? `<div class="s">${esc(c.s)}</div>` : ''}</div>${c.tel ? `<a class="tel" href="tel:${esc(String(c.tel).replace(/\s/g, ''))}">Llamar</a>` : ''}</div>`).join('') + `</div>`;
-  }
+  (p.contactos || []).forEach(c => contactos.push({ e: '👤', t: c.nombre || 'Contacto', s: [c.rol, c.notas].filter(Boolean).join(' · '), tel: c.tel, abrir: `formContacto('${c.id}')` }));
+  h += `<div class="sec"><h2>Contactos</h2><button class="link" onclick="formContacto()">Añadir</button></div><div class="card">` + (contactos.length ? contactos.map(c => `<div class="contacto" ${c.abrir ? `onclick="${c.abrir}" style="cursor:pointer"` : ''}><div class="ico">${c.e}</div><div class="txt"><div class="t">${esc(c.t)}</div>${c.s ? `<div class="s">${esc(c.s)}</div>` : ''}</div>${c.tel ? `<a class="tel" href="tel:${esc(String(c.tel).replace(/\s/g, ''))}" onclick="event.stopPropagation()">Llamar</a>` : ''}</div>`).join('') : vacioHTML('👤', 'Añade a quien quieras tener a mano: paseador, cuidador, peluquería, residencia, familiares…')) + `</div>`;
 
   const datos = [['Nacimiento', fmt(p.nacimiento)], ['Raza', p.raza], ['Color', p.color], ['Microchip', p.chip], ['Pasaporte', p.pasaporte], ['ADN canino', p.adn], ['Esterilizado', p.esterilizado], ['Alergias', p.alergias]].filter(x => x[1]);
+  const mios = [['Nombre', p.duenoNombre], ['DNI', p.duenoDni], ['Teléfono', p.duenoTel], ['Email', p.duenoEmail], ['Dirección', p.duenoDir]].filter(x => x[1]);
   h += `<section class="banda"><div class="sec"><h2>Ficha</h2><button class="link" onclick="editarPerfil()">Editar</button></div>${datos.length ? `<dl class="datos">${datos.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl>` : `<p class="banda-vacia">Toca «Editar» para apuntar su microchip, pasaporte, ADN y demás datos.</p>`}`;
+  h += `<div class="sec"><h2>Tus datos</h2><button class="link" onclick="editarPerfil('dueno')">Editar</button></div>${mios.length ? `<dl class="datos">${mios.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl>` : `<p class="banda-vacia">Apunta tu nombre, teléfono y dirección para tenerlos junto a los de tu perro (útil en el veterinario o si se pierde).</p>`}`;
   h += `<button class="ajustes-link" onclick="abrirAjustes()"><span class="estado-txt" id="estado-txt"></span>Ajustes y sincronización</button></section>`;
   $('#v-inicio').innerHTML = conIconos(h);
   pintarEstado();
@@ -691,7 +696,7 @@ function formulario(o) {
 // Para números con decimales (8,5 kg) en campos de texto
 const leerNum = s => { const x = parseFloat(String(s).replace(/\./g, '').replace(',', '.')); return Number.isNaN(x) ? '' : x; };
 
-function editarPerfil() {
+function editarPerfil(ir) {
   const p = D.perfil;
   let foto = p.foto || '';
   formulario({
@@ -704,6 +709,11 @@ function editarPerfil() {
       { k: 'chip', l: 'Microchip', half: 1 }, { k: 'pasaporte', l: 'Nº de pasaporte', half: 1 },
       { k: 'adn', l: 'Nº de ADN canino', half: 1 }, { k: 'esterilizado', l: 'Esterilizado', t: 'sel', op: ['', 'Sí', 'No'], half: 1 },
       { k: 'alergias', l: 'Alergias o problemas de salud', t: 'area', ph: 'Nada conocido' },
+      { t: 'sep', l: 'Tus datos' },
+      { k: 'duenoNombre', l: 'Nombre y apellidos' },
+      { k: 'duenoDni', l: 'DNI', half: 1 }, { k: 'duenoTel', l: 'Teléfono', t: 'tel', half: 1 },
+      { k: 'duenoEmail', l: 'Email', t: 'email' },
+      { k: 'duenoDir', l: 'Dirección' },
       { t: 'sep', l: 'Veterinario' },
       { k: 'clinica', l: 'Clínica', half: 1 }, { k: 'vet', l: 'Veterinario/a', half: 1 },
       { k: 'telVet', l: 'Teléfono', t: 'tel', half: 1 }, { k: 'urgencias', l: 'Urgencias 24 h', t: 'tel', half: 1 },
@@ -715,6 +725,7 @@ function editarPerfil() {
       { k: 'notas', l: 'Notas', t: 'area', ph: 'Carácter, miedos, cosas a tener en cuenta…' },
     ],
     iniciar: () => {
+      if (ir === 'dueno') setTimeout(() => { const el = $('#f_duenoNombre'); if (el) el.scrollIntoView({ block: 'center' }); }, 60);
       $('#ffoto').onchange = async e => {
         const file = e.target.files[0]; if (!file) return;
         try { const img = await cargarImagen(file); foto = lienzo(img, 1440).toDataURL('image/jpeg', .86); const el = $('#fprev'); el.style.backgroundImage = `url('${foto}')`; el.innerHTML = ''; }
@@ -722,6 +733,28 @@ function editarPerfil() {
       };
     },
     guardar: v => guardarObj('perfil', { ...v, foto }),
+  });
+}
+
+function formContacto(id) {
+  const lista = D.perfil.contactos || [];
+  const c = lista.find(x => x.id === id) || {};
+  const nuevo = !c.id;
+  formulario({
+    titulo: nuevo ? 'Nuevo contacto' : (c.nombre || 'Contacto'), v: c,
+    campos: [
+      { k: 'nombre', l: 'Nombre', ph: 'Laura, Peluquería Canina…' },
+      { k: 'rol', l: 'Quién es', ph: 'Paseador, cuidadora, familia…', list: ['Paseador/a', 'Cuidador/a', 'Peluquería', 'Residencia canina', 'Adiestrador/a', 'Familia', 'Vecino/a', 'Criador/a', 'Tienda'], half: 1 },
+      { k: 'tel', l: 'Teléfono', t: 'tel', half: 1 },
+      { k: 'notas', l: 'Notas', t: 'area', ph: 'Horario, dirección, precio…' },
+    ],
+    validar: v => !v.nombre && !v.tel && 'Pon al menos un nombre o un teléfono',
+    guardar: v => {
+      const otros = lista.filter(x => x.id !== c.id);
+      guardarObj('perfil', { contactos: [...otros, { ...c, ...v, id: c.id || uid() }].sort((a, b) => (a.nombre || '').localeCompare(b.nombre || '', 'es')) });
+      toast('Guardado');
+    },
+    borrar: nuevo ? null : () => guardarObj('perfil', { contactos: lista.filter(x => x.id !== c.id) }),
   });
 }
 

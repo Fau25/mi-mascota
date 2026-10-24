@@ -14,7 +14,7 @@
 <title>Mi Mascota</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* Estilo «tarjetas flotantes»: fondo verde-gris frío, tarjetas blancas con sombra difusa, verde azulado como único color de marca */
 :root{
@@ -437,6 +437,75 @@ textarea{min-height:84px;resize:vertical}
 #v-peso .peso-graf .grafica{width:100%;height:100%;margin:0}
 #v-peso .sec{flex:none;margin:16px 4px 10px}
 #v-peso .peso-regs{flex:0 1 auto;min-height:0;overflow:auto;margin-bottom:0;-webkit-overflow-scrolling:touch}
+
+/* Peso A · calendario */
+.pa-fila,.pb-fila,.pc-fila{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;background:none;padding:10px 0;border-top:1px solid var(--line);text-align:left;color:var(--ink);font-family:inherit}
+.peso-regs > :first-child,.pliegue > :first-child{border-top:0}
+.pa-kg{display:flex;align-items:baseline;gap:5px}
+.pa-kg b{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.pa-kg span{font-weight:700;color:var(--muted)}
+.pa-kg em{font-style:normal;font-size:12px;font-weight:800;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--bg);color:var(--muted)}
+.pa-kg em.sube{color:#2E8C5E}.pa-kg em.baja{color:var(--ambar)}
+.pa-cal{width:52px;border-radius:12px;overflow:hidden;background:var(--card);box-shadow:0 2px 8px rgba(30,50,55,.12);text-align:center;flex:none;display:grid}
+.pa-cal span{background:var(--verde);color:var(--sobre);font-size:10px;font-weight:800;letter-spacing:.08em;padding:2px 0}
+.pa-cal b{font-size:22px;font-weight:800;line-height:1.1;padding-top:3px}
+.pa-cal i{font-style:normal;font-size:9.5px;color:var(--muted);font-weight:700;padding-bottom:3px}
+/* Peso B · fecha grande */
+.pb-kg{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+.pb-kg span{font-size:15px;color:var(--muted);font-weight:700}
+.pb-kg small{display:block;font-size:12.5px;color:var(--muted);font-weight:600}
+.pb-fecha{display:flex;align-items:baseline;gap:7px;text-align:left}
+.pb-fecha b{font-size:34px;font-weight:800;line-height:1;color:var(--verde);font-variant-numeric:tabular-nums}
+.pb-fecha em{font-style:normal;font-size:34px;font-weight:300;line-height:1;color:var(--verde);letter-spacing:.02em}
+.pb-fecha span{font-size:12px;font-weight:700;color:var(--muted);align-self:center}
+/* Peso C · barra + fecha en bloque */
+.pc-kg{flex:1;min-width:0}
+.pc-kg b{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.pc-barra{height:6px;border-radius:3px;background:var(--verde2);margin-top:6px;max-width:180px}
+.pc-barra i{display:block;height:100%;border-radius:3px;background:var(--verde)}
+.pc-fecha{display:flex;align-items:center;gap:8px;padding-left:12px;border-left:1.5px solid var(--line)}
+.pc-fecha b{font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.pc-fecha span{font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--muted);line-height:1.25}
+/* Consultas comunes */
+.cd-chev{width:18px;height:18px;flex:none;color:var(--muted);transition:transform .2s}
+.ab .cd-chev{transform:rotate(180deg)}
+.cd-det{display:grid;gap:10px;padding:4px 0 2px}
+.cd-acc{display:flex;align-items:center;gap:12px;font-size:12.5px;color:var(--muted);font-weight:700;border-top:1px dashed var(--line);padding-top:10px}
+.cd-acc span:first-child{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cd-acc button{border:0;background:var(--verde2);color:var(--verde);font-weight:800;font-size:13px;padding:7px 12px;border-radius:10px;font-family:inherit}
+/* Consultas A · acordeón */
+.ca{padding:4px 16px}
+.ca-it{border-top:1px solid var(--line)}.ca-it:first-child{border-top:0}
+.ca-cab{width:100%;display:flex;align-items:center;gap:12px;border:0;background:none;padding:12px 0;text-align:left;color:var(--ink);font-family:inherit}
+.ca-dia{width:46px;flex:none;text-align:center;border-radius:12px;background:var(--verde2);color:var(--verde);padding:5px 0}
+.ca-dia b{display:block;font-size:19px;font-weight:800;line-height:1.05}.ca-dia span{font-size:9.5px;font-weight:800;letter-spacing:.05em}
+.ca-txt{flex:1;min-width:0}.ca-txt b{display:block;font-size:15.5px;font-weight:800}
+.ca-txt span{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ca-cab em{font-style:normal;font-size:12.5px;font-weight:800;color:var(--muted)}
+.ca-it.ab .cd-det{padding:0 0 14px 58px}
+/* Consultas B · tarjetas */
+.cb{display:grid;gap:12px}
+.cb-it{background:var(--card);border-radius:var(--r);box-shadow:var(--sombra);padding:14px 16px;display:grid;gap:8px;cursor:pointer}
+.cb-cab{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.cb-fecha{display:block;font-size:11.5px;font-weight:800;color:var(--verde);text-transform:uppercase;letter-spacing:.06em}
+.cb-cab b{font-size:16.5px;font-weight:800}
+.cb-prev{margin:0;font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cb-mas{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:800;color:var(--verde)}
+.cb-mas .cd-chev{color:var(--verde);width:15px;height:15px}
+/* Consultas C · línea de tiempo */
+.cc{position:relative;padding-left:2px}
+.cc-it{display:grid;grid-template-columns:44px 14px 1fr;gap:8px;position:relative;padding-bottom:14px}
+.cc-it::before{content:"";position:absolute;left:58px;top:18px;bottom:-4px;width:2px;background:var(--line)}
+.cc-it:last-child::before{display:none}
+.cc-lado{text-align:right;padding-top:6px}
+.cc-lado b{display:block;font-size:20px;font-weight:800;line-height:1}
+.cc-lado span{display:block;font-size:10.5px;font-weight:800;color:var(--verde);letter-spacing:.05em}
+.cc-lado i{font-style:normal;font-size:10px;color:var(--muted);font-weight:700}
+.cc-punto{width:14px;height:14px;border-radius:50%;background:var(--card);border:3px solid var(--verde);margin-top:10px;position:relative;z-index:1}
+.cc-card{background:var(--card);border-radius:18px;box-shadow:var(--sombra);padding:12px 14px;cursor:pointer;display:grid;gap:6px;min-width:0}
+.cc-cab{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cc-cab b{font-size:15.5px;font-weight:800}
+.cc-sub{font-size:13px;color:var(--muted)}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -512,7 +581,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v23';
+const VERSION = 'v24';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -789,6 +858,28 @@ function filaSalud(s, L) {
     abrir: `formSalud(D.salud.find(x=>x.id==='${s.id}'))`,
   });
 }
+window.consAbiertas = window.consAbiertas || {};
+function toggleCons(id) { consAbiertas[id] = !consAbiertas[id]; render(); }
+function consultasDesplegables(cons) {
+  const m = window.MODO_CONS || 'a', MES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+  const det = c => {
+    const adj = vivos('docs').filter(d => d.consulta === c.id).length;
+    const b = (t, v) => v ? `<div class="cons-bloque"><span>${t}</span><p>${esc(v)}</p></div>` : '';
+    return `<div class="cd-det">${b('Diagnóstico', c.diagnostico)}${b('Tratamiento', c.tratamiento)}${b('Notas', c.notas)}${!c.diagnostico && !c.tratamiento && !c.notas ? '<p class="s" style="margin:0">Sin diagnóstico ni tratamiento apuntados.</p>' : ''}
+      <div class="cd-acc">${c.vet ? `<span>${esc(c.vet)}</span>` : '<span></span>'}${adj ? `<span>📎 ${adj}</span>` : ''}<button onclick="event.stopPropagation();formConsulta(D.consultas.find(x=>x.id==='${c.id}'))">Editar</button></div></div>`;
+  };
+  const chev = '<svg class="cd-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+  if (m === 'a') {
+    // A · Acordeón en una sola tarjeta, con fecha en cuadradito
+    return `<div class="card ca">` + cons.map(c => { const d = aFecha(c.fecha), ab = consAbiertas[c.id]; return `<div class="ca-it ${ab ? 'ab' : ''}"><button class="ca-cab" onclick="toggleCons('${c.id}')"><div class="ca-dia"><b>${d.getDate()}</b><span>${MES[d.getMonth()]} ${String(d.getFullYear()).slice(2)}</span></div><div class="ca-txt"><b>${esc(c.motivo || 'Consulta')}</b>${!ab && c.diagnostico ? `<span>${esc(c.diagnostico)}</span>` : ''}</div>${chev}</button>${ab ? det(c) : ''}</div>`; }).join('') + `</div>`;
+  }
+  if (m === 'b') {
+    // B · Tarjetas sueltas con vista previa y «Ver más»
+    return `<div class="cb">` + cons.map(c => { const ab = consAbiertas[c.id]; return `<div class="cb-it ${ab ? 'ab' : ''}" onclick="toggleCons('${c.id}')"><div class="cb-cab"><div><span class="cb-fecha">${fmt(c.fecha)}</span><b>${esc(c.motivo || 'Consulta')}</b></div>${c.coste ? `<span class="pill neutro">${euros(c.coste)}</span>` : ''}</div>${ab ? det(c) : `${c.diagnostico ? `<p class="cb-prev">${esc(c.diagnostico)}</p>` : ''}<span class="cb-mas">Ver todo ${chev}</span>`}</div>`; }).join('') + `</div>`;
+  }
+  // C · Línea de tiempo
+  return `<div class="cc">` + cons.map(c => { const d = aFecha(c.fecha), ab = consAbiertas[c.id]; return `<div class="cc-it ${ab ? 'ab' : ''}"><div class="cc-lado"><b>${d.getDate()}</b><span>${MES[d.getMonth()]}</span><i>${d.getFullYear()}</i></div><div class="cc-punto"></div><div class="cc-card" onclick="toggleCons('${c.id}')"><div class="cc-cab"><b>${esc(c.motivo || 'Consulta')}</b>${chev}</div>${!ab ? `<span class="cc-sub">${esc([c.vet, c.coste ? euros(c.coste) : ''].filter(Boolean).join(' · '))}</span>` : det(c)}</div></div>`; }).join('') + `</div>`;
+}
 function tarjetaConsulta(c) {
   const adj = vivos('docs').filter(d => d.consulta === c.id).length;
   const bloque = (t, v) => v ? `<div class="cons-bloque"><span>${t}</span><p>${esc(v)}</p></div>` : '';
@@ -817,7 +908,7 @@ function renderSalud() {
     if (hist.length) h += `<div class="sec"><h2>Historial</h2></div><div class="card">${hist.map(s => filaSalud(s, L)).join('')}</div>`;
   } else if (subSalud === 'consultas') {
     const cons = vivos('consultas').sort(porFechaDesc);
-    h += cons.length ? `<div class="cons-lista">${cons.map(tarjetaConsulta).join('')}</div>` : `<div class="card">${vacioHTML('🩺', 'Apunta cada visita: motivo, diagnóstico, tratamiento y coste. Puedes adjuntarle informes y facturas.')}</div>`;
+    h += cons.length ? consultasDesplegables(cons) : `<div class="card">${vacioHTML('🩺', 'Apunta cada visita: motivo, diagnóstico, tratamiento y coste. Puedes adjuntarle informes y facturas.')}</div>`;
   } else {
     const meds = vivos('medicacion').sort((a, b) => (b.inicio || '').localeCompare(a.inicio || ''));
     const act = meds.filter(medActiva), ant = meds.filter(m => !medActiva(m));
@@ -969,7 +1060,20 @@ function renderPeso() {
     const dif = prev ? ult.kg - prev.kg : 0;
     h += `<div class="card peso-graf"><div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px"><div><div class="s">Último peso · ${fmt(ult.fecha)}</div><div class="grande" style="font-size:34px">${num(ult.kg)} kg</div></div>${prev ? `<span class="pill ${Math.abs(dif) < .05 ? 'neutro' : 'ok'}">${dif > 0 ? '+' : ''}${num(Math.round(dif * 100) / 100)} kg</span>` : ''}</div><div class="graf-caja" id="grafCaja"></div></div>`;
   }
-  const regs = ps.slice().reverse(), filaPeso = p => fila({ ico: '⚖️', t: num(p.kg) + ' kg', s: [fmt(p.fecha), p.nota].filter(Boolean).join(' · '), abrir: `formPeso(D.peso.find(x=>x.id==='${p.id}'))` });
+  const regs = ps.slice().reverse();
+  const MES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+  const mP = window.MODO_PESO || 'b';
+  const kgMin = Math.min(...ps.map(x => x.kg)), kgMax = Math.max(...ps.map(x => x.kg));
+  const filaPeso = p => {
+    const d = aFecha(p.fecha), i = regs.indexOf(p), ant = regs[i + 1];
+    const dif = ant ? Math.round((p.kg - ant.kg) * 10) / 10 : null;
+    const difTxt = dif === null ? '' : dif === 0 ? '=' : (dif > 0 ? '▲ ' : '▼ ') + num(Math.abs(dif));
+    const abrir = `formPeso(D.peso.find(x=>x.id==='${p.id}'))`;
+    if (mP === 'a') return `<button class="pa-fila" onclick="${abrir}"><div class="pa-kg"><b>${num(p.kg)}</b><span>kg</span>${difTxt ? `<em class="${dif > 0 ? 'sube' : dif < 0 ? 'baja' : ''}">${difTxt}</em>` : ''}</div><div class="pa-cal"><span>${MES[d.getMonth()]}</span><b>${d.getDate()}</b><i>${d.getFullYear()}</i></div></button>`;
+    if (mP === 'b') return `<button class="pb-fila" onclick="${abrir}"><div class="pb-kg">${num(p.kg)} <span>kg</span>${p.nota ? `<small>${esc(p.nota)}</small>` : ''}</div><div class="pb-fecha"><b>${d.getDate()}</b><em>${MES[d.getMonth()]}</em>${d.getFullYear() !== new Date().getFullYear() ? `<span>${d.getFullYear()}</span>` : ''}</div></button>`;
+    const pct = kgMax > kgMin ? (p.kg - kgMin) / (kgMax - kgMin) : .5;
+    return `<button class="pc-fila" onclick="${abrir}"><div class="pc-kg"><b>${num(p.kg)} kg</b><div class="pc-barra"><i style="width:${(15 + pct * 85).toFixed(0)}%"></i></div></div><div class="pc-fecha"><b>${pad(d.getDate())}</b><span>${MES[d.getMonth()]}<br>${d.getFullYear()}</span></div></button>`;
+  };
   const resto = regs.slice(4);
   h += `<div class="sec"><h2>Registros</h2>${regs.length ? `<span class="s">${regs.length}</span>` : ''}</div><div class="card peso-regs">${regs.length ? regs.slice(0, 4).map(filaPeso).join('') + (resto.length ? `<div class="pliegue ${verPesos ? 'abierto' : ''}">${verPesos ? resto.map(filaPeso).join('') : ''}<button class="pliegue-btn" onclick="verPesos=!verPesos;render()">${verPesos ? 'Ocultar anteriores' : `Ver ${resto.length} ${resto.length === 1 ? 'registro anterior' : 'registros anteriores'}`}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div>` : '') : vacioHTML('⚖️', 'Apunta su peso de vez en cuando (en casa o en el veterinario) y verás la evolución.')}</div>`;
   const v = $('#v-peso');
@@ -1206,7 +1310,7 @@ function formConsulta(c) {
     ],
     htmlFin: `<div class="subt">Documentos</div><div class="card adjuntos" style="margin-top:8px">${adj.length ? adj.map(d => fila({ ico: d.mime === 'application/pdf' ? '📄' : '🖼️', t: d.nombre, s: d.categoria, abrir: `verDoc('${d.id}')` })).join('') : '<div class="s" style="padding:6px 0">Sin documentos. Guarda la consulta y añade informes o facturas.</div>'}</div>`,
     extra: [{ t: '📎 Adjuntar informe o factura', fn: f => { guardarDesdeForm(f, c); adjuntarA = c.id; $('#fadj').click(); } }],
-    guardar: v => { const x = { ...c, ...v }; delete x._nuevo; guardarItem('consultas', x); toast('Guardado'); },
+    guardar: v => { const x = { ...c, ...v }; delete x._nuevo; const g = guardarItem('consultas', x); aplicarTratamiento(g, true); if (!g.tratamiento) toast('Guardado'); },
     borrar: nuevo ? null : () => borrarItem('consultas', c.id),
   });
 }
@@ -1217,6 +1321,35 @@ function guardarDesdeForm(f, c) {
   guardarItem('consultas', x);
 }
 
+/* Tratamiento de una consulta -> medicación (automático) */
+function medDeTratamiento(c) {
+  const t = (c.tratamiento || '').trim(); if (!t) return null;
+  let dias = 0, mm;
+  const NUM = { un: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10, quince: 15, veinte: 20, treinta: 30 };
+  const sinCada = t.replace(/cada\s+\d+\s*(h|horas?|d[ií]as?|semanas?)\b/gi, ' ').replace(/\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|quince|veinte|treinta)\s+(d[ií]as?|semanas?|mes(es)?)\b/gi, (m0, n, u) => NUM[n.toLowerCase()] + ' ' + u);
+  if ((mm = sinCada.match(/durante\s+(\d+)\s*d[ií]as?/i) || sinCada.match(/(\d+)\s*d[ií]as?/i))) dias = +mm[1];
+  else if ((mm = sinCada.match(/(\d+)\s*semanas?/i))) dias = +mm[1] * 7;
+  else if ((mm = sinCada.match(/(\d+)\s*mes(es)?/i))) dias = +mm[1] * 30;
+  const frec = (t.match(/cada\s+\d+\s*(h|horas?)\b/i) || t.match(/cada\s+\d+\s*d[ií]as?\b/i) || [''])[0];
+  const dosis = (t.match(/\d+(?:[.,]\d+)?\s*(ml|mg|gotas?|comprimidos?|pastillas?|cápsulas?)\b/i) || [''])[0];
+  const comunes = /^(Reposo|Limpiar|Revisión|Revision|Paseos|Dieta|Evitar|Volver|Control|Tratamiento|Aplicar|Dar|Cada|Durante|Con|Sin|Pienso)$/i;
+  const nombres = [...t.matchAll(/\b([A-ZÁÉÍÓÚ][a-záéíóúñ]{3,}(?:\s+(?:Plus|Forte|Retard))?)\b/g)].map(x => x[1]).filter(w => !comunes.test(w));
+  return {
+    id: 'med-' + c.id, consulta: c.id, auto: true,
+    nombre: nombres[0] || `Tratamiento · ${c.motivo || 'consulta'}`,
+    dosis, frecuencia: frec, inicio: c.fecha || hoy(), fin: dias ? sumarDias(c.fecha || hoy(), dias - 1) : (c.fecha && diasHasta(c.fecha) < -14 ? c.fecha : ''),
+    motivo: c.motivo || '', notas: t,
+  };
+}
+function aplicarTratamiento(c, avisar) {
+  const nueva = medDeTratamiento(c), i = D.medicacion.findIndex(x => x.id === 'med-' + c.id);
+  const actual = i >= 0 ? D.medicacion[i] : null;
+  if (!nueva) return;
+  if (actual && (actual.borrado || actual.auto === false)) return; // borrada o editada a mano: no tocar
+  if (actual && actual.notas === nueva.notas && actual.inicio === nueva.inicio && actual.motivo === nueva.motivo) return;
+  guardarItem('medicacion', { ...(actual || {}), ...nueva });
+  if (avisar) toast(actual ? 'Medicación actualizada' : 'Tratamiento añadido a Medicación');
+}
 function formMed(m) {
   const nuevo = !m; m = m || { inicio: hoy() };
   formulario({
@@ -1229,7 +1362,7 @@ function formMed(m) {
       { k: 'notas', l: 'Notas', t: 'area', ph: 'Con comida, no mezclar con…' },
     ],
     validar: v => !v.nombre && 'Pon el nombre del medicamento',
-    guardar: v => { guardarItem('medicacion', { ...m, ...v }); toast('Guardado'); },
+    guardar: v => { guardarItem('medicacion', { ...m, ...v, auto: false }); toast('Guardado'); },
     borrar: nuevo ? null : () => borrarItem('medicacion', m.id),
   });
 }
@@ -1490,6 +1623,7 @@ function exportar() {
 
 /* ---------- historial de rabia copiado del pasaporte (una sola vez; ids fijos para no duplicar entre dispositivos) ---------- */
 const HISTORIAL_PASAPORTE = []; // datos retirados del historial publico
+setTimeout(() => vivos('consultas').forEach(c => aplicarTratamiento(c, false)), 0);
 (function importarRabia() {
   let n = 0;
   for (const v of HISTORIAL_PASAPORTE) if (!D.salud.some(x => x.id === v.id)) { D.salud.push({ ...v, upd: 1 }); n++; }

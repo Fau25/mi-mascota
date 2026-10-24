@@ -214,6 +214,52 @@ textarea{min-height:84px;resize:vertical}
 .estado-sync b{font-size:14.5px}.estado-sync span{color:var(--muted);line-height:1.4}
 .estado-sync.bien{background:var(--verde2)}.estado-sync.bien b{color:var(--verde)}
 .estado-sync.mal{background:var(--rojo2)}.estado-sync.mal b{color:var(--rojo)}.estado-sync.mal span{color:var(--ink)}
+
+/* Pasaporte de vacunas */
+.pas-estados{display:flex;gap:12px;overflow-x:auto;margin:0 -20px;padding:2px 20px 12px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.pas-estados::-webkit-scrollbar{display:none}
+.pas-estado{flex:0 0 min(84%,330px);scroll-snap-align:start;text-align:left;border:2px solid transparent;background:var(--card);border-radius:var(--r);padding:14px 16px 12px;box-shadow:var(--sombra)}
+.pas-estados .pas-estado:only-child{flex-basis:100%}
+.pas-estado.on{border-color:var(--verde)}
+.pe-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pe-top b{font-size:18px;font-weight:800}
+.pe-hasta{font-size:14px;color:var(--muted);margin-top:4px}.pe-hasta strong{color:var(--ink)}
+.pe-pie{font-size:12.5px;color:var(--muted);margin-top:8px}
+.tl{margin-top:12px}
+.tl-barra{position:relative;height:12px;border-radius:6px;background:var(--line)}
+.tl-barra i{position:absolute;top:0;bottom:0;background:var(--verde);border-radius:6px;opacity:.85;box-shadow:inset -1.5px 0 0 var(--card)}
+.tl-barra b{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--rojo);border-radius:1px}
+.tl-anos{position:relative;height:16px;margin-top:3px;font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tl-anos span{position:absolute;transform:translateX(-1px)}
+.pas-hoja{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:700px){.pas-hoja{grid-template-columns:1fr 1fr}}
+.pas-item{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:12px;align-items:center;text-align:left;border:0;padding:14px;border-radius:var(--r);overflow:hidden;color:var(--ink);
+  background:var(--card) repeating-linear-gradient(135deg,transparent 0 9px,color-mix(in srgb,var(--verde) 4%,transparent) 9px 10px);box-shadow:var(--sombra)}
+.pas-item.vigente{outline:2px solid color-mix(in srgb,var(--verde) 45%,transparent);outline-offset:-2px}
+.peg{position:relative;aspect-ratio:1.55;border-radius:10px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.06),0 4px 10px rgba(0,0,0,.10);overflow:hidden;display:flex;flex-direction:column;color:#222;border:1px solid rgba(0,0,0,.06)}
+.peg.foto{background:#fff center/cover no-repeat}
+.peg-top{background:var(--pc);color:var(--pf);flex:1.15;padding:8px 10px 6px;display:flex;flex-direction:column;justify-content:flex-end;clip-path:polygon(0 0,100% 0,100% 82%,72% 100%,48% 88%,0 100%)}
+.peg-marca{font-weight:800;font-size:15px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.peg-lab{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.peg-pie{flex:1;display:grid;grid-template-columns:auto 1fr;gap:0 6px;align-content:center;padding:4px 10px;font-size:10px;font-variant-numeric:tabular-nums}
+.peg-pie span{color:#888;text-transform:uppercase;letter-spacing:.05em}
+.peg-pie b{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;font-weight:600;color:#222;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pas-fechas{list-style:none;margin:0;padding:0;display:grid;gap:5px;position:relative;z-index:1}
+.pas-fechas li{display:grid;grid-template-columns:18px 1fr;column-gap:7px;align-items:baseline}
+.pas-fechas i{grid-row:span 2;font-style:normal;font-size:10px;font-weight:800;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--verde2);color:var(--verde);align-self:center}
+.pas-fechas span{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;line-height:1.1}
+.pas-fechas b{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2}
+.pas-fechas li:last-child b{color:var(--verde)}
+.pas-pie{grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);font-weight:700;border-top:1px dashed var(--line);padding-top:9px;margin-top:-2px}
+.pas-pie span:first-child{display:flex;align-items:center;flex:none}
+.pas-pie span:last-child{text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sello{position:absolute;right:-10px;bottom:18px;width:96px;height:96px;color:var(--verde);opacity:.16;pointer-events:none}
+.pas-vig{font-style:normal;margin-right:6px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--verde);background:var(--verde2);padding:3px 8px;border-radius:999px}
+.peg-edit{display:flex;gap:14px;align-items:center;margin:6px 0 2px}
+.peg-edit .peg{width:150px;flex:none}
+.peg-edit .peg.vacia{display:grid;place-items:center;text-align:center;font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card);border:1.5px dashed var(--panel);box-shadow:none}
+.peg-edit-btns{display:grid;gap:8px;flex:1}
+.peg-edit-btns .btn{padding:11px 12px;font-size:14.5px}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -291,7 +337,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v10';
+const VERSION = 'v11';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -554,7 +600,9 @@ function filaConsulta(c) {
 }
 function renderSalud() {
   let h = `<div class="seg">${SUBS.map(([k, n]) => `<button class="${subSalud === k ? 'on' : ''}" onclick="subSalud='${k}';render()">${n}</button>`).join('')}</div>`;
-  if (subSalud === 'vacunas' || subSalud === 'parasitos') {
+  if (subSalud === 'vacunas') {
+    h += renderPasaporte();
+  } else if (subSalud === 'parasitos') {
     const L = vivos('salud');
     const tipos = subSalud === 'vacunas' ? ['vacuna', 'otro'] : ['interna', 'externa'];
     const items = L.filter(s => tipos.includes(s.tipo)).sort(porFechaDesc);
@@ -575,6 +623,81 @@ function renderSalud() {
     if (ant.length) h += `<div class="sec"><h2>Anteriores</h2></div><div class="card">${ant.map(f).join('')}</div>`;
   }
   $('#v-salud').innerHTML = conIconos(h);
+}
+
+
+/* ---------- pasaporte de vacunas ---------- */
+let filtroVac = 'Todas';
+const MARCAS = [
+  [/eurican/i, '#C8202F', '#fff'], [/rabigen|virbac/i, '#1F5FA6', '#fff'], [/versiguard|zoetis|vanguard/i, '#F4F1EA', '#B3262E'],
+  [/nobivac|msd/i, '#0E7C7B', '#fff'], [/canigen/i, '#2C6E3F', '#fff'], [/letifend|canileish/i, '#6B3FA0', '#fff'],
+];
+const colorMarca = t => { for (const [re, bg, fg] of MARCAS) if (re.test(t || '')) return [bg, fg]; return ['var(--verde)', 'var(--sobre)']; };
+const fmtNum = s => { if (!s) return '—'; const d = aFecha(s); return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`; };
+
+function sello(texto, k) {
+  const t = esc((texto || 'Veterinario').toUpperCase()).slice(0, 34);
+  const rot = [-14, 9, -6, 13, -10][k % 5];
+  return `<svg class="sello" viewBox="0 0 100 100" style="transform:rotate(${rot}deg)" aria-hidden="true"><defs><path id="sc${k}" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0"/></defs><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="50" cy="50" r="27" fill="none" stroke="currentColor" stroke-width="1.4"/><text font-size="9.5" font-weight="800" letter-spacing="1.2" fill="currentColor"><textPath href="#sc${k}" startOffset="0">${t} · ${t}</textPath></text><g transform="translate(38 38) scale(1)" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${SVG.perro}</g></svg>`;
+}
+
+function lineaTiempo(regs) {
+  const r = regs.filter(x => x.fecha).map(x => ({ a: x.validaDesde || x.fecha, b: x.proxima || sumarMeses(x.fecha, 12) })).sort((p, q) => p.a.localeCompare(q.a));
+  if (!r.length) return '';
+  const y0 = aFecha(r[0].a).getFullYear(), y1 = Math.max(aFecha(r.at(-1).b).getFullYear(), new Date().getFullYear()) + 1;
+  const t0 = new Date(y0, 0, 1).getTime(), t1 = new Date(y1, 0, 1).getTime(), X = s => ((aFecha(s).getTime() - t0) / (t1 - t0) * 100).toFixed(2);
+  const hoyX = X(hoy());
+  let segs = r.map(p => `<i style="left:${X(p.a)}%;width:${Math.max(.8, X(p.b) - X(p.a))}%"></i>`).join('');
+  let anos = ''; for (let y = y0; y < y1; y++) anos += `<span style="left:${X(y + '-01-01')}%">${String(y).slice(2)}</span>`;
+  return `<div class="tl"><div class="tl-barra">${segs}<b style="left:${hoyX}%"></b></div><div class="tl-anos">${anos}</div></div>`;
+}
+
+function renderPasaporte() {
+  const L = vivos('salud');
+  const vac = L.filter(s => s.tipo === 'vacuna').sort(porFechaDesc);
+  const otros = L.filter(s => s.tipo === 'otro').sort(porFechaDesc);
+  if (!vac.length && !otros.length) return `<div class="card">${vacioHTML('💉', 'Aquí tendrás tu propio pasaporte: cada vacuna con su pegatina, lote, fechas y sello. Pulsa + para apuntar la primera.')}</div>`;
+  const grupos = {};
+  vac.forEach(v => { const k = (v.nombre || 'Vacuna').trim(); (grupos[k] = grupos[k] || []).push(v); });
+  const nombres = Object.keys(grupos).sort((a, b) => grupos[b].length - grupos[a].length);
+  if (filtroVac !== 'Todas' && !grupos[filtroVac]) filtroVac = 'Todas';
+  let h = '';
+  // Estado de cada vacuna
+  h += `<div class="pas-estados">` + nombres.map(n => {
+    const ult = grupos[n][0], hasta = ult.proxima, d = hasta ? diasHasta(hasta) : null;
+    const total = hasta && ult.fecha ? Math.max(1, diasEntre(ult.validaDesde || ult.fecha, hasta)) : 1;
+    const pct = d === null ? 0 : Math.max(0, Math.min(100, d / total * 100));
+    const est = d === null ? ['neutro', 'Sin fecha'] : d < 0 ? ['vencido', 'Caducada'] : d <= 30 ? ['pronto', `Renovar en ${d} d`] : ['ok', 'En vigor'];
+    return `<button class="pas-estado ${filtroVac === n ? 'on' : ''}" onclick="filtroVac=filtroVac==='${esc(n)}'?'Todas':'${esc(n)}';render()">
+      <div class="pe-top"><b>${esc(n)}</b><span class="pill ${est[0]}">${est[1]}</span></div>
+      <div class="pe-hasta">${hasta ? `Válida hasta <strong>${fmt(hasta)}</strong>` : 'Sin fecha de validez'}</div>
+      <div class="barra ${est[0] === 'vencido' ? 'vencido' : est[0] === 'pronto' ? 'pronto' : ''}"><i style="width:${pct}%"></i></div>
+      ${lineaTiempo(grupos[n])}
+      <div class="pe-pie">${grupos[n].length} ${grupos[n].length === 1 ? 'dosis' : 'dosis'} · desde ${aFecha(grupos[n].at(-1).fecha).getFullYear()}</div>
+    </button>`;
+  }).join('') + `</div>`;
+  // Hoja del pasaporte
+  const lista = filtroVac === 'Todas' ? vac : grupos[filtroVac];
+  h += `<div class="sec"><h2>${filtroVac === 'Todas' ? 'Pasaporte' : esc(filtroVac)}</h2><span class="s">${lista.length} ${lista.length === 1 ? 'registro' : 'registros'}</span></div>`;
+  h += `<div class="pas-hoja">` + lista.map((v, k) => {
+    const [bg, fg] = colorMarca(v.producto + ' ' + (v.laboratorio || ''));
+    const vigente = v.proxima && diasHasta(v.proxima) >= 0 && (!v.validaDesde || diasHasta(v.validaDesde) <= 0);
+    const peg = v.fotoPeg
+      ? `<div class="peg foto" style="background-image:url('${v.fotoPeg}')"></div>`
+      : `<div class="peg" style="--pc:${bg};--pf:${fg}"><div class="peg-top"><span class="peg-marca">${esc(v.producto || v.nombre || 'Vacuna')}</span>${v.laboratorio ? `<span class="peg-lab">${esc(v.laboratorio)}</span>` : ''}</div><div class="peg-pie"><span>Lote</span><b>${esc(v.lote || '—')}</b><span>CAD</span><b>${esc(v.caducidad || '—')}</b></div></div>`;
+    return `<button class="pas-item ${vigente ? 'vigente' : ''}" onclick="formSalud(D.salud.find(x=>x.id==='${v.id}'))">
+      ${peg}
+      <ol class="pas-fechas">
+        <li><i>1</i><span>Vacunación</span><b>${fmtNum(v.fecha)}</b></li>
+        <li><i>2</i><span>Válida desde</span><b>${fmtNum(v.validaDesde)}</b></li>
+        <li><i>3</i><span>Válida hasta</span><b>${fmtNum(v.proxima)}</b></li>
+      </ol>
+      <div class="pas-pie"><span>${vigente ? '<em class="pas-vig">En vigor</em>' : ''}${esc(filtroVac === 'Todas' ? (v.nombre || '') : '')}</span><span>${esc(v.vet || '')}</span></div>
+      ${sello(v.vet, k)}
+    </button>`;
+  }).join('') + `</div>`;
+  if (otros.length) h += `<div class="sec"><h2>Revisiones y test</h2></div><div class="card">${otros.map(s => filaSalud(s, L)).join('')}</div>`;
+  return h;
 }
 
 function renderComida() {
@@ -761,13 +884,19 @@ function formContacto(id) {
 function formSalud(s, tipoDef) {
   const nuevo = !s;
   s = s || { tipo: tipoDef || 'vacuna', fecha: hoy() };
+  let fotoPeg = s.fotoPeg || '';
   formulario({
-    titulo: nuevo ? (TIPOS[s.tipo]?.n === 'Vacuna' ? 'Nueva vacuna' : 'Nuevo registro') : (s.nombre || 'Editar'), v: s,
+    titulo: nuevo ? (s.tipo === 'vacuna' ? 'Nueva vacuna' : 'Nuevo registro') : (s.nombre || 'Editar'), v: s,
+    html: `<div class="peg-edit"><div class="peg foto ${fotoPeg ? '' : 'vacia'}" id="pegPrev" style="${fotoPeg ? `background-image:url('${fotoPeg}')` : ''}">${fotoPeg ? '' : '<span>Foto de la pegatina<br><small>opcional</small></span>'}</div><div class="peg-edit-btns"><button type="button" class="btn sec" onclick="$('#fpeg').click()">${fotoPeg ? 'Cambiar foto' : 'Hacer foto'}</button>${fotoPeg ? '<button type="button" class="btn peligro" id="quitarPeg">Quitar foto</button>' : ''}<input type="file" id="fpeg" accept="image/*" hidden></div></div>`,
     campos: [
       { k: 'tipo', l: 'Tipo', t: 'sel', op: Object.entries(TIPOS).map(([k, v]) => [k, v.n]) },
-      { k: 'nombre', l: 'Nombre', ph: 'Rabia, Polivalente, Milbemax…', list: SUGERENCIAS },
-      { k: 'fecha', l: 'Fecha', t: 'date', half: 1 }, { k: 'proxima', l: 'Próxima vez', t: 'date', half: 1 },
-      { k: 'producto', l: 'Producto / marca', half: 1 }, { k: 'lote', l: 'Lote', half: 1 },
+      { k: 'nombre', l: 'Vacuna contra / nombre', ph: 'Rabia, Polivalente, Milbemax…', list: SUGERENCIAS },
+      { k: 'producto', l: 'Marca', ph: 'Eurican R, Rabigen L…', half: 1 }, { k: 'laboratorio', l: 'Laboratorio', ph: 'Merial, Virbac, Zoetis…', half: 1 },
+      { k: 'lote', l: 'Lote', half: 1 }, { k: 'caducidad', l: 'Caducidad (CAD)', ph: '05/2027', half: 1 },
+      { t: 'sep', l: 'Fechas' },
+      { k: 'fecha', l: '1 · Vacunación', t: 'date', half: 1 }, { k: 'validaDesde', l: '2 · Válida desde', t: 'date', half: 1 },
+      { k: 'proxima', l: '3 · Válida hasta / próxima', t: 'date' },
+      { t: 'sep', l: 'Clínica' },
       { k: 'vet', l: 'Dónde', ph: D.perfil.clinica || 'Clínica', half: 1 }, { k: 'coste', l: 'Coste (€)', t: 'number', half: 1 },
       { k: 'notas', l: 'Notas', t: 'area' },
     ],
@@ -781,9 +910,18 @@ function formSalud(s, tipoDef) {
       const pr = f.elements.proxima.value;
       $('#ayudaProx').textContent = pr ? (CFG.url ? `Te avisaré en Google Calendar una semana antes y el día anterior (${fmt(pr)}).` : `Aparecerá en "Próximo" el ${fmt(pr)}.`) : 'Sin próxima fecha no habrá aviso.';
     },
-    iniciar: f => { if (s.proxima || !nuevo) f.elements.proxima.dataset.tocado = 1; else f.elements.proxima.value = sumarMeses(s.fecha, TIPOS[s.tipo].meses); f.dispatchEvent(new Event('input')); },
+    iniciar: f => {
+      if (s.proxima || !nuevo) f.elements.proxima.dataset.tocado = 1; else f.elements.proxima.value = sumarMeses(s.fecha, TIPOS[s.tipo].meses);
+      f.dispatchEvent(new Event('input'));
+      $('#fpeg').onchange = async e => {
+        const file = e.target.files[0]; if (!file) return;
+        try { const img = await cargarImagen(file); fotoPeg = lienzo(img, 900).toDataURL('image/jpeg', .82); const el = $('#pegPrev'); el.style.backgroundImage = `url('${fotoPeg}')`; el.innerHTML = ''; el.classList.remove('vacia'); }
+        catch { toast('No se pudo leer la foto'); }
+      };
+      const q = $('#quitarPeg'); if (q) q.onclick = () => { fotoPeg = ''; const el = $('#pegPrev'); el.style.backgroundImage = ''; el.classList.add('vacia'); el.innerHTML = '<span>Foto de la pegatina<br><small>opcional</small></span>'; q.remove(); };
+    },
     extra: nuevo ? [] : [{ t: 'Apuntar la siguiente dosis', fn: () => renovar(s) }],
-    guardar: v => { guardarItem('salud', { ...s, ...v, coste: v.coste }); toast('Guardado'); },
+    guardar: v => { guardarItem('salud', { ...s, ...v, coste: v.coste, fotoPeg }); toast('Guardado'); },
     borrar: nuevo ? null : () => borrarItem('salud', s.id),
   });
 }
@@ -793,7 +931,7 @@ function renovar(s) {
   const f = hoy();
   formSalud(null, s.tipo);
   const fr = $('#frm');
-  Object.entries({ nombre: s.nombre || '', producto: s.producto || '', vet: s.vet || '', fecha: f, proxima: sumarMeses(f, meses) }).forEach(([k, v]) => fr.elements[k].value = v);
+  Object.entries({ nombre: s.nombre || '', producto: s.producto || '', laboratorio: s.laboratorio || '', vet: s.vet || '', fecha: f, proxima: sumarMeses(f, meses) }).forEach(([k, v]) => fr.elements[k].value = v);
   fr.elements.proxima.dataset.tocado = 1;
   fr.dispatchEvent(new Event('input'));
 }
@@ -1094,6 +1232,15 @@ function exportar() {
   setTimeout(() => URL.revokeObjectURL(a.href), 3000);
 }
 
+
+
+/* ---------- historial de rabia copiado del pasaporte (una sola vez; ids fijos para no duplicar entre dispositivos) ---------- */
+const HISTORIAL_RABIA = []; // datos retirados del historial publico
+(function importarRabia() {
+  let n = 0;
+  for (const v of HISTORIAL_RABIA) if (!D.salud.some(x => x.id === v.id)) { D.salud.push({ ...v, upd: 1 }); n++; }
+  if (n) guardarLocal();
+})();
 
 /* ---------- arranque ---------- */
 document.body.classList.add('menu-a');

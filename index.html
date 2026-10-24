@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F3EDE2" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#13191C" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#1F4B57" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0C1416" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Mi Mascota">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -46,8 +46,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 a{color:var(--verde)}
 .ic{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.2em;flex:none}
 
-header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:calc(env(safe-area-inset-top) + 12px) 20px 10px;display:flex;align-items:center;gap:12px;max-width:760px;margin:0 auto}
-header.top h1{font-size:24px;flex:1;text-align:center}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--banda) 86%,transparent);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);color:var(--banda-txt);padding:calc(env(safe-area-inset-top) + 12px) 20px 10px;display:flex;align-items:center;gap:12px;max-width:760px;margin:0 auto}
+header.top h1{font-size:24px;flex:1;text-align:center;color:var(--banda-txt)}
+header.top{max-width:none;margin:0}
 .estado{width:10px;height:10px;border-radius:50%;background:var(--muted);opacity:.35;flex:none;border:0;padding:0}
 header.top h1 .estado{display:inline-block;vertical-align:middle;margin:0 0 0 8px;width:11px;height:11px;position:relative;top:-2px}
 header.top h1 .estado::after{content:"";position:absolute;inset:-12px}
@@ -72,7 +73,7 @@ main{max-width:760px;margin:0 auto;padding:4px 20px 24px}
 .s{color:var(--muted);font-size:13.5px}
 
 /* Ficha estilo «perfil de adopción» */
-.hero{position:relative;margin:0 -20px;cursor:pointer}
+.hero{position:relative;margin:-4px -20px 0;cursor:pointer}
 .hero-foto{height:min(118vw,470px);border-radius:0 0 34px 34px;background:var(--panel) center 35%/cover no-repeat;display:grid;place-items:center;color:color-mix(in srgb,var(--verde) 55%,var(--panel));overflow:hidden;position:relative}
 .hero-foto .silueta{width:170px;height:170px;margin-top:-110px}
 .hero-foto .puntos{position:absolute;bottom:74px;left:50%;transform:translateX(-50%);display:flex;gap:4px}
@@ -321,7 +322,7 @@ textarea{min-height:84px;resize:vertical}
 .vac-op.apagada{opacity:.55}
 
 /* Salud: franja oscura superior */
-.banda-top{background:var(--banda);color:var(--banda-txt);margin:0 -20px 18px;padding:8px 20px 20px;border-radius:0 0 34px 34px;--tl:color-mix(in srgb,var(--banda-txt) 10%,transparent);--tl2:color-mix(in srgb,var(--banda-txt) 18%,transparent)}
+.banda-top{background:var(--banda);color:var(--banda-txt);margin:-4px -20px 18px;padding:8px 20px 20px;border-radius:0 0 34px 34px;--tl:color-mix(in srgb,var(--banda-txt) 10%,transparent);--tl2:color-mix(in srgb,var(--banda-txt) 18%,transparent)}
 .banda-top .seg.seg-fija{margin:4px 0 4px}
 .banda-top .seg button{background:var(--tl);color:var(--banda-txt);box-shadow:none}
 .banda-top .seg button.on{background:var(--banda-txt);color:var(--banda);box-shadow:none}
@@ -342,6 +343,37 @@ textarea{min-height:84px;resize:vertical}
 .banda-top .vac-op .vo-est.vencido{color:#F4A08F;opacity:1}.banda-top .vac-op .vo-est.pronto{color:#F2C878;opacity:1}
 .banda-top .vac-op.on{background:var(--tl2);border-color:var(--banda-txt)}
 .banda-top .vac-op.apagada{opacity:.5}
+
+/* A · lista */
+.va-lista{background:var(--tl);border-radius:18px;overflow:hidden}
+.va-fila{width:100%;display:grid;grid-template-columns:10px 1fr auto 20px;gap:12px;align-items:center;border:0;background:none;color:var(--banda-txt);padding:13px 14px;text-align:left;border-top:1px solid color-mix(in srgb,var(--banda-txt) 9%,transparent)}
+.va-fila:first-child{border-top:0}
+.va-fila i{width:10px;height:10px;border-radius:50%}
+.va-nom{font-weight:800;font-size:15px}
+.va-est{font-size:13px;font-weight:700;opacity:.75;font-variant-numeric:tabular-nums}
+.va-est.vencido{color:#F4A08F;opacity:1}.va-est.pronto{color:#F2C878;opacity:1}
+.va-chk{width:18px;height:18px;opacity:0;color:var(--banda-txt)}
+.va-fila.on{background:var(--tl2)}.va-fila.on .va-chk{opacity:1}
+.va-fila.apagada{opacity:.5}
+/* B · anillos */
+.vb-fila{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.vb-op{border:0;background:none;color:var(--banda-txt);display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:16px}
+.vb-op svg{width:58px;height:58px;transform:rotate(-90deg)}
+.vb-op svg text{transform:rotate(90deg);transform-origin:30px 30px;fill:var(--banda-txt);font-weight:800;font-size:17px;font-family:inherit}
+.vb-fondo{fill:none;stroke:var(--tl2);stroke-width:5}
+.vb-arco{fill:none;stroke-width:5;stroke-linecap:round}
+.vb-nom{font-weight:800;font-size:13px}
+.vb-est{font-size:11.5px;font-weight:700;opacity:.7;font-variant-numeric:tabular-nums}
+.vb-est.vencido{color:#F4A08F;opacity:1}.vb-est.pronto{color:#F2C878;opacity:1}
+.vb-op.on{background:var(--tl2)}
+.vb-op.apagada{opacity:.45}
+/* C · segmentado */
+.vc-seg{display:grid;grid-template-columns:repeat(5,auto);background:var(--tl);border-radius:16px;padding:4px;gap:2px}
+.vc-seg button{border:0;background:none;color:var(--banda-txt);opacity:.75;font-weight:800;font-size:13.5px;padding:10px 2px;border-radius:12px;white-space:nowrap}
+.vc-seg button.on{background:var(--banda-txt);color:var(--banda);opacity:1}
+.vc-info{display:flex;align-items:center;gap:8px;margin:12px 4px 0;font-size:14px}
+.vc-info i{width:10px;height:10px;border-radius:50%;flex:none}
+.vc-info span{opacity:.75;font-weight:700}.vc-info span.vencido{color:#F4A08F;opacity:1}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -364,13 +396,13 @@ textarea{min-height:84px;resize:vertical}
 /* ---------- Menú A: barra fija abajo, opaca, con + central ---------- */
 body.menu-a{padding-bottom:calc(74px + env(safe-area-inset-bottom))}
 body.menu-a .fab{display:none}
-body.menu-a nav.tabs{background:color-mix(in srgb,var(--card) 72%,transparent);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border-top:1px solid var(--vidrio-borde);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left,0px));pointer-events:auto;box-shadow:0 -6px 20px rgba(38,46,52,.06)}
+body.menu-a nav.tabs{background:color-mix(in srgb,var(--banda) 84%,transparent);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border-top:1px solid color-mix(in srgb,var(--banda-txt) 10%,transparent);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left,0px));pointer-events:auto;box-shadow:0 -6px 20px rgba(38,46,52,.06)}
 body.menu-a nav.tabs .in{background:none;box-shadow:none;border-radius:0;padding:0;align-items:center}
-body.menu-a nav.tabs button{background:none;gap:3px;padding:6px 0}
+body.menu-a nav.tabs button{background:none;gap:3px;padding:6px 0;color:color-mix(in srgb,var(--banda-txt) 65%,transparent)}
 body.menu-a nav.tabs button svg{width:24px;height:24px;padding:3px 12px;box-sizing:content-box;border-radius:14px}
-body.menu-a nav.tabs button.on{color:var(--verde);background:none}
-body.menu-a nav.tabs button.on svg{background:var(--verde2)}
-.mas-nav span{width:50px;height:50px;border-radius:17px;background:var(--verde);color:var(--sobre);display:grid;place-items:center;box-shadow:var(--sombra-btn)}
+body.menu-a nav.tabs button.on{color:var(--banda-txt);background:none}
+body.menu-a nav.tabs button.on svg{background:color-mix(in srgb,var(--banda-txt) 16%,transparent)}
+.mas-nav span{width:50px;height:50px;border-radius:17px;background:var(--banda-txt);color:var(--banda);display:grid;place-items:center;box-shadow:var(--sombra-btn)}
 .mas-nav span svg{width:26px!important;height:26px!important;padding:0!important;background:none!important}
 body.menu-a .banda{margin-bottom:calc(-98px - env(safe-area-inset-bottom));padding-bottom:calc(112px + env(safe-area-inset-bottom))}
 
@@ -418,7 +450,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v17';
+const VERSION = 'v18';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -552,7 +584,7 @@ function proximoCumple() {
 }
 function avisos() {
   const L = vivos('salud');
-  const r = L.filter(s => pendiente(s, L)).map(s => ({ fecha: s.proxima, titulo: s.nombre || TIPOS[s.tipo]?.n, sub: TIPOS[s.tipo]?.n || '', ico: TIPOS[s.tipo]?.ico || '🩺', abrir: `formSalud(D.salud.find(x=>x.id==='${s.id}'))` }));
+  const r = L.filter(s => pendiente(s, L) && diasHasta(s.proxima) >= -60).map(s => ({ fecha: s.proxima, titulo: s.nombre || TIPOS[s.tipo]?.n, sub: TIPOS[s.tipo]?.n || '', ico: TIPOS[s.tipo]?.ico || '🩺', abrir: `formSalud(D.salud.find(x=>x.id==='${s.id}'))` }));
   const p = pienso();
   if (false && p) r.push({ fecha: p.fin, titulo: 'Se acaba el pienso', sub: D.comida.pienso || 'Pienso', ico: '🥣', terra: 1, abrir: `irA('comida')` });
   const cu = proximoCumple();
@@ -771,14 +803,29 @@ function renderPasaporte() {
   // Año: control segmentado (año actual con desplegable | todos los años)
   h += `<div class="f2"><div class="f2-seg">${selAnio('f2-op')}${btnTodos('f2-op')}</div></div>`;
   // Vacunas: cuadrícula fija con el estado de cada una; tocar filtra, volver a tocar quita el filtro
-  h += `<div class="vac-cab"><span>Vacunas</span>${filtroVac !== 'Todas' ? `<button onclick="filtroVac='Todas';render()">Ver todas</button>` : ''}</div>`;
-  h += `<div class="vac-rejilla">` + nombres.map(n => {
+  h += `<div class="vac-cab"><span>Vacunas</span>${filtroVac !== 'Todas' && (window.MODO_VAC || 'a') !== 'c' ? `<button onclick="filtroVac='Todas';render()">Ver todas</button>` : ''}</div>`;
+  const infoVac = n => {
     const ult = grupos[n][0], hasta = ult.proxima, d = hasta ? diasHasta(hasta) : null;
-    const est = d === null ? ['neutro', 'Sin fecha'] : d < 0 ? ['vencido', 'Caducada'] : d <= 30 ? ['pronto', `Renovar en ${d} d`] : ['ok', `Hasta ${fmtNum(hasta).slice(0, 6)}${fmtNum(hasta).slice(8)}`];
-    return `<button class="vac-op ${filtroVac === n ? 'on' : ''} ${filtroVac !== 'Todas' && filtroVac !== n ? 'apagada' : ''}" style="--vc:${colorVac(n)}" onclick="filtroVac=filtroVac==='${esc(n)}'?'Todas':'${esc(n)}';render()" aria-pressed="${filtroVac === n}">
-      <i></i><span class="vo-nom">${esc(n)}</span><span class="vo-est ${est[0]}">${est[0] === 'ok' ? '<b>✓</b>' : ''}${est[1]}</span>
-    </button>`;
-  }).join('') + `</div><!--fin-top-->`;
+    const total = hasta && ult.fecha ? Math.max(1, diasEntre(ult.validaDesde || ult.fecha, hasta)) : 365;
+    const est = d === null ? 'neutro' : d < 0 ? 'vencido' : d <= 30 ? 'pronto' : 'ok';
+    const txt = d === null ? 'Sin fecha' : d < 0 ? 'Caducada' : d <= 30 ? `Renovar en ${d} d` : `Hasta ${fmtNum(hasta).slice(0, 6)}${fmtNum(hasta).slice(8)}`;
+    return { hasta, d, pct: d === null || d < 0 ? 0 : Math.min(1, d / total), est, txt };
+  };
+  const clic = n => `filtroVac=filtroVac==='${esc(n)}'?'Todas':'${esc(n)}';render()`;
+  const CORTO = { 'Rabia': 'Rabia', 'Polivalente': 'Polival.', 'Leishmaniosis': 'Leish.', 'Tos de las perreras': 'Tos' };
+  const modoV = window.MODO_VAC || 'b';
+  if (modoV === 'a') {
+    // A · Lista: filas finas con punto de color, nombre y validez a la derecha
+    h += `<div class="va-lista">` + nombres.map(n => { const i = infoVac(n); return `<button class="va-fila ${filtroVac === n ? 'on' : ''} ${filtroVac !== 'Todas' && filtroVac !== n ? 'apagada' : ''}" onclick="${clic(n)}"><i style="background:${colorVac(n)}"></i><span class="va-nom">${esc(n)}</span><span class="va-est ${i.est}">${i.txt}</span><svg class="va-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>`; }).join('') + `</div>`;
+  } else if (modoV === 'b') {
+    // B · Anillos: un círculo por vacuna con lo que queda de validez
+    h += `<div class="vb-fila">` + nombres.map(n => { const i = infoVac(n), C = 2 * Math.PI * 24; return `<button class="vb-op ${filtroVac === n ? 'on' : ''} ${filtroVac !== 'Todas' && filtroVac !== n ? 'apagada' : ''}" onclick="${clic(n)}"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="24" class="vb-fondo"/><circle cx="30" cy="30" r="24" class="vb-arco" style="stroke:${colorVac(n)};stroke-dasharray:${(C * i.pct).toFixed(1)} ${C.toFixed(1)};${i.pct ? '' : 'display:none'}"/><text x="30" y="35" text-anchor="middle">${esc(n.slice(0, 1))}</text></svg><span class="vb-nom">${esc(CORTO[n] || n)}</span><span class="vb-est ${i.est}">${i.est === 'ok' ? fmtNum(i.hasta).slice(0, 6) + fmtNum(i.hasta).slice(8) : i.txt}</span></button>`; }).join('') + `</div>`;
+  } else {
+    // C · Segmentado: mismo estilo que el selector de año
+    h += `<div class="vc-seg">` + ['Todas', ...nombres].map(n => `<button class="${filtroVac === n ? 'on' : ''}" onclick="filtroVac='${esc(n)}';render()">${n === 'Todas' ? 'Todas' : esc(CORTO[n] || n)}</button>`).join('') + `</div>`;
+    if (filtroVac !== 'Todas') { const i = infoVac(filtroVac); h += `<div class="vc-info"><i style="background:${colorVac(filtroVac)}"></i><b>${esc(filtroVac)}</b><span class="${i.est}">${i.est === 'ok' ? 'En vigor · ' : ''}${i.txt}</span></div>`; }
+  }
+  h += `<!--fin-top-->`;
   if (!lista.length) h += `<div class="card">${vacioHTML('💉', filtroAnio === 'Todos' ? 'No hay vacunas de este tipo.' : `En ${filtroAnio} no hay ${filtroVac === 'Todas' ? 'vacunas apuntadas' : 'dosis de ' + esc(filtroVac).toLowerCase()}. Elige otro año en el desplegable o «Todos los años».`)}</div>`;
   const tarjeta = (v, k) => {
     const [bg, fg] = colorMarca(v.producto + ' ' + (v.laboratorio || ''));

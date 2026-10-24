@@ -259,7 +259,7 @@ textarea{min-height:84px;resize:vertical}
 
 <script>
 'use strict';
-const VERSION = 'v3';
+const VERSION = 'v4';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -479,8 +479,6 @@ function renderInicio() {
       <div class="hc-sub"><span>${esc(p.raza || 'Toca para rellenar su ficha')}</span><span>${esc(edad(p.nacimiento))}</span></div>
       ${(ult || p.chip) ? `<div class="hc-loc">${ult ? `<span>${ic('bascula')} ${num(ult.kg)} kg</span>` : ''}${p.chip ? `<span>${ic('chip')} Chip ···${esc(String(p.chip).slice(-4))}</span>` : ''}</div>` : ''}
     </div></div>`;
-  const pend = av.filter(a => !a.cumple && diasHasta(a.fecha) <= 14).length;
-  h += `<div class="cats">${[['salud', 'vacunas', 'Vacunas', 'jeringa'], ['salud', 'parasitos', 'Parásitos', 'pastilla'], ['salud', 'consultas', 'Consultas', 'esteto'], ['comida', '', 'Comida', 'cuenco'], ['peso', '', 'Peso', 'bascula'], ['docs', '', 'Papeles', 'carpeta']].map(([t, sub, n, i], k) => `<button class="cat ${k === 0 ? 'on' : ''}" onclick="irA('${t}'${sub ? `,'${sub}'` : ''})"><i>${ic(i)}</i>${n}</button>`).join('')}</div>`;
   h += `<div class="sec"><h2>Próximo</h2></div><div class="card">`;
   h += av.length ? av.slice(0, 6).map(a => fila({ ico: a.ico, terra: a.terra, t: a.titulo, s: a.cumple ? a.sub : `${a.sub} · ${fmt(a.fecha)}`, der: a.cumple ? `<span class="pill neutro">${diasHasta(a.fecha) === 0 ? '¡hoy!' : 'en ' + diasHasta(a.fecha) + ' días'}</span>` : pillFecha(a.fecha), abrir: a.abrir })).join('')
     : vacioHTML('🗓️', 'Cuando apuntes una vacuna o un antiparasitario con su próxima fecha, aparecerá aquí.');

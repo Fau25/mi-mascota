@@ -47,7 +47,6 @@ a{color:var(--verde)}
 
 header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);color:var(--ink);padding:calc(env(safe-area-inset-top) + 12px) 20px 10px;display:flex;align-items:center;gap:12px;max-width:760px;margin:0 auto}
 header.top h1{font-size:24px;flex:1;text-align:center;color:inherit}
-body.tab-salud header.top{background:var(--banda);color:var(--banda-txt)}
 header.top{max-width:none;margin:0}
 .estado{width:10px;height:10px;border-radius:50%;background:var(--muted);opacity:.35;flex:none;border:0;padding:0}
 header.top h1 .estado{display:inline-block;vertical-align:middle;margin:0 0 0 8px;width:11px;height:11px;position:relative;top:-2px}
@@ -264,6 +263,7 @@ textarea{min-height:84px;resize:vertical}
 .pas-fechas li:last-child b{color:var(--verde)}
 .pas-pie{grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);font-weight:700;border-top:1px dashed var(--line);padding-top:9px;margin-top:-2px}
 .pas-pie span:first-child{display:flex;align-items:center;flex:none}
+.pas-pie .pas-tipo{color:var(--ink);font-weight:800}
 .pas-pie span:last-child{text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sello{position:absolute;right:-10px;bottom:18px;width:96px;height:96px;color:var(--verde);opacity:.16;pointer-events:none}
 .pas-vig{font-style:normal;margin-right:6px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--verde);background:var(--verde2);padding:3px 8px;border-radius:999px}
@@ -321,28 +321,10 @@ textarea{min-height:84px;resize:vertical}
 .vac-op.on{border-color:var(--verde);background:color-mix(in srgb,var(--verde2) 55%,var(--card))}
 .vac-op.apagada{opacity:.55}
 
-/* Salud: franja oscura superior */
-.banda-top{background:var(--banda);color:var(--banda-txt);margin:-4px -20px 18px;padding:8px 20px 20px;border-radius:0 0 34px 34px;--tl:color-mix(in srgb,var(--banda-txt) 10%,transparent);--tl2:color-mix(in srgb,var(--banda-txt) 18%,transparent)}
-.banda-top .seg.seg-fija{margin:4px 0 4px}
-.banda-top .seg button{background:var(--tl);color:var(--banda-txt);box-shadow:none}
-.banda-top .seg button.on{background:var(--banda-txt);color:var(--banda);box-shadow:none}
-.banda-top .sec{margin:22px 4px 12px}
-.banda-top .sec h2{color:var(--banda-txt)}
-.banda-top .sec .s{color:var(--banda-txt);opacity:.65}
-.banda-top .f2{margin:0}
-.banda-top .f2-seg{background:var(--tl);box-shadow:none}
-.banda-top .f2-op{color:var(--banda-txt);opacity:.75}
-.banda-top .f2-op.on{background:var(--banda-txt);color:var(--banda);opacity:1}
-.banda-top .vac-cab{color:var(--banda-txt);opacity:.65}
-.banda-top .vac-cab button{color:var(--banda-txt)}
-.banda-top .vac-rejilla{margin-bottom:0}
-.banda-top .vac-op{background:var(--tl);box-shadow:none}
-.banda-top .vac-op .vo-nom{color:var(--banda-txt)}
-.banda-top .vac-op .vo-est{color:var(--banda-txt);opacity:.75}
-.banda-top .vac-op .vo-est b{color:#7FD9A8}
-.banda-top .vac-op .vo-est.vencido{color:#F4A08F;opacity:1}.banda-top .vac-op .vo-est.pronto{color:#F2C878;opacity:1}
-.banda-top .vac-op.on{background:var(--tl2);border-color:var(--banda-txt)}
-.banda-top .vac-op.apagada{opacity:.5}
+/* Salud: parte superior (beige) */
+.banda-top{margin:0 0 6px}
+.banda-top .sec{margin:20px 4px 12px}
+.banda-top .seg.seg-fija{margin:6px 0 4px}
 
 /* A · lista */
 .va-lista{background:var(--tl);border-radius:18px;overflow:hidden}
@@ -479,7 +461,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v19';
+const VERSION = 'v20';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -650,7 +632,7 @@ const TITULOS = { inicio: null, salud: 'Salud', comida: 'Comida', peso: 'Peso', 
 function pintarTema() {
   document.body.classList.toggle('tab-salud', tab === 'salud');
   const cs = getComputedStyle(document.documentElement);
-  const c = (tab === 'salud' ? cs.getPropertyValue('--banda') : cs.getPropertyValue('--bg')).trim();
+  const c = cs.getPropertyValue('--bg').trim();
   const m = document.getElementById('metaTema'); if (m && c) m.setAttribute('content', c);
   document.documentElement.style.background = c;
 }
@@ -850,7 +832,8 @@ function renderPasaporte() {
   const actual = String(new Date().getFullYear());
   const todosAnios = [...new Set([actual, ...vac.map(anioDe).filter(Boolean)])].sort().reverse();
   if (!filtroAnio || (filtroAnio !== 'Todos' && !todosAnios.includes(filtroAnio))) filtroAnio = actual;
-  const porVac = filtroVac === 'Todas' ? vac : (grupos[filtroVac] || []);
+  filtroVac = 'Todas';
+  const porVac = vac;
   const anios = [...new Set(porVac.map(anioDe).filter(Boolean))].sort().reverse();
   const lista = filtroAnio === 'Todos' ? porVac : porVac.filter(v => anioDe(v) === filtroAnio);
   const anioSel = filtroAnio === 'Todos' ? (filtroAnioPrev || actual) : filtroAnio;
@@ -863,28 +846,7 @@ function renderPasaporte() {
   // Año: control segmentado (año actual con desplegable | todos los años)
   h += `<div class="f2"><div class="f2-seg">${selAnio('f2-op')}${btnTodos('f2-op')}</div></div>`;
   // Vacunas: cuadrícula fija con el estado de cada una; tocar filtra, volver a tocar quita el filtro
-  h += `<div class="vac-cab"><span>Vacunas</span>${filtroVac !== 'Todas' && (window.MODO_VAC || 'a') !== 'c' ? `<button onclick="filtroVac='Todas';render()">Ver todas</button>` : ''}</div>`;
-  const infoVac = n => {
-    const ult = grupos[n][0], hasta = ult.proxima, d = hasta ? diasHasta(hasta) : null;
-    const total = hasta && ult.fecha ? Math.max(1, diasEntre(ult.validaDesde || ult.fecha, hasta)) : 365;
-    const est = d === null ? 'neutro' : d < 0 ? 'vencido' : d <= 30 ? 'pronto' : 'ok';
-    const txt = d === null ? 'Sin fecha' : d < 0 ? 'Caducada' : d <= 30 ? `Renovar en ${d} d` : `Hasta ${fmtNum(hasta).slice(0, 6)}${fmtNum(hasta).slice(8)}`;
-    return { hasta, d, pct: d === null || d < 0 ? 0 : Math.min(1, d / total), est, txt };
-  };
-  const clic = n => `filtroVac=filtroVac==='${esc(n)}'?'Todas':'${esc(n)}';render()`;
-  const CORTO = { 'Rabia': 'Rabia', 'Polivalente': 'Polival.', 'Leishmaniosis': 'Leish.', 'Tos de las perreras': 'Tos' };
-  const modoV = window.MODO_VAC || 'b';
-  if (modoV === 'a') {
-    // A · Lista: filas finas con punto de color, nombre y validez a la derecha
-    h += `<div class="va-lista">` + nombres.map(n => { const i = infoVac(n); return `<button class="va-fila ${filtroVac === n ? 'on' : ''} ${filtroVac !== 'Todas' && filtroVac !== n ? 'apagada' : ''}" onclick="${clic(n)}"><i style="background:${colorVac(n)}"></i><span class="va-nom">${esc(n)}</span><span class="va-est ${i.est}">${i.txt}</span><svg class="va-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>`; }).join('') + `</div>`;
-  } else if (modoV === 'b') {
-    // B · Anillos: un círculo por vacuna con lo que queda de validez
-    h += `<div class="vb-fila">` + nombres.map(n => { const i = infoVac(n), C = 2 * Math.PI * 24; return `<button class="vb-op ${filtroVac === n ? 'on' : ''} ${filtroVac !== 'Todas' && filtroVac !== n ? 'apagada' : ''}" onclick="${clic(n)}"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="24" class="vb-fondo"/><circle cx="30" cy="30" r="24" class="vb-arco" style="stroke:${colorVac(n)};stroke-dasharray:${(C * i.pct).toFixed(1)} ${C.toFixed(1)};${i.pct ? '' : 'display:none'}"/><text x="30" y="35" text-anchor="middle">${esc(n.slice(0, 1))}</text></svg><span class="vb-nom">${esc(CORTO[n] || n)}</span><span class="vb-est ${i.est}">${i.est === 'ok' ? fmtNum(i.hasta).slice(0, 6) + fmtNum(i.hasta).slice(8) : i.txt}</span></button>`; }).join('') + `</div>`;
-  } else {
-    // C · Segmentado: mismo estilo que el selector de año
-    h += `<div class="vc-seg">` + ['Todas', ...nombres].map(n => `<button class="${filtroVac === n ? 'on' : ''}" onclick="filtroVac='${esc(n)}';render()">${n === 'Todas' ? 'Todas' : esc(CORTO[n] || n)}</button>`).join('') + `</div>`;
-    if (filtroVac !== 'Todas') { const i = infoVac(filtroVac); h += `<div class="vc-info"><i style="background:${colorVac(filtroVac)}"></i><b>${esc(filtroVac)}</b><span class="${i.est}">${i.est === 'ok' ? 'En vigor · ' : ''}${i.txt}</span></div>`; }
-  }
+  // (menú de vacunas eliminado: se ven todas las del año elegido)
   h += `<!--fin-top-->`;
   if (!lista.length) h += `<div class="card">${vacioHTML('💉', filtroAnio === 'Todos' ? 'No hay vacunas de este tipo.' : `En ${filtroAnio} no hay ${filtroVac === 'Todas' ? 'vacunas apuntadas' : 'dosis de ' + esc(filtroVac).toLowerCase()}. Elige otro año en el desplegable o «Todos los años».`)}</div>`;
   const tarjeta = (v, k) => {
@@ -899,7 +861,7 @@ function renderPasaporte() {
     return `<button class="pas-item ${vigente ? 'vigente' : ''}" onclick="formSalud(D.salud.find(x=>x.id==='${v.id}'))">
       ${peg}
       <ol class="pas-fechas">${filas.map(([t, f], j) => `<li><i>${j + 1}</i><span>${t}</span><b>${fmtNum(f)}</b></li>`).join('')}</ol>
-      <div class="pas-pie"><span>${vigente ? '<em class="pas-vig">En vigor</em>' : ''}${esc(filtroVac === 'Todas' ? (v.nombre || '') : '')}</span><span>${esc(v.vet || '')}</span></div>
+      <div class="pas-pie"><span>${vigente ? '<em class="pas-vig">En vigor</em>' : ''}</span><span class="pas-tipo">${esc(v.nombre || '')}</span></div>
       ${sello(v.vet, k)}
     </button>`;
   };

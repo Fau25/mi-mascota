@@ -70,7 +70,7 @@ main{max-width:760px;margin:0 auto;padding:4px 20px 24px}
 
 /* Ficha estilo «perfil de adopción» */
 .hero{position:relative;margin:0 -20px;cursor:pointer}
-.hero-foto{height:min(118vw,470px);border-radius:0 0 34px 34px;background:var(--panel) center/cover no-repeat;display:grid;place-items:center;color:color-mix(in srgb,var(--verde) 55%,var(--panel));overflow:hidden;position:relative}
+.hero-foto{height:min(118vw,470px);border-radius:0 0 34px 34px;background:var(--panel) center 35%/cover no-repeat;display:grid;place-items:center;color:color-mix(in srgb,var(--verde) 55%,var(--panel));overflow:hidden;position:relative}
 .hero-foto .silueta{width:170px;height:170px;margin-top:-110px}
 .hero-foto .puntos{position:absolute;bottom:74px;left:50%;transform:translateX(-50%);display:flex;gap:4px}
 .hero-foto .puntos i{width:6px;height:6px;border-radius:3px;background:#fff;opacity:.6}.hero-foto .puntos i:first-child{width:16px;background:var(--verde);opacity:1}
@@ -259,7 +259,7 @@ textarea{min-height:84px;resize:vertical}
 
 <script>
 'use strict';
-const VERSION = 'v4';
+const VERSION = 'v5';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -687,7 +687,7 @@ function editarPerfil() {
     iniciar: () => {
       $('#ffoto').onchange = async e => {
         const file = e.target.files[0]; if (!file) return;
-        try { const img = await cargarImagen(file); foto = recortarCuadrado(img, 360).toDataURL('image/jpeg', .82); const el = $('#fprev'); el.style.backgroundImage = `url('${foto}')`; el.innerHTML = ''; }
+        try { const img = await cargarImagen(file); foto = lienzo(img, 1440).toDataURL('image/jpeg', .86); const el = $('#fprev'); el.style.backgroundImage = `url('${foto}')`; el.innerHTML = ''; }
         catch { toast('No se pudo leer la foto'); }
       };
     },

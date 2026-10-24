@@ -271,6 +271,54 @@ textarea{min-height:84px;resize:vertical}
 .peg-edit .peg.vacia{display:grid;place-items:center;text-align:center;font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card);border:1.5px dashed var(--panel);box-shadow:none}
 .peg-edit-btns{display:grid;gap:8px;flex:1}
 .peg-edit-btns .btn{padding:11px 12px;font-size:14.5px}
+
+/* Propuesta 1 · desplegable en píldora */
+.f1{display:grid;gap:10px;margin:-4px 0 14px}
+.f1-fila{display:flex;gap:8px;align-items:stretch}.f1-fila>*{white-space:nowrap;line-height:1.2}
+.f1-anio,.f1-todos{position:relative;display:flex;align-items:center;gap:6px;border:0;border-radius:14px;padding:10px 14px;font-weight:800;font-size:15px;background:var(--card);color:var(--ink);box-shadow:var(--sombra)}
+.f1-anio svg{width:16px;height:16px}
+.f1-anio select,.f2-op select{position:absolute;inset:0;opacity:0;width:100%;font-size:16px;cursor:pointer}
+.f1-anio.on,.f1-todos.on{background:var(--verde);color:var(--sobre);box-shadow:var(--sombra-btn)}
+.f1 .chips-f{margin:0 -20px}
+/* Propuesta 2 · control segmentado + pestañas subrayadas */
+.f2{margin:-4px 0 16px}
+.f2-seg{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border-radius:16px;padding:4px;box-shadow:var(--sombra)}
+.f2-op{position:relative;display:flex;align-items:center;justify-content:center;gap:6px;border:0;background:none;border-radius:12px;padding:10px;font-weight:800;font-size:15px;color:var(--muted)}
+.f2-op svg{width:16px;height:16px}
+.f2-op.on{background:var(--verde);color:var(--sobre)}
+.f2-tabs{display:flex;gap:20px;overflow-x:auto;margin:12px -20px 0;padding:0 20px;border-bottom:1px solid var(--line);scrollbar-width:none}
+.f2-tabs::-webkit-scrollbar{display:none}
+.f2-tabs button{flex:none;border:0;background:none;padding:10px 0;font-weight:700;font-size:14.5px;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-1px}
+.f2-tabs button.on{color:var(--ink);border-bottom-color:var(--verde)}
+/* Propuesta 3 · año grande con hoja + puntos de color */
+.f3{margin:-8px 0 14px}
+.f3-cab{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.f3-anio{display:flex;align-items:center;gap:6px;border:0;background:none;padding:0;font-size:30px;font-weight:800;color:var(--ink);letter-spacing:-.02em}
+.f3-anio svg{width:22px;height:22px;color:var(--verde);margin-top:4px}
+.f3-link{border:0;background:none;color:var(--verde);font-weight:800;font-size:14px;padding:4px 0}
+.f3 .chips-f{margin:10px -20px 0}
+.f3-vacs button{gap:7px}
+.f3-vacs button i{width:9px;height:9px;border-radius:50%;flex:none}
+.f3-vacs button.on i{box-shadow:0 0 0 2px var(--sobre)}
+.rej-anios{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.rej-anios button{border:0;border-radius:16px;padding:16px 0;font-weight:800;font-size:18px;background:var(--card);color:var(--ink);box-shadow:var(--sombra)}
+.rej-anios button.on{background:var(--verde);color:var(--sobre)}
+
+/* Salud: 4 pestañas fijas en 2 filas */
+.seg.seg-fija{display:grid;grid-template-columns:1fr 1fr;gap:8px;overflow:visible;margin:6px 0 16px;padding:0}
+.seg.seg-fija button{width:100%;padding:11px 8px;text-align:center}
+/* Vacunas: cuadrícula de estado */
+.vac-cab{display:flex;justify-content:space-between;align-items:baseline;margin:16px 4px 8px;font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.vac-cab button{border:0;background:none;color:var(--verde);font-weight:800;font-size:13.5px;text-transform:none;letter-spacing:0;padding:0}
+.vac-rejilla{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.vac-op{position:relative;display:grid;grid-template-columns:10px 1fr;grid-template-rows:auto auto;column-gap:9px;row-gap:3px;align-items:center;text-align:left;border:2px solid transparent;border-radius:18px;padding:12px 12px 11px;background:var(--card);box-shadow:var(--sombra);transition:opacity .2s,border-color .2s}
+.vac-op i{grid-row:1/3;width:10px;height:100%;min-height:34px;border-radius:5px;background:var(--vc)}
+.vac-op .vo-nom{font-weight:800;font-size:15px;line-height:1.15;color:var(--ink)}
+.vac-op .vo-est{font-size:12.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.vac-op .vo-est b{color:#2E9E6A;margin-right:4px}
+.vac-op .vo-est.pronto{color:var(--ambar)}.vac-op .vo-est.vencido{color:var(--rojo)}
+.vac-op.on{border-color:var(--verde);background:color-mix(in srgb,var(--verde2) 55%,var(--card))}
+.vac-op.apagada{opacity:.55}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -347,7 +395,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v15';
+const VERSION = 'v16';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -609,7 +657,7 @@ function filaConsulta(c) {
   return fila({ ico: '🩺', t: c.motivo || 'Consulta', s: [fmt(c.fecha), c.diagnostico, adj ? `📎 ${adj}` : ''].filter(Boolean).join(' · '), der: c.coste ? `<span class="pill neutro">${euros(c.coste)}</span>` : '', abrir: `formConsulta(D.consultas.find(x=>x.id==='${c.id}'))` });
 }
 function renderSalud() {
-  let h = `<div class="seg">${SUBS.map(([k, n]) => `<button class="${subSalud === k ? 'on' : ''}" onclick="subSalud='${k}';render()">${n}</button>`).join('')}</div>`;
+  let h = `<div class="seg seg-fija">${SUBS.map(([k, n]) => `<button class="${subSalud === k ? 'on' : ''}" onclick="subSalud='${k}';render()">${n}</button>`).join('')}</div>`;
   if (subSalud === 'vacunas') {
     h += renderPasaporte();
   } else if (subSalud === 'parasitos') {
@@ -637,7 +685,12 @@ function renderSalud() {
 
 
 /* ---------- pasaporte de vacunas ---------- */
-let filtroVac = 'Todas', filtroAnio = '';
+let filtroVac = 'Todas', filtroAnio = '', filtroAnioPrev = '';
+function hojaAnios(anios) {
+  abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>Elige el año</h3><button class="cerrar" onclick="cerrarHoja()">✕</button></div>
+  <div class="rej-anios">${anios.map(a => `<button class="${filtroAnio === a ? 'on' : ''}" onclick="filtroAnio='${a}';filtroAnioPrev='${a}';cerrarHoja();render()">${a}</button>`).join('')}</div>
+  <div class="acciones"><button class="btn sec" onclick="filtroAnio='Todos';cerrarHoja();render()">Todos los años</button></div>`);
+}
 const MARCAS = [
   [/eurican.*pneumo/i, '#F2B6CF', '#5A1E3A'], [/eurican.*(dappi|lmulti)/i, '#2D5C9A', '#fff'], [/letifend|leti\b/i, '#3E8FCF', '#fff'], [/canigen/i, '#2E8B3E', '#fff'], [/eurican/i, '#C8202F', '#fff'], [/rabigen|virbac/i, '#1F5FA6', '#fff'], [/versiguard|zoetis|vanguard/i, '#F4F1EA', '#B3262E'],
   [/nobivac|msd/i, '#0E7C7B', '#fff'], [/canigen/i, '#2C6E3F', '#fff'], [/letifend|canileish/i, '#6B3FA0', '#fff'],
@@ -672,31 +725,33 @@ function renderPasaporte() {
   const nombres = Object.keys(grupos).sort((a, b) => grupos[b].length - grupos[a].length);
   if (filtroVac !== 'Todas' && !grupos[filtroVac]) filtroVac = 'Todas';
   let h = '';
-  // Estado de cada vacuna
-  h += `<div class="pas-estados">` + nombres.map(n => {
+  // Filtros: año (actual por defecto, desplegable para los anteriores) + «Todos»; debajo, vacunas
+  const anioDe = v => (v.fecha || '').slice(0, 4);
+  const actual = String(new Date().getFullYear());
+  const todosAnios = [...new Set([actual, ...vac.map(anioDe).filter(Boolean)])].sort().reverse();
+  if (!filtroAnio || (filtroAnio !== 'Todos' && !todosAnios.includes(filtroAnio))) filtroAnio = actual;
+  const porVac = filtroVac === 'Todas' ? vac : (grupos[filtroVac] || []);
+  const anios = [...new Set(porVac.map(anioDe).filter(Boolean))].sort().reverse();
+  const lista = filtroAnio === 'Todos' ? porVac : porVac.filter(v => anioDe(v) === filtroAnio);
+  const anioSel = filtroAnio === 'Todos' ? (filtroAnioPrev || actual) : filtroAnio;
+  const opcionesAnio = todosAnios.map(a => `<option value="${a}" ${a === anioSel ? 'selected' : ''}>${a}</option>`).join('');
+  const selAnio = cls => `<label class="${cls} ${filtroAnio !== 'Todos' ? 'on' : ''}"><span>${anioSel}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg><select aria-label="Año" onchange="filtroAnio=this.value;filtroAnioPrev=this.value;render()" onclick="if(filtroAnio==='Todos'){filtroAnio=this.value;render()}">${opcionesAnio}</select></label>`;
+  const btnTodos = cls => `<button class="${cls} ${filtroAnio === 'Todos' ? 'on' : ''}" onclick="filtroAnioPrev=filtroAnio==='Todos'?filtroAnioPrev:filtroAnio;filtroAnio='Todos';render()">Todos los años</button>`;
+  const colorVac = n => ({ 'Rabia': '#C8202F', 'Polivalente': '#2D5C9A', 'Leishmaniosis': '#3E8FCF', 'Tos de las perreras': '#D77AA6' })[n] || 'var(--verde)';
+  const vacsLista = ['Todas', ...nombres];
+  h += `<div class="sec"><h2>Pasaporte</h2><span class="s">${lista.length} ${lista.length === 1 ? 'vacunación' : 'vacunaciones'}</span></div>`;
+  // Año: control segmentado (año actual con desplegable | todos los años)
+  h += `<div class="f2"><div class="f2-seg">${selAnio('f2-op')}${btnTodos('f2-op')}</div></div>`;
+  // Vacunas: cuadrícula fija con el estado de cada una; tocar filtra, volver a tocar quita el filtro
+  h += `<div class="vac-cab"><span>Vacunas</span>${filtroVac !== 'Todas' ? `<button onclick="filtroVac='Todas';render()">Ver todas</button>` : ''}</div>`;
+  h += `<div class="vac-rejilla">` + nombres.map(n => {
     const ult = grupos[n][0], hasta = ult.proxima, d = hasta ? diasHasta(hasta) : null;
-    const total = hasta && ult.fecha ? Math.max(1, diasEntre(ult.validaDesde || ult.fecha, hasta)) : 1;
-    const pct = d === null ? 0 : Math.max(0, Math.min(100, d / total * 100));
-    const est = d === null ? ['neutro', 'Sin fecha'] : d < 0 ? ['vencido', 'Caducada'] : d <= 30 ? ['pronto', `Renovar en ${d} d`] : ['ok', 'En vigor'];
-    return `<button class="pas-estado ${filtroVac === n ? 'on' : ''}" onclick="filtroVac=filtroVac==='${esc(n)}'?'Todas':'${esc(n)}';filtroAnio='';render()">
-      <div class="pe-top"><b>${esc(n)}</b><span class="pill ${est[0]}">${est[1]}</span></div>
-      <div class="pe-hasta">${hasta ? `Válida hasta <strong>${fmt(hasta)}</strong>` : 'Sin fecha de validez'}</div>
-      <div class="barra ${est[0] === 'vencido' ? 'vencido' : est[0] === 'pronto' ? 'pronto' : ''}"><i style="width:${pct}%"></i></div>
-      ${lineaTiempo(grupos[n])}
-      <div class="pe-pie">${grupos[n].length} ${grupos[n].length === 1 ? 'dosis' : 'dosis'} · desde ${aFecha(grupos[n].at(-1).fecha).getFullYear()}</div>
+    const est = d === null ? ['neutro', 'Sin fecha'] : d < 0 ? ['vencido', 'Caducada'] : d <= 30 ? ['pronto', `Renovar en ${d} d`] : ['ok', `Hasta ${fmtNum(hasta).slice(0, 6)}${fmtNum(hasta).slice(8)}`];
+    return `<button class="vac-op ${filtroVac === n ? 'on' : ''} ${filtroVac !== 'Todas' && filtroVac !== n ? 'apagada' : ''}" style="--vc:${colorVac(n)}" onclick="filtroVac=filtroVac==='${esc(n)}'?'Todas':'${esc(n)}';render()" aria-pressed="${filtroVac === n}">
+      <i></i><span class="vo-nom">${esc(n)}</span><span class="vo-est ${est[0]}">${est[0] === 'ok' ? '<b>✓</b>' : ''}${est[1]}</span>
     </button>`;
   }).join('') + `</div>`;
-  // Hoja del pasaporte: filtros por vacuna y por año
-  const porVac = filtroVac === 'Todas' ? vac : (grupos[filtroVac] || []);
-  const anioDe = v => (v.fecha || '').slice(0, 4);
-  const anios = [...new Set(porVac.map(anioDe).filter(Boolean))].sort().reverse();
-  if (filtroAnio !== 'Todos' && !anios.includes(filtroAnio)) filtroAnio = anios[0] || 'Todos';
-  const lista = filtroAnio === 'Todos' ? porVac : porVac.filter(v => anioDe(v) === filtroAnio);
-  h += `<div class="sec"><h2>Pasaporte</h2><span class="s">${lista.length} ${lista.length === 1 ? 'vacunación' : 'vacunaciones'}</span></div>`;
-  h += `<div class="filtros-pas">
-    <div class="chips-f" role="tablist" aria-label="Año">${[...anios, 'Todos'].map(a => `<button class="${filtroAnio === a ? 'on' : ''}" onclick="filtroAnio='${a}';render()">${a}</button>`).join('')}</div>
-    <div class="chips-f vacs" role="tablist" aria-label="Vacuna">${['Todas', ...nombres].map(n => `<button class="${filtroVac === n ? 'on' : ''}" onclick="filtroVac='${esc(n)}';render()">${esc(n)}</button>`).join('')}</div>
-  </div>`;
+  if (!lista.length) h += `<div class="card">${vacioHTML('💉', filtroAnio === 'Todos' ? 'No hay vacunas de este tipo.' : `En ${filtroAnio} no hay ${filtroVac === 'Todas' ? 'vacunas apuntadas' : 'dosis de ' + esc(filtroVac).toLowerCase()}. Elige otro año en el desplegable o «Todos los años».`)}</div>`;
   const tarjeta = (v, k) => {
     const [bg, fg] = colorMarca(v.producto + ' ' + (v.laboratorio || ''));
     const vigente = v.proxima && diasHasta(v.proxima) >= 0 && (!v.validaDesde || diasHasta(v.validaDesde) <= 0) && diasHasta(v.fecha) <= 0;

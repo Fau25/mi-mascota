@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#1F4B57" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0C1416" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" id="metaTema" content="#F3EDE2">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Mi Mascota">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -46,8 +45,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 a{color:var(--verde)}
 .ic{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.2em;flex:none}
 
-header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--banda) 86%,transparent);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);color:var(--banda-txt);padding:calc(env(safe-area-inset-top) + 12px) 20px 10px;display:flex;align-items:center;gap:12px;max-width:760px;margin:0 auto}
-header.top h1{font-size:24px;flex:1;text-align:center;color:var(--banda-txt)}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);color:var(--ink);padding:calc(env(safe-area-inset-top) + 12px) 20px 10px;display:flex;align-items:center;gap:12px;max-width:760px;margin:0 auto}
+header.top h1{font-size:24px;flex:1;text-align:center;color:inherit}
+body.tab-salud header.top{background:var(--banda);color:var(--banda-txt)}
 header.top{max-width:none;margin:0}
 .estado{width:10px;height:10px;border-radius:50%;background:var(--muted);opacity:.35;flex:none;border:0;padding:0}
 header.top h1 .estado{display:inline-block;vertical-align:middle;margin:0 0 0 8px;width:11px;height:11px;position:relative;top:-2px}
@@ -74,8 +74,8 @@ main{max-width:760px;margin:0 auto;padding:4px 20px 24px}
 
 /* Ficha estilo «perfil de adopción» */
 .hero{position:relative;margin:-4px -20px 0;cursor:pointer}
-.hero-foto{height:min(118vw,470px);border-radius:0 0 34px 34px;background:var(--panel) center 35%/cover no-repeat;display:grid;place-items:center;color:color-mix(in srgb,var(--verde) 55%,var(--panel));overflow:hidden;position:relative}
-.hero-foto .silueta{width:170px;height:170px;margin-top:-110px}
+.hero-foto{height:min(94vw,376px);border-radius:0 0 34px 34px;background:var(--panel) center 35%/cover no-repeat;display:grid;place-items:center;color:color-mix(in srgb,var(--verde) 55%,var(--panel));overflow:hidden;position:relative}
+.hero-foto .silueta{width:130px;height:130px;margin-top:-80px}
 .hero-foto .puntos{position:absolute;bottom:74px;left:50%;transform:translateX(-50%);display:flex;gap:4px}
 .hero-foto .puntos i{width:6px;height:6px;border-radius:3px;background:#fff;opacity:.6}.hero-foto .puntos i:first-child{width:16px;background:var(--verde);opacity:1}
 .hero-card{position:absolute;left:16px;right:16px;bottom:16px;background:var(--vidrio);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid var(--vidrio-borde);border-radius:var(--r);box-shadow:0 10px 30px rgba(20,30,36,.18);padding:16px 20px}
@@ -374,6 +374,36 @@ textarea{min-height:84px;resize:vertical}
 .vc-info{display:flex;align-items:center;gap:8px;margin:12px 4px 0;font-size:14px}
 .vc-info i{width:10px;height:10px;border-radius:50%;flex:none}
 .vc-info span{opacity:.75;font-weight:700}.vc-info span.vencido{color:#F4A08F;opacity:1}
+
+/* Ficha en forma de tarjeta */
+.tarjeta{perspective:1200px;cursor:pointer;max-width:420px;margin:0 auto}
+.tj-in{position:relative;aspect-ratio:1.586;max-width:100%;transition:transform .7s cubic-bezier(.3,.8,.3,1);transform-style:preserve-3d}
+.tarjeta.girada .tj-in{transform:rotateY(180deg)}
+.tj-cara{position:absolute;inset:0;border-radius:18px;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;color:#F6F0E6;box-shadow:0 14px 30px rgba(20,40,48,.28),inset 0 0 0 1px rgba(255,255,255,.08);
+  background:radial-gradient(120% 90% at 100% 0%,rgba(255,255,255,.14),transparent 55%),repeating-radial-gradient(circle at 15% 120%,rgba(255,255,255,.05) 0 1px,transparent 1px 7px),linear-gradient(135deg,#1F4B57 0%,#2C6170 55%,#163843 100%)}
+.tj-frente{padding:16px 18px;display:grid;grid-template-rows:auto auto 1fr auto auto;row-gap:6px}
+.tj-top{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;font-weight:800;letter-spacing:.14em}
+.tj-tipo{opacity:.6}
+.tj-chip{width:40px;height:30px;border-radius:6px;background:linear-gradient(135deg,#EFE4CF,#CDBB98);position:relative;margin-top:4px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.tj-chip i{position:absolute;inset:6px 8px;border:1px solid rgba(60,50,30,.35);border-radius:3px}
+.tj-chip i::before,.tj-chip i::after{content:"";position:absolute;left:-8px;right:-8px;top:50%;height:1px;background:rgba(60,50,30,.35)}
+.tj-chip i::after{left:50%;right:auto;top:-6px;bottom:-6px;width:1px;height:auto}
+.tj-num{align-self:end;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:clamp(15px,5vw,20px);letter-spacing:.08em;font-weight:600;text-shadow:0 1px 0 rgba(0,0,0,.25);white-space:nowrap}
+.tj-num em{font-family:var(--f);font-style:normal;font-size:14px;opacity:.7;letter-spacing:0}
+.tj-extra{font-size:10.5px;opacity:.7;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tj-pie{display:grid;grid-template-columns:1.3fr auto 1fr;gap:12px;align-items:end;padding-right:34px}
+.tj-c{min-width:0}
+.tj-c span{display:block;font-size:8.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+.tj-c b{display:block;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.tj-huella{position:absolute;right:16px;bottom:16px;width:28px;height:28px;opacity:.85;color:#EFE4CF}
+.tj-dorso{transform:rotateY(180deg);display:flex;flex-direction:column}
+.tj-banda{height:34px;margin-top:16px;background:#0F262D;flex:none}
+.tj-dueno{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;padding:10px 18px 0}
+.tj-dueno .ancho{grid-column:1/-1}
+.tj-dueno .tj-c b{font-size:12.5px}
+.tj-vacio{margin:6px 0 0;font-size:13px;opacity:.8;grid-column:1/-1}
+.tj-notas{margin-top:auto;padding:0 18px 12px;font-size:10px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tj-ayuda{text-align:center;font-size:12.5px;color:var(--muted);margin:10px 0 0}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -390,21 +420,20 @@ textarea{min-height:84px;resize:vertical}
 
 @media (min-width:820px){
   .doscol{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
-  .hero-foto{height:440px}
+  .hero-foto{height:352px}
 }
 
 /* ---------- Menú A: barra fija abajo, opaca, con + central ---------- */
 body.menu-a{padding-bottom:calc(74px + env(safe-area-inset-bottom))}
 body.menu-a .fab{display:none}
-body.menu-a nav.tabs{background:color-mix(in srgb,var(--banda) 84%,transparent);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border-top:1px solid color-mix(in srgb,var(--banda-txt) 10%,transparent);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left,0px));pointer-events:auto;box-shadow:0 -6px 20px rgba(38,46,52,.06)}
+body.menu-a nav.tabs{background:color-mix(in srgb,var(--card) 72%,transparent);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border-top:1px solid var(--vidrio-borde);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left,0px));pointer-events:auto;box-shadow:0 -6px 20px rgba(38,46,52,.06)}
 body.menu-a nav.tabs .in{background:none;box-shadow:none;border-radius:0;padding:0;align-items:center}
-body.menu-a nav.tabs button{background:none;gap:3px;padding:6px 0;color:color-mix(in srgb,var(--banda-txt) 65%,transparent)}
+body.menu-a nav.tabs button{background:none;gap:3px;padding:6px 0;color:var(--muted)}
 body.menu-a nav.tabs button svg{width:24px;height:24px;padding:3px 12px;box-sizing:content-box;border-radius:14px}
-body.menu-a nav.tabs button.on{color:var(--banda-txt);background:none}
-body.menu-a nav.tabs button.on svg{background:color-mix(in srgb,var(--banda-txt) 16%,transparent)}
-.mas-nav span{width:50px;height:50px;border-radius:17px;background:var(--banda-txt);color:var(--banda);display:grid;place-items:center;box-shadow:var(--sombra-btn)}
+body.menu-a nav.tabs button.on{color:var(--verde);background:none}
+body.menu-a nav.tabs button.on svg{background:var(--verde2)}
+.mas-nav span{width:50px;height:50px;border-radius:17px;background:var(--verde);color:var(--sobre);display:grid;place-items:center;box-shadow:var(--sombra-btn)}
 .mas-nav span svg{width:26px!important;height:26px!important;padding:0!important;background:none!important}
-body.menu-a .banda{margin-bottom:calc(-98px - env(safe-area-inset-bottom));padding-bottom:calc(112px + env(safe-area-inset-bottom))}
 
 body.menu-a .mas-nav{display:flex}
 
@@ -450,7 +479,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v18';
+const VERSION = 'v19';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -618,8 +647,17 @@ const medActiva = m => !m.fin || m.fin >= hoy();
 /* ---------- navegación ---------- */
 let tab = 'inicio', subSalud = 'vacunas', filtroDoc = 'Todos';
 const TITULOS = { inicio: null, salud: 'Salud', comida: 'Comida', peso: 'Peso', docs: 'Documentos' };
+function pintarTema() {
+  document.body.classList.toggle('tab-salud', tab === 'salud');
+  const cs = getComputedStyle(document.documentElement);
+  const c = (tab === 'salud' ? cs.getPropertyValue('--banda') : cs.getPropertyValue('--bg')).trim();
+  const m = document.getElementById('metaTema'); if (m && c) m.setAttribute('content', c);
+  document.documentElement.style.background = c;
+}
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => pintarTema());
 function irA(t, sub) {
   tab = t; if (sub) subSalud = sub;
+  pintarTema();
   document.querySelectorAll('.vista').forEach(v => v.classList.toggle('activa', v.id === 'v-' + t));
   document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   render(); scrollTo(0, 0);
@@ -688,11 +726,33 @@ function renderInicio() {
   (p.contactos || []).forEach(c => contactos.push({ e: '👤', t: c.nombre || 'Contacto', s: [c.rol, c.notas].filter(Boolean).join(' · '), tel: c.tel, abrir: `formContacto('${c.id}')` }));
   h += `<div class="sec"><h2>Contactos</h2><button class="link" onclick="formContacto()">Añadir</button></div><div class="card">` + (contactos.length ? contactos.map(c => `<div class="contacto" ${c.abrir ? `onclick="${c.abrir}" style="cursor:pointer"` : ''}><div class="ico">${c.e}</div><div class="txt"><div class="t">${esc(c.t)}</div>${c.s ? `<div class="s">${esc(c.s)}</div>` : ''}</div>${c.tel ? `<a class="tel" href="tel:${esc(String(c.tel).replace(/\s/g, ''))}" onclick="event.stopPropagation()">Llamar</a>` : ''}</div>`).join('') : vacioHTML('👤', 'Añade a quien quieras tener a mano: paseador, cuidador, peluquería, residencia, familiares…')) + `</div>`;
 
-  const datos = [['Nacimiento', fmt(p.nacimiento)], ['Raza', p.raza], ['Color', p.color], ['Microchip', p.chip], ['Pasaporte', p.pasaporte], ['ADN canino', p.adn], ['Esterilizado', p.esterilizado], ['Alergias', p.alergias]].filter(x => x[1]);
-  const mios = [['Nombre', p.duenoNombre], ['DNI', p.duenoDni], ['Teléfono', p.duenoTel], ['Email', p.duenoEmail], ['Dirección', p.duenoDir]].filter(x => x[1]);
-  h += `<section class="banda"><div class="sec"><h2>Ficha</h2><button class="link" onclick="editarPerfil()">Editar</button></div>${datos.length ? `<dl class="datos">${datos.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl>` : `<p class="banda-vacia">Toca «Editar» para apuntar su microchip, pasaporte, ADN y demás datos.</p>`}`;
-  h += `<div class="sec"><h2>Tus datos</h2><button class="link" onclick="editarPerfil('dueno')">Editar</button></div>${mios.length ? `<dl class="datos">${mios.map(([a, b]) => `<dt>${a}</dt><dd>${esc(b)}</dd>`).join('')}</dl>` : `<p class="banda-vacia">Apunta tu nombre, teléfono y dirección para tenerlos junto a los de tu perro (útil en el veterinario o si se pierde).</p>`}`;
-  h += `<button class="ajustes-link" onclick="abrirAjustes()"><span class="estado-txt" id="estado-txt"></span>Ajustes y sincronización</button></section>`;
+  const grupos3 = t => String(t || '').replace(/\s+/g, '').replace(/(.{3})(?=.)/g, '$1 ');
+  const corta = f => { if (!f) return '—'; const d = aFecha(f); return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${String(d.getFullYear()).slice(2)}`; };
+  const campo = (l, v, cls = '') => `<div class="tj-c ${cls}"><span>${l}</span><b>${esc(v || '—')}</b></div>`;
+  const extra = [p.pasaporte ? `Pasaporte ${p.pasaporte}` : '', p.adn ? `ADN ${p.adn}` : ''].filter(Boolean).join(' · ');
+  const notas = [p.esterilizado ? `Esterilizado: ${p.esterilizado}` : '', p.color ? `Color: ${p.color}` : '', p.alergias ? `Alergias: ${p.alergias}` : ''].filter(Boolean).join(' · ');
+  h += `<div class="sec"><h2>Ficha</h2><button class="link" onclick="editarPerfil()">Editar</button></div>
+  <div class="tarjeta" id="tarjeta" onclick="this.classList.toggle('girada')" role="button" aria-label="Ficha de ${esc(p.nombre || 'tu perro')}. Toca para ver tus datos">
+    <div class="tj-in">
+      <div class="tj-cara tj-frente">
+        <div class="tj-top"><span class="tj-marca">MI MASCOTA</span><span class="tj-tipo">FICHA CANINA</span></div>
+        <div class="tj-chip"><i></i></div>
+        <div class="tj-num">${p.chip ? esc(grupos3(p.chip)) : '<em>Microchip sin apuntar</em>'}</div>
+        ${extra ? `<div class="tj-extra">${esc(extra)}</div>` : ''}
+        <div class="tj-pie">${campo('Nombre', (p.nombre || '').toUpperCase(), 'ancho')}${campo('Nacimiento', corta(p.nacimiento))}${campo('Raza', p.raza)}</div>
+        <svg class="tj-huella" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="6" cy="9" rx="2" ry="2.6"/><ellipse cx="10" cy="5.6" rx="2" ry="2.7"/><ellipse cx="14.4" cy="5.6" rx="2" ry="2.7"/><ellipse cx="18.2" cy="9" rx="2" ry="2.6"/><path d="M12 11c-3 0-6 3.4-6 6.2 0 1.8 1.4 2.6 3 2.2 1.1-.3 2-.7 3-.7s1.9.4 3 .7c1.6.4 3-.4 3-2.2C18 14.4 15 11 12 11z"/></svg>
+      </div>
+      <div class="tj-cara tj-dorso">
+        <div class="tj-banda"></div>
+        <div class="tj-dueno">${p.duenoNombre || p.duenoTel || p.duenoDni || p.duenoDir || p.duenoEmail
+          ? `${campo('Titular', p.duenoNombre, 'ancho')}${campo('DNI', p.duenoDni)}${campo('Teléfono', p.duenoTel)}${campo('Email', p.duenoEmail, 'ancho')}${campo('Dirección', p.duenoDir, 'ancho')}`
+          : `<p class="tj-vacio">Añade tus datos en «Editar» para tenerlos aquí, por si alguien encuentra a ${esc(p.nombre || 'tu perro')}.</p>`}</div>
+        ${notas ? `<div class="tj-notas">${esc(notas)}</div>` : ''}
+      </div>
+    </div>
+  </div>
+  <p class="tj-ayuda">Toca la tarjeta para ver ${p.duenoNombre ? 'tus datos' : 'el reverso'}</p>`;
+  h += `<button class="ajustes-link" onclick="abrirAjustes()"><span class="estado-txt" id="estado-txt"></span>Ajustes y sincronización</button>`;
   $('#v-inicio').innerHTML = conIconos(h);
   pintarEstado();
 }
@@ -1397,6 +1457,7 @@ const HISTORIAL_PASAPORTE = []; // datos retirados del historial publico
 
 /* ---------- arranque ---------- */
 document.body.classList.add('menu-a');
+pintarTema();
 render();
 estado(CFG.url ? '' : '');
 if (CFG.url) sincronizar();

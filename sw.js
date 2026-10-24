@@ -1,5 +1,5 @@
 // Cada cambio de la app: subir la versión (mi-mascota-vNN)
-const CACHE = 'mi-mascota-v12';
+const CACHE = 'mi-mascota-v13';
 const ARCHIVOS = ['./', 'index.html', 'manifest.json', 'icon-180.png', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -28,5 +28,13 @@ self.addEventListener('fetch', e => {
     return;
   }
   if (url.origin !== location.origin) return;
+  // La app (index.html) siempre desde la red si hay conexión, para ver los cambios al momento; sin conexión, la copia guardada
+  const esApp = req.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('index.html');
+  if (esApp) {
+    e.respondWith(fetch(req, { cache: 'no-store' })
+      .then(r => { if (r.ok) caches.open(CACHE).then(c => c.put('index.html', r.clone())); return r; })
+      .catch(() => caches.match('index.html')));
+    return;
+  }
   e.respondWith(caches.match(req, { ignoreSearch: true }).then(hit => hit || fetch(req).catch(() => caches.match('index.html'))));
 });

@@ -348,7 +348,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v12';
+const VERSION = 'v13';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -1274,7 +1274,16 @@ if (CFG.url) sincronizar();
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { render(); sincronizar(); } });
 setInterval(() => { if (document.visibilityState === 'visible' && CFG.url) sincronizar(); }, 30000);
 addEventListener('online', () => sincronizar());
-if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => { });
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  // Si hay una versión nueva, se instala y la app se recarga sola una vez
+  let recargando = false;
+  const habiaControl = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (habiaControl && !recargando) { recargando = true; location.reload(); } });
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => {
+    reg.update().catch(() => { });
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => { }); });
+  }).catch(() => { });
+}
 </script>
 </body>
 </html>

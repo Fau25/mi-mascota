@@ -526,6 +526,58 @@ textarea{min-height:84px;resize:vertical}
 .fu5{display:inline-flex;align-items:stretch;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(30,50,55,.12);font-variant-numeric:tabular-nums}
 .fu5 b{background:var(--verde);color:var(--sobre);font-size:17px;font-weight:800;padding:6px 10px;min-width:38px;text-align:center}
 .fu5 i{font-style:normal;background:var(--card);color:var(--verde);font-size:12px;font-weight:800;letter-spacing:.1em;padding:0 10px;display:flex;align-items:center}
+
+/* Vacuna 1 · compacta */
+.v1{display:flex;gap:0;border:0;padding:0;text-align:left;background:var(--card);border-radius:20px;box-shadow:var(--sombra);overflow:hidden;color:var(--ink);font-family:inherit;width:100%}
+.v1-barra{width:7px;background:var(--pc);flex:none}
+.v1-cuerpo{flex:1;min-width:0;padding:12px 14px;display:grid;gap:4px}
+.v1-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.v1-tipo{font-size:11px;font-weight:800;color:var(--verde);text-transform:uppercase;letter-spacing:.08em}
+.v1-marca{font-size:17px;font-weight:800}.v1-marca small{font-size:12px;color:var(--muted);font-weight:700}
+.v1-fechas{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.v1-fechas svg{width:16px;height:16px;color:var(--muted)}
+.v1-pie{font-size:12px;color:var(--muted)}.v1-pie b{color:var(--ink);font-family:ui-monospace,Menlo,monospace;font-weight:600}
+/* Vacuna 2 · billete */
+.v2{display:flex;border:0;padding:0;text-align:left;background:var(--card);border-radius:20px;box-shadow:var(--sombra);overflow:hidden;color:var(--ink);font-family:inherit;width:100%;position:relative}
+.v2-talon{width:44px;flex:none;background:var(--pc);color:var(--pf);display:flex;align-items:center;justify-content:center;position:relative}
+.v2-talon span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.v2-talon::after{content:"";position:absolute;right:-1px;top:8px;bottom:8px;border-right:2px dashed var(--card)}
+.v2::before,.v2::after{content:"";position:absolute;left:35px;width:18px;height:18px;border-radius:50%;background:var(--bg);z-index:1}
+.v2::before{top:-9px}.v2::after{bottom:-9px}
+.v2-cuerpo{flex:1;min-width:0;padding:12px 14px 11px 16px;display:grid;gap:8px}
+.v2-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.v2-top b{font-size:16px;font-weight:800}
+.v2-vuelo{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px}
+.v2-vuelo span{display:block;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.v2-vuelo b{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.v2-dcha{text-align:right}.v2-dcha b{color:var(--verde)}
+.v2-linea{display:flex;align-items:center;gap:4px;color:var(--muted)}.v2-linea i{flex:1;border-top:1.5px dashed var(--line)}.v2-linea svg{width:16px;height:16px}
+.v2-pie{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:var(--muted);font-weight:700;border-top:1px solid var(--line);padding-top:7px}
+/* Vacuna 3 · validez */
+.v3{border:0;width:100%;text-align:left;background:var(--card);border-radius:20px;box-shadow:var(--sombra);padding:14px 16px;display:grid;gap:8px;color:var(--ink);font-family:inherit}
+.v3-cab{display:flex;align-items:center;gap:12px}
+.v3-mini{width:42px;height:42px;border-radius:12px;background:var(--pc);color:var(--pf);display:grid;place-items:center;font-weight:800;font-size:18px;flex:none}
+.v3-txt{flex:1;min-width:0}.v3-txt b{display:block;font-size:16px;font-weight:800}.v3-txt span{font-size:12.5px;color:var(--muted);font-weight:700}
+.v3-hasta span{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}.v3-hasta b{font-size:21px;font-weight:800}
+.v3-barra{height:8px;border-radius:4px;background:var(--verde2);overflow:hidden}.v3-barra i{display:block;height:100%;background:var(--verde);border-radius:4px}.v3-barra.fin i{background:var(--muted)}
+.v3-ext{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-weight:700;margin-top:-3px}
+.v3-chips{display:flex;flex-wrap:wrap;gap:6px}.v3-chips span{font-size:11.5px;font-weight:700;background:var(--bg);border-radius:8px;padding:4px 8px;color:var(--muted)}
+/* Vacuna 4 · pegatina protagonista */
+.v4{position:relative;overflow:hidden;border:0;width:100%;text-align:left;background:var(--card);border-radius:22px;box-shadow:var(--sombra);padding:12px;display:grid;gap:10px;color:var(--ink);font-family:inherit}
+.v4-peg{border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12);display:grid;grid-template-rows:auto auto;min-height:118px}
+.v4-peg.foto{background:#fff center/cover no-repeat;height:130px}
+.v4-band{background:var(--pc);color:var(--pf);padding:12px 14px 16px;clip-path:polygon(0 0,100% 0,100% 80%,70% 100%,45% 86%,0 100%)}
+.v4-band b{display:block;font-size:20px;font-weight:800;line-height:1.1}.v4-band span{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.v4-datos{display:flex;align-items:center;gap:16px;padding:6px 14px 10px;color:#222}
+.v4-datos span{display:block;font-size:9.5px;color:#888;letter-spacing:.08em}.v4-datos b{font-family:ui-monospace,Menlo,monospace;font-size:13px;font-weight:600}
+.v4-cod{margin-left:auto;display:flex;gap:1.5px;height:26px;align-items:stretch}.v4-cod i{background:#333;display:block}
+.v4-fechas{display:grid;gap:8px}
+.v4-fechas div{background:var(--bg);border-radius:12px;padding:7px 9px}
+.v4-fechas span{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.v4-fechas em{font-style:normal;width:15px;height:15px;border-radius:50%;background:var(--verde2);color:var(--verde);display:grid;place-items:center;font-size:9px}
+.v4-fechas b{display:block;font-size:14.5px;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
+.v4-fechas div:last-child b{color:var(--verde)}
+.v4-pie{display:flex;justify-content:space-between;align-items:center}.v4-pie b{font-weight:800}
+.v4 .sello{right:-14px;bottom:40px;width:86px;height:86px}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -601,7 +653,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v25';
+const VERSION = 'v26';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -1012,6 +1064,7 @@ function renderPasaporte() {
   const tarjeta = (v, k) => {
     const [bg, fg] = colorMarca(v.producto + ' ' + (v.laboratorio || ''));
     const vigente = v.proxima && diasHasta(v.proxima) >= 0 && (!v.validaDesde || diasHasta(v.validaDesde) <= 0) && diasHasta(v.fecha) <= 0;
+    const mV = window.MODO_VCARD || '2'; if (mV !== '0') return tarjetaVac(v, k, mV, bg, fg, vigente);
     const peg = v.fotoPeg
       ? `<div class="peg foto" style="background-image:url('${v.fotoPeg}')"></div>`
       : `<div class="peg" style="--pc:${bg};--pf:${fg}"><div class="peg-top"><span class="peg-marca">${esc(v.producto || v.nombre || 'Vacuna')}</span>${v.laboratorio ? `<span class="peg-lab">${esc(v.laboratorio)}</span>` : ''}</div><div class="peg-pie"><span>Lote</span><b>${esc(v.lote || '—')}</b><span>CAD</span><b>${esc(v.caducidad || '—')}</b></div></div>`;
@@ -1033,6 +1086,47 @@ function renderPasaporte() {
   }
   if (otros.length) h += `<div class="sec"><h2>Revisiones y test</h2></div><div class="card">${otros.map(s => filaSalud(s, L)).join('')}</div>`;
   return h;
+}
+
+
+/* ---------- propuestas de ficha de vacuna ---------- */
+function tarjetaVac(v, k, m, bg, fg, vigente) {
+  const abrir = `formSalud(D.salud.find(x=>x.id==='${v.id}'))`;
+  const caducada = v.proxima && diasHasta(v.proxima) < 0;
+  const est = vigente ? ['ok', 'En vigor'] : caducada ? ['neutro', 'Caducada'] : ['pronto', 'Pendiente'];
+  const corta = f => { if (!f) return '—'; const d = aFecha(f); return `${d.getDate()} ${MESES[d.getMonth()]} ${String(d.getFullYear()).slice(2)}`; };
+  const marca = esc(v.producto || v.nombre || 'Vacuna'), tipo = esc(v.nombre || ''), lab = esc(v.laboratorio || '');
+  const fotoMini = v.fotoPeg ? `style="background-image:url('${v.fotoPeg}');background-size:cover"` : '';
+  if (m === '1') {
+    return `<button class="v1" onclick="${abrir}" style="--pc:${bg}"><i class="v1-barra"></i><div class="v1-cuerpo">
+      <div class="v1-top"><span class="v1-tipo">${tipo}</span><span class="pill ${est[0]}">${est[1]}</span></div>
+      <b class="v1-marca">${marca}${lab ? ` <small>${lab}</small>` : ''}</b>
+      <div class="v1-fechas"><span>${corta(v.fecha)}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>${corta(v.proxima)}</span></div>
+      <div class="v1-pie">Lote <b>${esc(v.lote || '—')}</b> · CAD <b>${esc(v.caducidad || '—')}</b>${v.validaDesde ? ` · desde ${corta(v.validaDesde)}` : ''}</div></div></button>`;
+  }
+  if (m === '2') {
+    return `<button class="v2" onclick="${abrir}"><div class="v2-talon" style="--pc:${bg};--pf:${fg}"><span>${tipo}</span></div><div class="v2-cuerpo">
+      <div class="v2-top"><b>${marca}</b><span class="pill ${est[0]}">${est[1]}</span></div>
+      <div class="v2-vuelo"><div><span>Vacunado</span><b>${corta(v.fecha)}</b></div><div class="v2-linea"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><i></i></div><div class="v2-dcha"><span>Válida hasta</span><b>${corta(v.proxima)}</b></div></div>
+      <div class="v2-pie"><span>${lab || '&nbsp;'}</span><span>Lote ${esc(v.lote || '—')} · CAD ${esc(v.caducidad || '—')}</span></div></div></button>`;
+  }
+  if (m === '3') {
+    const ini = v.validaDesde || v.fecha, fin = v.proxima;
+    let pct = 0; if (ini && fin) { const tot = Math.max(1, diasEntre(ini, fin)); pct = Math.max(0, Math.min(100, (tot - Math.max(0, diasHasta(fin))) / tot * 100)); }
+    return `<button class="v3" onclick="${abrir}"><div class="v3-cab"><div class="v3-mini" style="--pc:${bg};--pf:${fg}" ${fotoMini}>${v.fotoPeg ? '' : marca.slice(0, 1)}</div><div class="v3-txt"><b>${marca}</b><span>${tipo}${lab ? ' · ' + lab : ''}</span></div><span class="pill ${est[0]}">${est[1]}</span></div>
+      <div class="v3-hasta"><span>Válida hasta</span><b>${v.proxima ? fmt(v.proxima) : '—'}</b></div>
+      <div class="v3-barra ${caducada ? 'fin' : ''}"><i style="width:${pct.toFixed(0)}%"></i></div>
+      <div class="v3-ext"><span>${corta(ini)}</span><span>${corta(fin)}</span></div>
+      <div class="v3-chips"><span>Lote ${esc(v.lote || '—')}</span><span>CAD ${esc(v.caducidad || '—')}</span>${v.vet ? `<span>${esc(v.vet)}</span>` : ''}</div></button>`;
+  }
+  // 4 · Pegatina protagonista
+  const barras = Array.from({ length: 34 }, (_, i) => `<i style="width:${[1, 2, 1, 3, 1, 2][(i * 7 + (v.lote || '').length) % 6]}px"></i>`).join('');
+  const filas = v.validaDesde ? [['Vacunación', v.fecha], ['Desde', v.validaDesde], ['Hasta', v.proxima]] : [['Vacunación', v.fecha], ['Hasta', v.proxima]];
+  return `<button class="v4" onclick="${abrir}">
+    ${v.fotoPeg ? `<div class="v4-peg foto" style="background-image:url('${v.fotoPeg}')"></div>` : `<div class="v4-peg" style="--pc:${bg};--pf:${fg}"><div class="v4-band"><b>${marca}</b>${lab ? `<span>${lab}</span>` : ''}</div><div class="v4-datos"><div><span>LOTE</span><b>${esc(v.lote || '—')}</b></div><div><span>CAD</span><b>${esc(v.caducidad || '—')}</b></div><div class="v4-cod">${barras}</div></div></div>`}
+    <div class="v4-fechas" style="grid-template-columns:repeat(${filas.length},1fr)">${filas.map(([t, f], j) => `<div><span><em>${j + 1}</em>${t}</span><b>${corta(f)}</b></div>`).join('')}</div>
+    <div class="v4-pie"><span class="pill ${est[0]}">${est[1]}</span><b>${tipo}</b></div>
+    ${sello(v.vet, k)}</button>`;
 }
 
 function renderComida() {

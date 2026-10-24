@@ -399,6 +399,12 @@ textarea{min-height:84px;resize:vertical}
 .f1c-dueno .f1c-et{font-size:11px;font-weight:800;color:var(--verde);text-transform:uppercase;letter-spacing:.08em}
 .f1c-dueno b{font-size:15px}
 .f1c-dueno span{color:var(--muted)}
+
+.pliegue-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;border:0;border-top:1px solid var(--line);background:none;color:var(--verde);font-weight:800;font-size:14px;padding:13px 0 8px;font-family:inherit}
+.pliegue-btn svg{width:16px;height:16px;transition:transform .2s}
+.pliegue.abierto .pliegue-btn svg{transform:rotate(180deg)}
+.pliegue .fila:first-child{border-top:1px solid var(--line)}
+.banda-top + .card{margin-top:22px}
 /* Visor */
 .visor{position:fixed;inset:0;background:#0c1110;z-index:30;display:none;flex-direction:column;color:#eee}
 .visor.abierto{display:flex}
@@ -474,7 +480,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v21';
+const VERSION = 'v22';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -909,6 +915,7 @@ function grafica(ps) {
   const pf = ps.length > 24 ? '' : pts.map(q => `<circle class="pt" cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="3.2"/>`).join('');
   return `<svg class="grafica" viewBox="0 0 ${W} ${H}" role="img" aria-label="Evolución del peso">${rej}<path class="area" d="${area}" opacity=".8"/><path class="lin" d="${lin}"/>${pf}<text x="${pl}" y="${H - 6}">${fmtCorto(ps[0].fecha)}</text><text x="${W - pr}" y="${H - 6}" text-anchor="end">${fmtCorto(ps.at(-1).fecha)}</text></svg>`;
 }
+let verPesos = false;
 function renderPeso() {
   const ps = pesos(), ult = ps.at(-1), prev = ps.at(-2);
   let h = '';
@@ -916,7 +923,9 @@ function renderPeso() {
     const dif = prev ? ult.kg - prev.kg : 0;
     h += `<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px"><div><div class="s">Último peso · ${fmt(ult.fecha)}</div><div class="grande" style="font-size:34px">${num(ult.kg)} kg</div></div>${prev ? `<span class="pill ${Math.abs(dif) < .05 ? 'neutro' : 'ok'}">${dif > 0 ? '+' : ''}${num(Math.round(dif * 100) / 100)} kg</span>` : ''}</div>${grafica(ps.slice(-60))}</div>`;
   }
-  h += `<div class="sec"><h2>Registros</h2></div><div class="card">${ps.length ? ps.slice().reverse().map(p => fila({ ico: '⚖️', t: num(p.kg) + ' kg', s: [fmt(p.fecha), p.nota].filter(Boolean).join(' · '), abrir: `formPeso(D.peso.find(x=>x.id==='${p.id}'))` })).join('') : vacioHTML('⚖️', 'Apunta su peso de vez en cuando (en casa o en el veterinario) y verás la evolución.')}</div>`;
+  const regs = ps.slice().reverse(), filaPeso = p => fila({ ico: '⚖️', t: num(p.kg) + ' kg', s: [fmt(p.fecha), p.nota].filter(Boolean).join(' · '), abrir: `formPeso(D.peso.find(x=>x.id==='${p.id}'))` });
+  const resto = regs.slice(4);
+  h += `<div class="sec"><h2>Registros</h2>${regs.length ? `<span class="s">${regs.length}</span>` : ''}</div><div class="card">${regs.length ? regs.slice(0, 4).map(filaPeso).join('') + (resto.length ? `<div class="pliegue ${verPesos ? 'abierto' : ''}">${verPesos ? resto.map(filaPeso).join('') : ''}<button class="pliegue-btn" onclick="verPesos=!verPesos;render()">${verPesos ? 'Ocultar anteriores' : `Ver ${resto.length} ${resto.length === 1 ? 'registro anterior' : 'registros anteriores'}`}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div>` : '') : vacioHTML('⚖️', 'Apunta su peso de vez en cuando (en casa o en el veterinario) y verás la evolución.')}</div>`;
   $('#v-peso').innerHTML = conIconos(h);
 }
 

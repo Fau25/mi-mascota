@@ -12,6 +12,8 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <title>Mi Mascota</title>
+<meta name="description" content="App personal para la salud, el peso y los documentos de mi perro.">
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -150,6 +152,9 @@ nav.tabs button.on{color:var(--sobre);background:var(--verde)}
 @keyframes sube{from{transform:translateY(40px);opacity:.4}}
 @media (min-width:700px){.velo{align-items:center}.hoja{border-radius:30px;max-height:86vh}}
 .asa{width:40px;height:5px;border-radius:3px;background:var(--panel);margin:4px auto 12px}
+.hoja:focus{outline:none}
+[role=button]:focus-visible,.fila:focus-visible{outline:2px solid var(--verde);outline-offset:2px;border-radius:12px}
+.v2-foto{display:inline-flex;vertical-align:-2px;margin-left:6px;color:var(--muted)}.v2-foto svg{width:15px;height:15px}
 .hoja-tit{display:flex;align-items:center;gap:10px;margin-bottom:4px}
 .hoja-tit h3{font-size:22px;flex:1}
 .cerrar{border:0;background:var(--card);width:34px;height:34px;border-radius:50%;font-size:14px;color:var(--muted);box-shadow:var(--sombra)}
@@ -352,7 +357,7 @@ body.menu-a .mas-nav{display:flex}
   <button data-tab="docs" onclick="irA('docs')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>Documentos</button>
 </div></nav>
 
-<div class="velo" id="velo"><div class="hoja" id="hoja"></div></div>
+<div class="velo" id="velo"><div class="hoja" id="hoja" role="dialog" aria-modal="true" tabindex="-1"></div></div>
 
 <div class="visor" id="visor">
   <div class="barra-v" id="visor-barra"></div>
@@ -365,7 +370,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v30';
+const VERSION = 'v31';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -381,6 +386,7 @@ const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'o
 const fmt = s => { if (!s) return ''; const d = aFecha(s); return `${d.getDate()} ${MESES[d.getMonth()]} ${d.getFullYear()}`; };
 const fmtCorto = s => { if (!s) return ''; const d = aFecha(s); return `${d.getDate()} ${MESES[d.getMonth()]}`; };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const sid = id => String(id ?? '').replace(/[^\w-]/g, '');
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const norm = s => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const num = n => Number(n).toLocaleString('es-ES', { maximumFractionDigits: 2 });
@@ -519,7 +525,7 @@ function proximoCumple() {
 }
 function avisos() {
   const L = vivos('salud');
-  const r = L.filter(s => pendiente(s, L) && diasHasta(s.proxima) >= -60).map(s => ({ fecha: s.proxima, titulo: s.nombre || TIPOS[s.tipo]?.n, sub: TIPOS[s.tipo]?.n || '', ico: TIPOS[s.tipo]?.ico || '🩺', abrir: `formSalud(D.salud.find(x=>x.id==='${s.id}'))` }));
+  const r = L.filter(s => pendiente(s, L) && diasHasta(s.proxima) >= -60).map(s => ({ fecha: s.proxima, titulo: s.nombre || TIPOS[s.tipo]?.n, sub: TIPOS[s.tipo]?.n || '', ico: TIPOS[s.tipo]?.ico || '🩺', abrir: `formSalud(D.salud.find(x=>x.id==='${sid(s.id)}'))` }));
   const cu = proximoCumple();
   if (cu && diasHasta(cu.fecha) <= 45) r.push({ fecha: cu.fecha, titulo: `Cumple ${cu.anios} ${cu.anios === 1 ? 'año' : 'años'}`, sub: fmt(cu.fecha), ico: '🎂', terra: 1, abrir: 'editarPerfil()', cumple: 1 });
   return r.sort((a, b) => a.fecha.localeCompare(b.fecha));
@@ -576,7 +582,7 @@ function accionFab() {
   }
   if (tab === 'peso') return formPeso();
   if (tab === 'docs') return $('#fdoc').click();
-  abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>Añadir</h3><button class="cerrar" onclick="cerrarHoja()">✕</button></div>
+  abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>Añadir</h3><button class="cerrar" onclick="cerrarHoja()" aria-label="Cerrar">✕</button></div>
   <div class="rapido">
     <button onclick="formSalud(null,'vacuna')"><span>💉</span>Vacuna</button>
     <button onclick="formSalud(null,'interna')"><span>💊</span>Antiparasitario</button>
@@ -592,7 +598,7 @@ function render() {
   $('#titulo').textContent = TITULOS[tab] || (D.perfil.nombre ? D.perfil.nombre : 'Mi Mascota');
   ({ inicio: renderInicio, salud: renderSalud, peso: renderPeso, docs: renderDocs })[tab]();
 }
-const fila = ({ ico, terra, t, s, der, abrir }) => `<div class="fila" onclick="${esc(abrir || '')}"><div class="ico ${terra ? 'terra' : ''}">${ico}</div><div class="txt"><div class="t">${esc(t)}</div>${s ? `<div class="s">${esc(s)}</div>` : ''}</div>${der || ''}</div>`;
+const fila = ({ ico, terra, t, s, der, abrir }) => `<div class="fila" ${abrir ? `role="button" tabindex="0" onclick="${esc(abrir)}"` : ''}><div class="ico ${terra ? 'terra' : ''}">${ico}</div><div class="txt"><div class="t">${esc(t)}</div>${s ? `<div class="s">${esc(s)}</div>` : ''}</div>${der || ''}</div>`;
 const vacioHTML = (e, t) => `<div class="vacio"><b>${e}</b>${t}</div>`;
 
 function renderInicio() {
@@ -600,7 +606,7 @@ function renderInicio() {
   const av = avisos();
   const cons = vivos('consultas').sort(porFechaDesc);
 
-  let h = `<div class="hero" onclick="editarPerfil()">
+  let h = `<div class="hero" role="button" tabindex="0" aria-label="Editar la ficha" onclick="editarPerfil()">
     ${(() => { const u = imgURL(p.foto, p.fotoDrive); return `<div class="hero-foto" style="${u ? `background-image:url('${u}')` : ''}">${u ? '' : ic('perro', 'silueta')}</div>`; })()}
     <div class="hero-card">
       <div class="hc-top"><h2>${esc(p.nombre || 'Tu perro')}</h2></div>
@@ -620,8 +626,8 @@ function renderInicio() {
   if (p.clinica || p.vet) contactos.push({ e: '🏥', t: p.clinica || p.vet, s: [p.clinica ? p.vet : '', p.dirVet].filter(Boolean).join(' · '), tel: p.telVet });
   if (p.urgencias) contactos.push({ e: '🚨', t: 'Urgencias 24 h', s: '', tel: p.urgencias });
   if (p.seguro) contactos.push({ e: '🛡️', t: p.seguro, s: p.poliza ? 'Póliza ' + p.poliza : '', tel: p.telSeguro });
-  (p.contactos || []).forEach(c => contactos.push({ e: '👤', t: c.nombre || 'Contacto', s: [c.rol, c.notas].filter(Boolean).join(' · '), tel: c.tel, abrir: `formContacto('${c.id}')` }));
-  h += `<div class="sec"><h2>Contactos</h2><button class="link" onclick="formContacto()">Añadir</button></div><div class="card">` + (contactos.length ? contactos.map(c => `<div class="contacto" ${c.abrir ? `onclick="${c.abrir}" style="cursor:pointer"` : ''}><div class="ico">${c.e}</div><div class="txt"><div class="t">${esc(c.t)}</div>${c.s ? `<div class="s">${esc(c.s)}</div>` : ''}</div>${c.tel ? `<a class="tel" href="tel:${esc(String(c.tel).replace(/\s/g, ''))}" onclick="event.stopPropagation()">Llamar</a>` : ''}</div>`).join('') : vacioHTML('👤', 'Añade a quien quieras tener a mano: paseador, cuidador, peluquería, residencia, familiares…')) + `</div>`;
+  (p.contactos || []).forEach(c => contactos.push({ e: '👤', t: c.nombre || 'Contacto', s: [c.rol, c.notas].filter(Boolean).join(' · '), tel: c.tel, abrir: `formContacto('${sid(c.id)}')` }));
+  h += `<div class="sec"><h2>Contactos</h2><button class="link" onclick="formContacto()">Añadir</button></div><div class="card">` + (contactos.length ? contactos.map(c => `<div class="contacto" ${c.abrir ? `role="button" tabindex="0" onclick="${c.abrir}" style="cursor:pointer"` : ''}><div class="ico">${c.e}</div><div class="txt"><div class="t">${esc(c.t)}</div>${c.s ? `<div class="s">${esc(c.s)}</div>` : ''}</div>${c.tel ? `<a class="tel" href="tel:${esc(String(c.tel).replace(/\s/g, ''))}" onclick="event.stopPropagation()">Llamar</a>` : ''}</div>`).join('') : vacioHTML('👤', 'Añade a quien quieras tener a mano: paseador, cuidador, peluquería, residencia, familiares…')) + `</div>`;
 
   const datosFicha = [['Microchip', p.chip, 1], ['Pasaporte', p.pasaporte, 1], ['ADN canino', p.adn, 1], ['Nacimiento', p.nacimiento ? fmt(p.nacimiento) : ''], ['Esterilizado', p.esterilizado], ['Color', p.color], ['Alergias', p.alergias]].filter(x => x[1]);
   const tieneDueno = p.duenoNombre || p.duenoTel || p.duenoDni || p.duenoDir || p.duenoEmail;
@@ -630,7 +636,7 @@ function renderInicio() {
     <div class="f1c-cab"><div class="f1c-tit"><h3>${esc(p.nombre || 'Tu perro')}</h3><span>${esc(p.raza || 'Toca «Editar» para rellenar su ficha')}</span></div>
       ${p.adnQR ? `<button class="f1c-qr" onclick="verQR()" aria-label="Ver código QR del ADN">${qrSVG(p.adnQR)}</button>` : `<button class="f1c-qr vacio" onclick="editarPerfil('qr')"><span>+ QR</span></button>`}</div>
     ${datosFicha.length ? `<div class="f1c-grid">${datosFicha.map(([l, v, m]) => `<div><span>${l}</span><b class="${m ? 'mono' : ''}">${esc(v)}</b></div>`).join('')}</div>` : ''}
-    <div class="f1c-dueno" onclick="editarPerfil('dueno')">${tieneDueno
+    <div class="f1c-dueno" role="button" tabindex="0" onclick="editarPerfil('dueno')">${tieneDueno
       ? `<span class="f1c-et">Si me encuentras</span><b>${esc(p.duenoNombre || '')}</b><span>${esc([p.duenoTel, p.duenoDir].filter(Boolean).join(' · '))}</span>${p.duenoDni || p.duenoEmail ? `<span>${esc([p.duenoDni ? 'DNI ' + p.duenoDni : '', p.duenoEmail].filter(Boolean).join(' · '))}</span>` : ''}`
       : `<span class="f1c-et">Tus datos</span><span>Añádelos en «Editar» por si alguien encuentra a ${esc(p.nombre || 'tu perro')}.</span>`}</div>
   </div>`;
@@ -646,7 +652,7 @@ function filaSalud(s, L) {
     ico: TIPOS[s.tipo]?.ico || '🩺', t: s.nombre || TIPOS[s.tipo]?.n,
     s: [fmt(s.fecha), s.tipo === 'interna' || s.tipo === 'externa' ? (s.tipo === 'interna' ? 'Interno' : 'Externo') : '', s.producto].filter(Boolean).join(' · '),
     der: pend ? pillFecha(s.proxima) : s.proxima ? '<span class="pill neutro">renovada</span>' : '',
-    abrir: `formSalud(D.salud.find(x=>x.id==='${s.id}'))`,
+    abrir: `formSalud(D.salud.find(x=>x.id==='${sid(s.id)}'))`,
   });
 }
 window.consAbiertas = window.consAbiertas || {};
@@ -657,15 +663,15 @@ function consultasDesplegables(cons) {
     const adj = vivos('docs').filter(d => d.consulta === c.id).length;
     const b = (t, v) => v ? `<div class="cons-bloque"><span>${t}</span><p>${esc(v)}</p></div>` : '';
     return `<div class="cd-det">${b('Diagnóstico', c.diagnostico)}${b('Tratamiento', c.tratamiento)}${b('Notas', c.notas)}${!c.diagnostico && !c.tratamiento && !c.notas ? '<p class="s" style="margin:0">Sin diagnóstico ni tratamiento apuntados.</p>' : ''}
-      <div class="cd-acc">${c.vet ? `<span>${esc(c.vet)}</span>` : '<span></span>'}${adj ? `<span>📎 ${adj}</span>` : ''}<button onclick="event.stopPropagation();formConsulta(D.consultas.find(x=>x.id==='${c.id}'))">Editar</button></div></div>`;
+      <div class="cd-acc">${c.vet ? `<span>${esc(c.vet)}</span>` : '<span></span>'}${adj ? `<span>📎 ${adj}</span>` : ''}<button onclick="event.stopPropagation();formConsulta(D.consultas.find(x=>x.id==='${sid(c.id)}'))">Editar</button></div></div>`;
   };
   const chev = '<svg class="cd-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
   // Acordeón en una sola tarjeta, con fecha en cuadradito
-  return `<div class="card ca">` + cons.map(c => { const d = aFecha(c.fecha), ab = consAbiertas[c.id]; return `<div class="ca-it ${ab ? 'ab' : ''}"><button class="ca-cab" onclick="toggleCons('${c.id}')"><div class="ca-dia"><b>${d.getDate()}</b><span>${MES[d.getMonth()]} ${String(d.getFullYear()).slice(2)}</span></div><div class="ca-txt"><b>${esc(c.motivo || 'Consulta')}</b>${!ab && c.diagnostico ? `<span>${esc(c.diagnostico)}</span>` : ''}</div>${chev}</button>${ab ? det(c) : ''}</div>`; }).join('') + `</div>`;
+  return `<div class="card ca">` + cons.map(c => { const d = aFecha(c.fecha), ab = consAbiertas[c.id]; return `<div class="ca-it ${ab ? 'ab' : ''}"><button class="ca-cab" onclick="toggleCons('${sid(c.id)}')"><div class="ca-dia"><b>${d.getDate()}</b><span>${MES[d.getMonth()]} ${String(d.getFullYear()).slice(2)}</span></div><div class="ca-txt"><b>${esc(c.motivo || 'Consulta')}</b>${!ab && c.diagnostico ? `<span>${esc(c.diagnostico)}</span>` : ''}</div>${chev}</button>${ab ? det(c) : ''}</div>`; }).join('') + `</div>`;
 }
 function filaConsulta(c) {
   const adj = vivos('docs').filter(d => d.consulta === c.id).length;
-  return fila({ ico: '🩺', t: c.motivo || 'Consulta', s: [fmt(c.fecha), c.diagnostico, adj ? `📎 ${adj}` : ''].filter(Boolean).join(' · '), der: c.coste ? `<span class="pill neutro">${euros(c.coste)}</span>` : '', abrir: `formConsulta(D.consultas.find(x=>x.id==='${c.id}'))` });
+  return fila({ ico: '🩺', t: c.motivo || 'Consulta', s: [fmt(c.fecha), c.diagnostico, adj ? `📎 ${adj}` : ''].filter(Boolean).join(' · '), der: c.coste ? `<span class="pill neutro">${euros(c.coste)}</span>` : '', abrir: `formConsulta(D.consultas.find(x=>x.id==='${sid(c.id)}'))` });
 }
 function renderSalud() {
   let h = `<div class="seg seg-fija">${SUBS.map(([k, n]) => `<button class="${subSalud === k ? 'on' : ''}" onclick="subSalud='${k}';render()">${n}</button>`).join('')}</div>`;
@@ -686,7 +692,7 @@ function renderSalud() {
   } else {
     const meds = vivos('medicacion').sort((a, b) => (b.inicio || '').localeCompare(a.inicio || ''));
     const act = meds.filter(medActiva), ant = meds.filter(m => !medActiva(m));
-    const f = m => fila({ ico: '💧', t: m.nombre, s: [m.consulta ? 'Desde consulta' : '', m.dosis, m.frecuencia, m.inicio ? fmt(m.inicio) + (m.fin ? ' → ' + fmt(m.fin) : '') : '', m.motivo].filter(Boolean).join(' · '), der: medActiva(m) ? '<span class="pill ok">activa</span>' : '', abrir: `formMed(D.medicacion.find(x=>x.id==='${m.id}'))` });
+    const f = m => fila({ ico: '💧', t: m.nombre, s: [m.consulta ? 'Desde consulta' : '', m.dosis, m.frecuencia, m.inicio ? fmt(m.inicio) + (m.fin ? ' → ' + fmt(m.fin) : '') : '', m.motivo].filter(Boolean).join(' · '), der: medActiva(m) ? '<span class="pill ok">activa</span>' : '', abrir: `formMed(D.medicacion.find(x=>x.id==='${sid(m.id)}'))` });
     if (!meds.length) h += `<div class="card">${vacioHTML('💧', 'Aquí van los tratamientos: antibióticos, antiinflamatorios, gotas… con dosis y duración.')}</div>`;
     if (act.length) h += `<div class="sec"><h2>Activa</h2></div><div class="card">${act.map(f).join('')}</div>`;
     if (ant.length) h += `<div class="sec"><h2>Anteriores</h2></div><div class="card">${ant.map(f).join('')}</div>`;
@@ -748,13 +754,14 @@ function renderPasaporte() {
 
 /* ---------- ficha de vacuna (billete) ---------- */
 function tarjetaVac(v, bg, fg, vigente) {
-  const abrir = `formSalud(D.salud.find(x=>x.id==='${v.id}'))`;
+  const abrir = `formSalud(D.salud.find(x=>x.id==='${sid(v.id)}'))`;
   const caducada = v.proxima && diasHasta(v.proxima) < 0;
   const est = vigente ? ['ok', 'En vigor'] : caducada ? ['neutro', 'Caducada'] : ['pronto', 'Pendiente'];
   const corta = f => { if (!f) return '—'; const d = aFecha(f); return `${d.getDate()} ${MESES[d.getMonth()]} ${String(d.getFullYear()).slice(2)}`; };
   const marca = esc(v.producto || v.nombre || 'Vacuna'), tipo = esc(v.nombre || ''), lab = esc(v.laboratorio || '');
-  return `<button class="v2" onclick="${abrir}"><div class="v2-talon" style="--pc:${bg};--pf:${fg}"><span>${tipo}</span></div><div class="v2-cuerpo">
-    <div class="v2-top"><b>${marca}</b><span class="pill ${est[0]}">${est[1]}</span></div>
+  const foto = v.fotoPeg ? `<span class="v2-foto" title="Con foto de la pegatina">${ic('camara')}</span>` : '';
+  return `<button class="v2" onclick="${abrir}" ${v.fotoPeg ? 'aria-label="' + marca + ', con foto de la pegatina"' : ''}><div class="v2-talon" style="--pc:${bg};--pf:${fg}"><span>${tipo}</span></div><div class="v2-cuerpo">
+    <div class="v2-top"><b>${marca}${foto}</b><span class="pill ${est[0]}">${est[1]}</span></div>
     <div class="v2-vuelo"><div><span>Vacunado</span><b>${corta(v.fecha)}</b></div><div class="v2-linea"><i></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><i></i></div><div class="v2-dcha"><span>Válida hasta</span><b>${corta(v.proxima)}</b></div></div>
     <div class="v2-pie"><span>${lab || '&nbsp;'}</span><span>Lote ${esc(v.lote || '—')} · CAD ${esc(v.caducidad || '—')}</span></div></div></button>`;
 }
@@ -790,7 +797,7 @@ function renderPeso() {
     h += `<div class="card peso-graf"><div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px"><div><div class="s">Último peso · ${fmt(ult.fecha)}</div><div class="grande" style="font-size:34px">${num(ult.kg)} kg</div></div>${prev ? `<span class="pill ${Math.abs(dif) < .05 ? 'neutro' : 'ok'}">${dif > 0 ? '+' : ''}${num(Math.round(dif * 100) / 100)} kg</span>` : ''}</div><div class="graf-caja" id="grafCaja"></div></div>`;
   }
   const regs = ps.slice().reverse();
-  const filaPeso = p => `<button class="pb-fila" onclick="formPeso(D.peso.find(x=>x.id==='${p.id}'))"><div class="pb-kg">${num(p.kg)} <span>kg</span>${p.nota ? `<small>${esc(p.nota)}</small>` : ''}</div>${fechaUI(aFecha(p.fecha))}</button>`;
+  const filaPeso = p => `<button class="pb-fila" onclick="formPeso(D.peso.find(x=>x.id==='${sid(p.id)}'))"><div class="pb-kg">${num(p.kg)} <span>kg</span>${p.nota ? `<small>${esc(p.nota)}</small>` : ''}</div>${fechaUI(aFecha(p.fecha))}</button>`;
   const resto = regs.slice(4);
   h += `<div class="sec"><h2>Registros</h2>${regs.length ? `<span class="s">${regs.length}</span>` : ''}</div><div class="card peso-regs">${regs.length ? regs.slice(0, 4).map(filaPeso).join('') + (resto.length ? `<div class="pliegue ${verPesos ? 'abierto' : ''}">${verPesos ? resto.map(filaPeso).join('') : ''}<button class="pliegue-btn" onclick="verPesos=!verPesos;render()">${verPesos ? 'Ocultar anteriores' : `Ver ${resto.length} ${resto.length === 1 ? 'registro anterior' : 'registros anteriores'}`}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div>` : '') : vacioHTML('⚖️', 'Apunta su peso de vez en cuando (en casa o en el veterinario) y verás la evolución.')}</div>`;
   const v = $('#v-peso');
@@ -807,8 +814,8 @@ function ajustarPeso() {
 addEventListener('resize', () => { if (tab === 'peso') ajustarPeso(); });
 
 function tarjetaDoc(d) {
-  const imagen = d.thumb && (d.mime || '').startsWith('image/');
-  return `<button class="doc" onclick="verDoc('${d.id}')"><div class="mini ${d.mime === 'application/pdf' ? 'pdf' : ''}" style="${imagen ? `background-image:url('${d.thumb}')` : ''}">${imagen ? '' : (d.mime === 'application/pdf' ? '📄' : ICO_CAT[d.categoria] || '📄')}${CFG.url && !d.driveId ? '<span class="nube">sin subir</span>' : ''}</div><div class="pie"><div class="t">${esc(d.nombre || 'Documento')}</div><div class="s">${esc([fmt(d.fecha), d.categoria].filter(Boolean).join(' · '))}</div></div></button>`;
+  const mini = (d.mime || '').startsWith('image/') ? imgURL(d.thumb, d.thumbDrive) : '', imagen = !!mini;
+  return `<button class="doc" onclick="verDoc('${sid(d.id)}')"><div class="mini ${d.mime === 'application/pdf' ? 'pdf' : ''}" style="${imagen ? `background-image:url('${mini}')` : ''}">${imagen ? '' : (d.mime === 'application/pdf' ? '📄' : ICO_CAT[d.categoria] || '📄')}${CFG.url && !d.driveId ? '<span class="nube">sin subir</span>' : ''}</div><div class="pie"><div class="t">${esc(d.nombre || 'Documento')}</div><div class="s">${esc([fmt(d.fecha), d.categoria].filter(Boolean).join(' · '))}</div></div></button>`;
 }
 function renderDocs() {
   const todos = vivos('docs').sort(porFechaDesc);
@@ -821,9 +828,29 @@ function renderDocs() {
 }
 
 /* ---------- hoja y formularios ---------- */
-function abrirHoja(h) { $('#hoja').innerHTML = conIconos(h); $('#velo').classList.add('abierto'); $('#hoja').scrollTop = 0; }
-function cerrarHoja() { $('#velo').classList.remove('abierto'); $('#hoja').innerHTML = ''; }
-$('#velo').addEventListener('click', e => { if (e.target.id === 'velo') cerrarHoja(); });
+let hojaSucia = false, focoPrevio = null;
+function abrirHoja(h) {
+  if (!$('#velo').classList.contains('abierto')) focoPrevio = document.activeElement;
+  hojaSucia = false;
+  const hoja = $('#hoja');
+  hoja.innerHTML = conIconos(h); $('#velo').classList.add('abierto'); hoja.scrollTop = 0;
+  const t = hoja.querySelector('h3'); if (t) { t.id = 'hoja-titulo'; hoja.setAttribute('aria-labelledby', 'hoja-titulo'); }
+  hoja.focus({ preventScroll: true });
+}
+function cerrarHoja() {
+  $('#velo').classList.remove('abierto'); $('#hoja').innerHTML = ''; hojaSucia = false;
+  if (focoPrevio && document.contains(focoPrevio)) focoPrevio.focus({ preventScroll: true }); focoPrevio = null;
+  recargaPendiente();
+}
+// Cierre por el usuario (tocar fuera, ✕, Escape): si hay cambios sin guardar, pregunta antes
+function intentarCerrar() { if (hojaSucia && !confirm('¿Cerrar sin guardar? Se perderá lo que has escrito.')) return; cerrarHoja(); }
+$('#velo').addEventListener('click', e => { if (e.target.id === 'velo') intentarCerrar(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if ($('#visor').classList.contains('abierto')) cerrarVisor(); else if ($('#velo').classList.contains('abierto')) intentarCerrar(); return; }
+  // U1: lo que se toca y no es un botón también funciona con Intro y Espacio
+  const el = e.target;
+  if ((e.key === 'Enter' || e.key === ' ') && el.getAttribute && el.getAttribute('role') === 'button' && el.tagName !== 'BUTTON') { e.preventDefault(); el.click(); }
+});
 
 function campo(c, val) {
   const id = 'f_' + c.k;
@@ -842,7 +869,7 @@ function campo(c, val) {
 
 function formulario(o) {
   const v = o.v || {};
-  let h = `<div class="asa"></div><div class="hoja-tit"><h3>${esc(o.titulo)}</h3><button type="button" class="cerrar" onclick="cerrarHoja()" aria-label="Cerrar">✕</button></div>${o.html || ''}<form id="frm" autocomplete="off" novalidate>`;
+  let h = `<div class="asa"></div><div class="hoja-tit"><h3>${esc(o.titulo)}</h3><button type="button" class="cerrar" onclick="intentarCerrar()" aria-label="Cerrar">✕</button></div>${o.html || ''}<form id="frm" autocomplete="off" novalidate>`;
   let buf = [];
   const flush = () => { if (buf.length) { h += buf.length === 2 ? `<div class="dos">${buf.join('')}</div>` : buf[0]; buf = []; } };
   for (const c of o.campos) {
@@ -860,13 +887,15 @@ function formulario(o) {
     for (const c of o.campos) {
       if (c.t === 'sep') continue;
       let x = f.elements[c.k].value.trim();
-      if (c.t === 'number') { x = x === '' ? '' : parseFloat(x.replace(/\./g, '').replace(',', '.')); if (Number.isNaN(x)) x = ''; }
+      if (c.t === 'number') x = leerNum(x);
       r[c.k] = x;
     }
     if (o.validar) { const err = o.validar(r); if (err) return toast(err); }
     const btn = f.querySelector('[type=submit]'); btn.disabled = true;
     try { if ((await o.guardar(r)) !== false) cerrarHoja(); } finally { btn.disabled = false; }
   });
+  f.addEventListener('input', () => { hojaSucia = true; });
+  f.addEventListener('change', () => { hojaSucia = true; });
   f.querySelectorAll('[data-extra]').forEach(b => b.onclick = () => o.extra[b.dataset.extra].fn(f));
   const bb = f.querySelector('[data-borrar]');
   if (bb) bb.onclick = () => { if (confirm('¿Borrar este registro?')) { o.borrar(); cerrarHoja(); } };
@@ -875,7 +904,14 @@ function formulario(o) {
   return f;
 }
 // Para números con decimales (8,5 kg) en campos de texto
-const leerNum = s => { const x = parseFloat(String(s).replace(/\./g, '').replace(',', '.')); return Number.isNaN(x) ? '' : x; };
+// Admite coma o punto decimal: «19,8», «19.8», «1.250,5», «45.50». Un punto con grupos de 3 cifras («1.250») es de miles.
+const leerNum = s => {
+  let t = String(s ?? '').trim().replace(/\s/g, '');
+  if (!t) return '';
+  if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.');
+  else if (/^-?\d{1,3}(\.\d{3})+$/.test(t)) t = t.replace(/\./g, '');
+  const x = parseFloat(t); return Number.isNaN(x) ? '' : x;
+};
 
 function qrSVG(texto) {
   try {
@@ -888,7 +924,7 @@ function qrSVG(texto) {
 function verQR() {
   const p = D.perfil, url = p.adnQR || '';
   const esUrl = /^https?:\/\//i.test(url);
-  abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>ADN de ${esc(p.nombre || 'tu perro')}</h3><button class="cerrar" onclick="cerrarHoja()">✕</button></div>
+  abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>ADN de ${esc(p.nombre || 'tu perro')}</h3><button class="cerrar" onclick="cerrarHoja()" aria-label="Cerrar">✕</button></div>
   <div class="qr-grande">${qrSVG(url)}</div>
   <p class="s" style="text-align:center;word-break:break-all;margin:10px 0 0">${esc(url)}</p>
   <div class="acciones">${esUrl ? `<a class="btn" href="${esc(url)}" target="_blank" rel="noopener">Abrir enlace</a>` : ''}<button class="btn sec" onclick="cerrarHoja();editarPerfil('qr')">Cambiar</button></div>`);
@@ -995,8 +1031,12 @@ function formSalud(s, tipoDef) {
         try { const img = await cargarImagen(file); fotoPeg = await guardarImagen(lienzo(img, 900), .82); fotoPegDrive = ''; const el = $('#pegPrev'); el.style.backgroundImage = `url('${imgURL(fotoPeg)}')`; el.innerHTML = ''; el.classList.remove('vacia'); }
         catch { toast('No se pudo leer la foto'); }
       };
+      $('#pegPrev').onclick = () => { const u = imgURL(fotoPeg, fotoPegDrive); if (u) verImagen(u, 'Pegatina ' + (s.producto || s.nombre || '')); };
       const q = $('#quitarPeg'); if (q) q.onclick = () => { fotoPeg = ''; fotoPegDrive = ''; const el = $('#pegPrev'); el.style.backgroundImage = ''; el.classList.add('vacia'); el.innerHTML = '<span>Foto de la pegatina<br><small>opcional</small></span>'; q.remove(); };
     },
+    validar: v => !v.nombre && !v.producto ? 'Escribe contra qué es o la marca'
+      : v.proxima && v.fecha && v.proxima < v.fecha ? 'La fecha «válida hasta» es anterior a la vacunación'
+      : v.validaDesde && v.fecha && v.validaDesde < v.fecha ? 'La fecha «válida desde» es anterior a la vacunación' : '',
     extra: nuevo ? [] : [{ t: 'Apuntar la siguiente dosis', fn: () => renovar(s) }],
     guardar: v => { guardarItem('salud', { ...s, ...v, coste: v.coste, fotoPeg, fotoPegDrive }); toast('Guardado'); },
     borrar: nuevo ? null : () => borrarItem('salud', s.id),
@@ -1027,10 +1067,15 @@ function formConsulta(c) {
       { k: 'tratamiento', l: 'Tratamiento indicado', t: 'area' },
       { k: 'notas', l: 'Notas', t: 'area', ph: 'Próxima revisión, recomendaciones…' },
     ],
-    htmlFin: `<div class="subt">Documentos</div><div class="card adjuntos" style="margin-top:8px">${adj.length ? adj.map(d => fila({ ico: d.mime === 'application/pdf' ? '📄' : '🖼️', t: d.nombre, s: d.categoria, abrir: `verDoc('${d.id}')` })).join('') : '<div class="s" style="padding:6px 0">Sin documentos. Guarda la consulta y añade informes o facturas.</div>'}</div>`,
+    htmlFin: `<div class="subt">Documentos</div><div class="card adjuntos" style="margin-top:8px">${adj.length ? adj.map(d => fila({ ico: d.mime === 'application/pdf' ? '📄' : '🖼️', t: d.nombre, s: d.categoria, abrir: `verDoc('${sid(d.id)}')` })).join('') : '<div class="s" style="padding:6px 0">Sin documentos. Guarda la consulta y añade informes o facturas.</div>'}</div>`,
+    validar: v => !v.motivo && !v.diagnostico && !v.tratamiento && !v.notas ? 'Escribe al menos el motivo' : '',
     extra: [{ t: '📎 Adjuntar informe o factura', fn: f => { guardarDesdeForm(f, c); adjuntarA = c.id; $('#fadj').click(); } }],
     guardar: v => { const x = { ...c, ...v }; delete x._nuevo; const g = guardarItem('consultas', x); aplicarTratamiento(g, true); if (!g.tratamiento) toast('Guardado'); },
-    borrar: nuevo ? null : () => borrarItem('consultas', c.id),
+    borrar: nuevo ? null : () => {
+      borrarItem('consultas', c.id);
+      const m = D.medicacion.find(x => x.id === 'med-' + c.id && !x.borrado);
+      if (m && m.auto !== false) { borrarItem('medicacion', m.id); toast('Consulta y su medicación borradas'); }
+    },
   });
 }
 function guardarDesdeForm(f, c) {
@@ -1092,7 +1137,7 @@ function formPeso(p) {
     titulo: nuevo ? 'Nuevo peso' : 'Editar peso', v: p,
     campos: [{ k: 'kg', l: 'Peso (kg)', t: 'number', ph: '12,5', half: 1 }, { k: 'fecha', l: 'Fecha', t: 'date', half: 1 }, { k: 'nota', l: 'Nota', ph: 'En el veterinario, en casa…' }],
     iniciar: f => { if (nuevo) setTimeout(() => f.elements.kg.focus(), 250); },
-    validar: v => !(v.kg > 0) && 'Escribe el peso',
+    validar: v => !(v.kg > 0) ? 'Escribe el peso' : v.kg > 120 ? `¿${num(v.kg)} kg? Revisa el peso (usa coma para los decimales: 19,8)` : v.fecha > hoy() ? 'La fecha no puede ser futura' : '',
     guardar: v => { guardarItem('peso', { ...p, ...v }); toast('Guardado'); },
     borrar: nuevo ? null : () => borrarItem('peso', p.id),
   });
@@ -1122,6 +1167,9 @@ const a64Blob = (s, mime) => { const bin = atob(s), u = new Uint8Array(bin.lengt
 
 /* Fotos (perfil y pegatinas): se guardan en IndexedDB y en Drive; en los datos solo va la referencia «img:<id>» */
 const IMG = {}, IMG_CARGANDO = {};
+let descargasActivas = 0; const colaDescargas = [];
+function enCola(fn) { return new Promise(ok => { colaDescargas.push(async () => { try { ok(await fn()); } finally { descargasActivas--; siguienteDescarga(); } }); siguienteDescarga(); }); }
+function siguienteDescarga() { while (descargasActivas < 3 && colaDescargas.length) { descargasActivas++; colaDescargas.shift()(); } }
 function imgURL(ref, driveId) {
   if (!ref) return '';
   if (ref.startsWith('data:')) return ref;
@@ -1131,8 +1179,8 @@ function imgURL(ref, driveId) {
   if (!IMG_CARGANDO[id]) {
     IMG_CARGANDO[id] = (async () => {
       let b = await idb.get('img-' + id).catch(() => null);
-      if (!b && driveId && CFG.url) { try { const r = await api('bajarDoc', { driveId }); b = a64Blob(r.base64, r.mime || 'image/jpeg'); await idb.set('img-' + id, b); } catch { } }
-      if (b) { IMG[id] = URL.createObjectURL(b); render(); } else delete IMG_CARGANDO[id];
+      if (!b && driveId && CFG.url) { try { const r = await enCola(() => api('bajarDoc', { driveId })); b = a64Blob(r.base64, r.mime || 'image/jpeg'); await idb.set('img-' + id, b); } catch { } }
+      if (b) { IMG[id] = URL.createObjectURL(b); programarRender(); } else delete IMG_CARGANDO[id];
     })();
   }
   return '';
@@ -1143,6 +1191,8 @@ async function guardarImagen(canvas, q) {
   IMG[id] = URL.createObjectURL(b);
   return 'img:' + id;
 }
+// Varias imágenes que llegan seguidas → un solo repintado
+let renderT = null; function programarRender() { clearTimeout(renderT); renderT = setTimeout(render, 60); }
 async function dataABlob(u) { return (await fetch(u)).blob(); }
 // Paso único: fotos antiguas guardadas dentro de los datos → IndexedDB
 async function migrarFotos() {
@@ -1159,10 +1209,23 @@ async function migrarFotos() {
       D.salud[i] = { ...v, fotoPeg: 'img:' + id, fotoPegDrive: '', upd: Date.now() }; hay = true;
     }
   }
+  for (let i = 0; i < D.docs.length; i++) {
+    const d = D.docs[i];
+    if ((d.thumb || '').startsWith('data:')) {
+      const b = await dataABlob(d.thumb), id = uid(); await idb.set('img-' + id, b); IMG[id] = URL.createObjectURL(b);
+      D.docs[i] = { ...d, thumb: 'img:' + id, thumbDrive: '', upd: Date.now() }; hay = true;
+    }
+  }
   if (hay) cambio();
 }
+// Devuelve cuántas imágenes no se pudieron subir (se reintentan en la siguiente sincronización)
 async function subirImagenes() {
-  const subir = async (ref, nombre) => { const b = await idb.get('img-' + ref.slice(4)).catch(() => null); if (!b) return null; return api('subirDoc', { nombre, mime: 'image/jpeg', base64: await blobA64(b), carpeta: 'Fotos' }); };
+  let fallos = 0;
+  const subir = async (ref, nombre) => {
+    const b = await idb.get('img-' + ref.slice(4)).catch(() => null); if (!b) return null;
+    try { return await api('subirDoc', { nombre, mime: 'image/jpeg', base64: await blobA64(b), carpeta: 'Fotos' }); }
+    catch (e) { if (/contraseña|intentos|dirección|contactar|conexión|tardado/i.test(e.message)) throw e; fallos++; return null; }
+  };
   const p = D.perfil;
   if ((p.foto || '').startsWith('img:') && !p.fotoDrive) {
     const r = await subir(p.foto, `Foto ${p.nombre || 'perro'}.jpg`);
@@ -1173,6 +1236,12 @@ async function subirImagenes() {
     const i = D.salud.findIndex(x => x.id === v.id);
     if (r && i >= 0 && D.salud[i].fotoPeg === v.fotoPeg) { D.salud[i] = { ...D.salud[i], fotoPegDrive: r.driveId, upd: Date.now() }; marcarPendiente(); guardarLocal(); }
   }
+  for (const d of D.docs.filter(x => !x.borrado && (x.thumb || '').startsWith('img:') && !x.thumbDrive)) {
+    const r = await subir(d.thumb, `Miniatura ${d.nombre || 'documento'}.jpg`);
+    const i = D.docs.findIndex(x => x.id === d.id);
+    if (r && i >= 0 && D.docs[i].thumb === d.thumb) { D.docs[i] = { ...D.docs[i], thumbDrive: r.driveId, upd: Date.now() }; marcarPendiente(); guardarLocal(); }
+  }
+  return fallos;
 }
 
 async function prepararArchivo(file) {
@@ -1181,7 +1250,7 @@ async function prepararArchivo(file) {
   if (mime.startsWith('image/')) {
     const img = await cargarImagen(file);
     blob = await aBlob(lienzo(img, 2000), .85); mime = 'image/jpeg';
-    thumb = lienzo(img, 360).toDataURL('image/jpeg', .7);
+    thumb = await guardarImagen(lienzo(img, 360), .7);
   }
   if (blob.size > 25e6) throw new Error('grande');
   await idb.set(id, blob);
@@ -1229,7 +1298,7 @@ async function verDoc(id) {
   const d = D.docs.find(x => x.id === id); if (!d) return;
   cerrarHoja();
   const barra = $('#visor-barra'), cont = $('#visor-cont');
-  barra.innerHTML = `<button onclick="cerrarVisor()">✕</button><b>${esc(d.nombre)}</b><button onclick="cerrarVisor();formDoc(D.docs.find(x=>x.id==='${d.id}'))">Editar</button>`;
+  barra.innerHTML = `<button onclick="cerrarVisor()" aria-label="Cerrar">✕</button><b>${esc(d.nombre)}</b><button onclick="cerrarVisor();formDoc(D.docs.find(x=>x.id==='${sid(d.id)}'))">Editar</button>`;
   cont.innerHTML = '<div class="msg">Abriendo…</div>';
   $('#visor').classList.add('abierto');
   let b = await idb.get(d.id).catch(() => null);
@@ -1250,7 +1319,12 @@ async function verDoc(id) {
   barra.insertAdjacentHTML('beforeend', btns.join(''));
   const sh = $('#vshare'); if (sh) sh.onclick = () => navigator.share({ files: [archivo], title: d.nombre }).catch(() => { });
 }
-function cerrarVisor() { $('#visor').classList.remove('abierto'); $('#visor-cont').innerHTML = ''; if (urlVisor) { URL.revokeObjectURL(urlVisor); urlVisor = null; } }
+function verImagen(url, titulo) {
+  $('#visor-barra').innerHTML = `<button onclick="cerrarVisor()" aria-label="Cerrar">✕</button><b>${esc(titulo)}</b>`;
+  $('#visor-cont').innerHTML = `<img src="${url}" alt="${esc(titulo)}">`;
+  $('#visor').classList.add('abierto');
+}
+function cerrarVisor() { $('#visor').classList.remove('abierto'); $('#visor-cont').innerHTML = ''; if (urlVisor) { URL.revokeObjectURL(urlVisor); urlVisor = null; } recargaPendiente(); }
 
 /* ---------- sincronización con Google (Apps Script) ---------- */
 let syncTimer = null, sincronizando = false, otraVez = false;
@@ -1260,13 +1334,21 @@ function pintarEstado() { const el = $('#estado-txt'); if (el) el.className = 'e
 function programarSync(ms = 1500) { clearTimeout(syncTimer); if (CFG.url) syncTimer = setTimeout(() => sincronizar(), ms); }
 async function api(accion, extra = {}) {
   let r;
-  try { r = await fetch(CFG.url, { method: 'POST', body: JSON.stringify({ clave: CFG.clave, accion, ...extra }) }); }
-  catch { throw new Error('No se puede contactar con el script. Revisa que la dirección esté bien copiada y termine en /exec.'); }
+  const ctl = new AbortController(), limite = window.MM_LIMITE_MS || (accion === 'subirDoc' || accion === 'bajarDoc' ? 120000 : 45000);
+  const t = setTimeout(() => ctl.abort(), limite);
+  try { r = await fetch(CFG.url, { method: 'POST', body: JSON.stringify({ clave: CFG.clave, accion, ...extra }), signal: ctl.signal }); }
+  catch (e) {
+    if (e.name === 'AbortError') throw new Error('Google ha tardado demasiado en responder. Se reintentará sola.');
+    throw new Error(navigator.onLine ? 'No se puede contactar con el script. Revisa que la dirección esté bien copiada y termine en /exec.' : 'Sin conexión a internet.');
+  }
+  finally { clearTimeout(t); }
   if (r.status === 404) throw new Error('La dirección del script no existe. Copia de nuevo la URL de la implementación (termina en /exec).');
   if (!r.ok) throw new Error('El script respondió con un error (' + r.status + ').');
   let j;
   try { j = await r.json(); }
   catch { throw new Error('Google pide iniciar sesión. En «Implementar», el acceso debe ser «Cualquier usuario» (no «con cuenta de Google»).'); }
+  if (j.error && /lock|timeout|tiempo de espera/i.test(j.error)) throw new Error('Google estaba guardando desde otro dispositivo. Se reintentará sola.');
+  if (j.error && /service|exception|exceeded|quota|cuota|límite|limit|drive|calendar/i.test(j.error) && !/contraseña|intentos/i.test(j.error)) throw new Error('Google no ha podido completar la operación ahora mismo (' + j.error.replace(/^Exception:\s*/, '').slice(0, 80) + '). Se reintentará sola.');
   if (j.error) throw new Error(j.error === 'Contraseña incorrecta' ? 'Contraseña incorrecta: debe ser la misma que pusiste en CLAVE dentro del script.' : /intentos/i.test(j.error) ? 'Demasiados intentos con contraseña incorrecta. Espera 10 minutos y revisa la contraseña.' : j.error);
   return j;
 }
@@ -1279,22 +1361,34 @@ async function sincronizar(manual) {
   if (sincronizando) { otraVez = true; return; }
   sincronizando = true; estado('sync');
   try {
-    await subirImagenes();
+    // Cada archivo por separado: si uno falla, se avisa y el resto de los datos se sincroniza igual
+    let fallos = await subirImagenes(), ultimoFallo = '';
     for (const d of D.docs.filter(x => !x.borrado && !x.driveId)) {
       const b = await idb.get(d.id).catch(() => null); if (!b) continue;
-      const r = await api('subirDoc', { nombre: `${d.fecha || hoy()} ${d.nombre || 'documento'}${ext(d.mime)}`, mime: d.mime, base64: await blobA64(b) });
+      let r;
+      try { r = await api('subirDoc', { nombre: `${d.fecha || hoy()} ${d.nombre || 'documento'}${ext(d.mime)}`, mime: d.mime, base64: await blobA64(b) }); }
+      catch (e) { if (/contraseña|intentos|dirección|contactar|conexión|tardado/i.test(e.message)) throw e; fallos++; ultimoFallo = d.nombre || 'documento'; continue; }
       const i = D.docs.findIndex(x => x.id === d.id);
       if (i >= 0 && !D.docs[i].borrado) { D.docs[i] = { ...D.docs[i], driveId: r.driveId, url: r.url, upd: Date.now() }; marcarPendiente(); guardarLocal(); }
     }
+    try { if (fallos) localStorage.setItem('mm-aviso-docs', fallos === 1 && ultimoFallo ? `«${ultimoFallo}» no se ha podido subir a Drive; se reintentará.` : `${fallos} archivos no se han podido subir a Drive; se reintentará.`); else localStorage.removeItem('mm-aviso-docs'); } catch { }
     // Con cambios pendientes se envía todo; si no, solo se leen los datos (más rápido y sin reescribir Drive ni el calendario)
     let pendiente = manual; try { pendiente = pendiente || localStorage.getItem('mm-pendiente') === '1'; } catch { pendiente = true; }
     const n0 = nCambios;
-    const r = pendiente ? await api('sincronizar', { datos: D }) : await api('cargar');
-    D = Object.assign(vacio(), fusionar(D, r.datos));
-    if (pendiente && nCambios === n0) { try { localStorage.removeItem('mm-pendiente'); } catch { } }
-    guardarLocal(); localStorage.setItem('mm-ultima', Date.now()); localStorage.removeItem('mm-error');
-    if (r.calendario) localStorage.setItem('mm-aviso-cal', r.calendario); else localStorage.removeItem('mm-aviso-cal');
-    render(); estado('ok');
+    // «ver» = versión de los datos en Drive: si no ha cambiado, el script no los vuelve a enviar
+    let ver = ''; try { ver = localStorage.getItem('mm-ver') || ''; } catch { }
+    const r = pendiente ? await api('sincronizar', { datos: D }) : await api('cargar', { ver });
+    if (!r.sinCambios) {
+      const antes = JSON.stringify(D);
+      D = Object.assign(vacio(), fusionar(D, r.datos));
+      if (pendiente && nCambios === n0) { try { localStorage.removeItem('mm-pendiente'); } catch { } }
+      const guardado = guardarLocal();
+      try { if (r.ver && guardado) localStorage.setItem('mm-ver', r.ver); else localStorage.removeItem('mm-ver'); } catch { }
+      if (r.calendario) localStorage.setItem('mm-aviso-cal', r.calendario); else localStorage.removeItem('mm-aviso-cal');
+      if (manual || JSON.stringify(D) !== antes) render();
+    }
+    localStorage.setItem('mm-ultima', Date.now()); localStorage.removeItem('mm-error');
+    estado('ok');
     if (manual) toast('Sincronizado');
   } catch (e) {
     estado('error');
@@ -1312,13 +1406,13 @@ function htmlEstadoSync() {
   let cls = 'neutro', tit, txt = '';
   if (!CFG.url) { tit = 'Sin configurar'; txt = 'Los datos solo están en este dispositivo.'; }
   else if (err) { cls = 'mal'; tit = 'No se pudo sincronizar'; txt = err + (cuando ? `<br>Última vez que funcionó: ${cuando}.` : ''); }
-  else if (ult) { cls = 'bien'; tit = 'Sincronización funcionando'; txt = `Última vez: ${cuando}.` + (cal ? `<br>Pero los avisos del calendario fallan: ${esc(cal)}. Ejecuta «autorizar» otra vez en el script.` : ''); }
+  else if (ult) { const avDocs = localStorage.getItem('mm-aviso-docs'); cls = 'bien'; tit = 'Sincronización funcionando'; txt = `Última vez: ${cuando}.` + (avDocs ? `<br>${esc(avDocs)}` : '') + (cal ? `<br>Pero los avisos del calendario fallan: ${esc(cal)}. Ejecuta «autorizar» otra vez en el script.` : ''); }
   else { tit = 'Aún no se ha sincronizado'; txt = 'Pulsa «Guardar y sincronizar».'; }
   return `<div class="estado-sync ${cls}" id="estadoSync"><b>${tit}</b><span>${txt}</span></div>`;
 }
 function abrirAjustes() {
   const ult = Number(localStorage.getItem('mm-ultima') || 0);
-  abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>Ajustes</h3><button class="cerrar" onclick="cerrarHoja()">✕</button></div>
+  abrirHoja(`<div class="asa"></div><div class="hoja-tit"><h3>Ajustes</h3><button class="cerrar" onclick="cerrarHoja()" aria-label="Cerrar">✕</button></div>
   <div class="subt">Sincronizar con Google</div>
   <label for="cfgUrl">Dirección del script (termina en /exec)</label><input id="cfgUrl" value="${esc(CFG.url || '')}" placeholder="https://script.google.com/macros/s/…/exec" autocapitalize="off" autocorrect="off" spellcheck="false">
   <label for="cfgClave">Contraseña de la app</label><input id="cfgClave" type="password" value="${esc(CFG.clave || '')}" autocapitalize="off" autocorrect="off">
@@ -1326,19 +1420,20 @@ function abrirAjustes() {
   <div class="acciones" style="margin-top:10px"><button class="btn" onclick="guardarAjustes()">Guardar y sincronizar</button></div>
   <div class="nota">Con la sincronización activa, los datos se guardan en tu Google Drive (carpeta «Mi Mascota»), los documentos se suben a «Mi Mascota/Documentos» y los avisos se crean en un calendario «Mi Mascota».</div>
   <div class="subt">Copia de seguridad</div>
-  <div class="acciones" style="margin-top:10px"><button class="btn sec" onclick="exportar()">Descargar copia (sin archivos)</button><button class="btn sec" onclick="$('#fimp').click()">Restaurar una copia</button></div>
+  <div class="acciones" style="margin-top:10px"><button class="btn sec" onclick="exportar()">Descargar copia (sin archivos)</button><button class="btn sec" onclick="$('#fimp').click()">Importar una copia</button></div>
+  <div class="s" style="margin:6px 2px 0">Importar combina la copia con lo que ya tienes: añade lo que falte y no deshace los cambios hechos después.</div>
   <input type="file" id="fimp" accept="application/json,.json" hidden>
   <div class="s" style="text-align:center;margin-top:22px">Mi Mascota · ${VERSION}</div>`);
   $('#fimp').onchange = async e => {
     const f = e.target.files[0]; if (!f) return;
-    try { const x = JSON.parse(await f.text()); D = Object.assign(vacio(), fusionar(D, x.datos || x)); cambio(); toast('Copia restaurada'); cerrarHoja(); }
+    try { const x = JSON.parse(await f.text()); D = Object.assign(vacio(), fusionar(D, x.datos || x)); cambio(); toast('Copia importada'); cerrarHoja(); }
     catch { toast('Ese archivo no es una copia válida'); }
   };
 }
 async function guardarAjustes() {
   CFG = { url: $('#cfgUrl').value.trim(), clave: $('#cfgClave').value };
   localStorage.setItem('mm-cfg', JSON.stringify(CFG));
-  localStorage.removeItem('mm-error'); localStorage.removeItem('mm-clave-mala');
+  localStorage.removeItem('mm-error'); localStorage.removeItem('mm-clave-mala'); localStorage.removeItem('mm-ver');
   render();
   const el = $('#estadoSync');
   if (!CFG.url) { estado(''); if (el) el.outerHTML = htmlEstadoSync(); return; }
@@ -1356,11 +1451,18 @@ function exportar() {
 
 /* El historial del pasaporte ya está en los datos sincronizados (Drive); se quitó del código público. */
 
+/* Versión nueva: se recarga sola, pero nunca con un formulario o un documento abierto */
+let hayVersionNueva = false, recargando = false;
+function recargaPendiente() {
+  if (!hayVersionNueva || recargando) return;
+  if ($('#velo').classList.contains('abierto') || $('#visor').classList.contains('abierto')) return;
+  recargando = true; location.reload();
+}
+
 /* ---------- arranque ---------- */
 document.body.classList.add('menu-a');
 pintarTema();
 render();
-estado(CFG.url ? '' : '');
 migrarFotos().catch(() => { });
 if (CFG.url) sincronizar();
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { render(); sincronizar(); } });
@@ -1368,9 +1470,8 @@ setInterval(() => { if (document.visibilityState === 'visible' && CFG.url) sincr
 addEventListener('online', () => sincronizar());
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   // Si hay una versión nueva, se instala y la app se recarga sola una vez
-  let recargando = false;
   const habiaControl = !!navigator.serviceWorker.controller;
-  navigator.serviceWorker.addEventListener('controllerchange', () => { if (habiaControl && !recargando) { recargando = true; location.reload(); } });
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (habiaControl) { hayVersionNueva = true; recargaPendiente(); } });
   navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => {
     reg.update().catch(() => { });
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => { }); });

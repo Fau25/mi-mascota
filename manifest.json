@@ -1,7 +1,7 @@
 {
   "name": "Mi Mascota",
   "short_name": "Mi Mascota",
-  "description": "Salud, comida, peso y documentos de mi perro",
+  "description": "Salud, peso y documentos de mi perro",
   "lang": "es",
   "start_url": "./",
   "scope": "./",

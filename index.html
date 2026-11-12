@@ -330,6 +330,33 @@ body.menu-a nav.tabs button.on svg{background:var(--verde2)}
 body.menu-a .mas-nav{display:flex}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ---------- Escritorio (desde 1024 px): menú arriba e Inicio en 3 columnas ---------- */
+@media (min-width:1024px){
+  body.menu-a{padding-bottom:24px}
+  header.top{padding:16px 32px 12px}
+  header.top h1{text-align:left;flex:none}
+  body.menu-a nav.tabs{position:fixed;top:12px;left:260px;right:32px;bottom:auto;padding:0;background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;z-index:7;pointer-events:none}
+  body.menu-a nav.tabs .in{max-width:none;gap:6px;pointer-events:auto}
+  body.menu-a nav.tabs button{flex:none;flex-direction:row;gap:8px;font-size:15px;padding:0 16px;height:44px;border-radius:999px;color:var(--verde)}
+  body.menu-a nav.tabs button svg{width:20px;height:20px;padding:0;background:none!important}
+  body.menu-a nav.tabs button.on{background:var(--verde);color:var(--sobre)}
+  body.menu-a nav.tabs button:not(.on):not(.mas-nav):hover{background:var(--card)}
+  body.menu-a nav.tabs .mas-nav{order:9;margin-left:auto;padding:0}
+  body.menu-a nav.tabs .mas-nav span{width:44px;height:44px;border-radius:999px}
+  main:has(#v-inicio.activa.pc){max-width:1360px;padding:4px 32px 24px}
+  #v-inicio.pc{display:grid;grid-template-columns:400px minmax(0,1fr) 340px;gap:24px;align-items:start}
+  #v-inicio.pc .ini-col{min-width:0}
+  #v-inicio.pc .hero{margin:0}
+  #v-inicio.pc .hero-foto{height:380px;border-radius:30px}
+  #v-inicio.pc .ini-col>.sec:first-child{margin-top:0}
+  [role=button],button{cursor:pointer}
+}
+@media (min-width:1024px) and (max-width:1279px){
+  #v-inicio.pc{grid-template-columns:360px minmax(0,1fr)}
+  #v-inicio.pc{grid-template-rows:auto 1fr}
+  #v-inicio.pc .ini-col:nth-child(1){grid-row:1 / span 2}
+  #v-inicio.pc .ini-col:nth-child(3){grid-column:2}
+}
 </style>
 </head>
 <body>
@@ -370,7 +397,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v31';
+const VERSION = 'v32';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -613,12 +640,12 @@ function renderInicio() {
       <div class="hc-sub">${esc([p.raza || 'Toca para rellenar su ficha', anios(p.nacimiento)].filter(Boolean).join(' · '))}</div>
       ${(ult || p.chip) ? `<div class="hc-loc">${ult ? `<span>${ic('bascula')} ${num(ult.kg)} kg</span>` : ''}${p.chip ? `<span>${ic('chip')} ${esc(p.chip)}</span>` : ''}</div>` : ''}
     </div></div>`;
-  h += `<div class="sec"><h2>Próximo</h2></div><div class="card">`;
+  h += `<!--§--><div class="sec"><h2>Próximo</h2></div><div class="card">`;
   h += av.length ? av.slice(0, 6).map(a => fila({ ico: a.ico, terra: a.terra, t: a.titulo, s: a.cumple ? a.sub : `${a.sub} · ${fmt(a.fecha)}`, der: a.cumple ? `<span class="pill neutro">${diasHasta(a.fecha) === 0 ? '¡hoy!' : 'en ' + diasHasta(a.fecha) + ' días'}</span>` : pillFecha(a.fecha), abrir: a.abrir })).join('')
     : vacioHTML('🗓️', 'Cuando apuntes una vacuna o un antiparasitario con su próxima fecha, aparecerá aquí.');
   h += `</div>`;
 
-  h += `<div class="sec"><h2>Última consulta</h2>${cons.length ? `<button class="link" onclick="irA('salud','consultas')">Ver todas</button>` : ''}</div><div class="card">`;
+  h += `<!--§--><div class="sec"><h2>Última consulta</h2>${cons.length ? `<button class="link" onclick="irA('salud','consultas')">Ver todas</button>` : ''}</div><div class="card">`;
   h += cons.length ? filaConsulta(cons[0]) : vacioHTML('🩺', 'Aún no has apuntado ninguna visita al veterinario.');
   h += `</div>`;
 
@@ -627,11 +654,11 @@ function renderInicio() {
   if (p.urgencias) contactos.push({ e: '🚨', t: 'Urgencias 24 h', s: '', tel: p.urgencias });
   if (p.seguro) contactos.push({ e: '🛡️', t: p.seguro, s: p.poliza ? 'Póliza ' + p.poliza : '', tel: p.telSeguro });
   (p.contactos || []).forEach(c => contactos.push({ e: '👤', t: c.nombre || 'Contacto', s: [c.rol, c.notas].filter(Boolean).join(' · '), tel: c.tel, abrir: `formContacto('${sid(c.id)}')` }));
-  h += `<div class="sec"><h2>Contactos</h2><button class="link" onclick="formContacto()">Añadir</button></div><div class="card">` + (contactos.length ? contactos.map(c => `<div class="contacto" ${c.abrir ? `role="button" tabindex="0" onclick="${c.abrir}" style="cursor:pointer"` : ''}><div class="ico">${c.e}</div><div class="txt"><div class="t">${esc(c.t)}</div>${c.s ? `<div class="s">${esc(c.s)}</div>` : ''}</div>${c.tel ? `<a class="tel" href="tel:${esc(String(c.tel).replace(/\s/g, ''))}" onclick="event.stopPropagation()">Llamar</a>` : ''}</div>`).join('') : vacioHTML('👤', 'Añade a quien quieras tener a mano: paseador, cuidador, peluquería, residencia, familiares…')) + `</div>`;
+  h += `<!--§--><div class="sec"><h2>Contactos</h2><button class="link" onclick="formContacto()">Añadir</button></div><div class="card">` + (contactos.length ? contactos.map(c => `<div class="contacto" ${c.abrir ? `role="button" tabindex="0" onclick="${c.abrir}" style="cursor:pointer"` : ''}><div class="ico">${c.e}</div><div class="txt"><div class="t">${esc(c.t)}</div>${c.s ? `<div class="s">${esc(c.s)}</div>` : ''}</div>${c.tel ? `<a class="tel" href="tel:${esc(String(c.tel).replace(/\s/g, ''))}" onclick="event.stopPropagation()">Llamar</a>` : ''}</div>`).join('') : vacioHTML('👤', 'Añade a quien quieras tener a mano: paseador, cuidador, peluquería, residencia, familiares…')) + `</div>`;
 
   const datosFicha = [['Microchip', p.chip, 1], ['Pasaporte', p.pasaporte, 1], ['ADN canino', p.adn, 1], ['Nacimiento', p.nacimiento ? fmt(p.nacimiento) : ''], ['Esterilizado', p.esterilizado], ['Color', p.color], ['Alergias', p.alergias]].filter(x => x[1]);
   const tieneDueno = p.duenoNombre || p.duenoTel || p.duenoDni || p.duenoDir || p.duenoEmail;
-  h += `<div class="sec"><h2>Ficha</h2><button class="link" onclick="editarPerfil()">Editar</button></div>
+  h += `<!--§--><div class="sec"><h2>Ficha</h2><button class="link" onclick="editarPerfil()">Editar</button></div>
   <div class="f1c oscura">
     <div class="f1c-cab"><div class="f1c-tit"><h3>${esc(p.nombre || 'Tu perro')}</h3><span>${esc(p.raza || 'Toca «Editar» para rellenar su ficha')}</span></div>
       ${p.adnQR ? `<button class="f1c-qr" onclick="verQR()" aria-label="Ver código QR del ADN">${qrSVG(p.adnQR)}</button>` : `<button class="f1c-qr vacio" onclick="editarPerfil('qr')"><span>+ QR</span></button>`}</div>
@@ -640,10 +667,17 @@ function renderInicio() {
       ? `<span class="f1c-et">Si me encuentras</span><b>${esc(p.duenoNombre || '')}</b><span>${esc([p.duenoTel, p.duenoDir].filter(Boolean).join(' · '))}</span>${p.duenoDni || p.duenoEmail ? `<span>${esc([p.duenoDni ? 'DNI ' + p.duenoDni : '', p.duenoEmail].filter(Boolean).join(' · '))}</span>` : ''}`
       : `<span class="f1c-et">Tus datos</span><span>Añádelos en «Editar» por si alguien encuentra a ${esc(p.nombre || 'tu perro')}.</span>`}</div>
   </div>`;
-  h += `<button class="ajustes-link" onclick="abrirAjustes()"><span class="estado-txt" id="estado-txt"></span>Ajustes y sincronización</button>`;
+  h += `<!--§--><button class="ajustes-link" onclick="abrirAjustes()"><span class="estado-txt" id="estado-txt"></span>Ajustes y sincronización</button>`;
+  // Escritorio (desde 1024 px): Denver y su ficha · próximo y última consulta · contactos y ajustes
+  const [bHero, bProx, bCons, bCont, bFicha, bAj] = h.split('<!--§-->');
+  if (MQ_PC.matches) h = `<div class="ini-col">${bHero}${bFicha}</div><div class="ini-col">${bProx}${bCons}</div><div class="ini-col">${bCont}${bAj}</div>`;
+  else h = [bHero, bProx, bCons, bCont, bFicha, bAj].join('');
+  $('#v-inicio').classList.toggle('pc', MQ_PC.matches);
   $('#v-inicio').innerHTML = conIconos(h);
   pintarEstado();
 }
+const MQ_PC = matchMedia('(min-width:1024px)');
+MQ_PC.addEventListener('change', () => { if ($('#v-inicio').classList.contains('activa')) renderInicio(); });
 
 const SUBS = [['vacunas', 'Vacunas'], ['parasitos', 'Antiparasitarios'], ['consultas', 'Consultas'], ['medicacion', 'Medicación']];
 function filaSalud(s, L) {

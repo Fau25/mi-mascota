@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" id="metaTema" content="#F3EDE2">
+<meta name="theme-color" id="metaTema" content="#F3EEF1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -14,9 +14,7 @@
 <title>Mi Mascota</title>
 <meta name="description" content="App personal para la salud, el peso y los documentos de mi perro.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="fuentes/sora-600.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* Tarjetas con sombra difusa; crema + azul petróleo */
 :root{
@@ -357,6 +355,85 @@ body.menu-a .mas-nav{display:flex}
   #v-inicio.pc .ini-col:nth-child(1){grid-row:1 / span 2}
   #v-inicio.pc .ini-col:nth-child(3){grid-column:2}
 }
+
+/* ======================= v33 · ESTILO «AURORA · ALBA» (el mismo que Mis apps, Mi Día, Hábitos y Mis Tickets) =======================
+   Fondo claro con brumas lavanda, menta y melocotón; cristal blanco; todo en Sora con jerarquía por pesos;
+   acento melocotón mate en lo activo y lavanda para iconos y textos de acción. Siempre claro. */
+@font-face{font-family:Sora;font-weight:400;font-display:swap;src:url(fuentes/sora-400.woff2) format('woff2')}
+@font-face{font-family:Sora;font-weight:500;font-display:swap;src:url(fuentes/sora-500.woff2) format('woff2')}
+@font-face{font-family:Sora;font-weight:600;font-display:swap;src:url(fuentes/sora-600.woff2) format('woff2')}
+@font-face{font-family:Sora;font-weight:700 800;font-display:swap;src:url(fuentes/sora-700.woff2) format('woff2')}
+:root,:root:root{
+  --bg:#F3EEF1;--card:rgba(255,255,255,.62);--ink:#2A2433;--muted:#857D92;--line:rgba(42,36,51,.09);
+  --verde:#6F5CC4;--verde2:rgba(211,198,255,.45);--verde3:#8B78D8;--terra:#6F5CC4;--terra2:rgba(181,233,216,.5);
+  --ambar:#A8741E;--ambar2:rgba(248,231,176,.7);--rojo:#B9503F;--rojo2:rgba(255,203,179,.55);
+  --panel:#E6DEEE;--sobre:#2A2433;--vidrio:rgba(255,255,255,.55);--vidrio-borde:rgba(255,255,255,.9);--banda:#2A2433;--banda-txt:#2A2433;
+  --acento:#FFCBB3;--borde:1px solid rgba(255,255,255,.95);
+  --sombra:0 10px 30px rgba(120,100,140,.10),0 1px 3px rgba(120,100,140,.05);
+  --sombra-btn:0 8px 20px rgba(255,160,130,.28);
+  --f:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+html{background:#F3EEF1}
+body{letter-spacing:-.01em;background:radial-gradient(60% 40% at 8% 4%,rgba(190,172,255,.5),transparent 70%),radial-gradient(50% 35% at 96% 22%,rgba(160,226,205,.4),transparent 70%),radial-gradient(55% 40% at 70% 102%,rgba(255,186,164,.45),transparent 70%),#F3EEF1;background-attachment:fixed}
+/* jerarquía por pesos */
+h1,h2,h3{font-weight:600;letter-spacing:-.035em}
+header.top h1{font-weight:600}
+.hc-top h2,.f1c-tit h3{letter-spacing:-.04em}
+.grande,.pb-kg,.ca-dia b,.v2-vuelo b{font-weight:600;letter-spacing:-.03em}
+.t,.ca-txt b,.v2-top b,.f1c-grid b,.hc-sub{font-weight:600}
+.pill,.f2-op,.seg button,.btn,.tel,.link,.pliegue-btn,.subt,.anio-tit{font-weight:600}
+.mono{font-family:var(--f);font-variant-numeric:tabular-nums}
+/* cristal */
+.card,.doc,.f1c,.v2,.seg button,.f2-seg,.estado-sync,.nota,.rapido button,.cerrar,input,select,textarea{border:var(--borde);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+input:focus,select:focus,textarea:focus{border-color:#B9A9F0}
+header.top{background:linear-gradient(180deg,rgba(243,238,241,.94) 0%,rgba(243,238,241,.82) 70%,rgba(243,238,241,0) 100%);-webkit-backdrop-filter:none;backdrop-filter:none}
+.hoja{background:#FBF8FA}
+.velo{background:rgba(90,76,110,.25)}
+.hero-foto{background-color:#E6DEEE}
+.hero-card{border:var(--borde)}
+/* iconos en baldosa pastel */
+.ico,.rapido button span,.vacio b{background:linear-gradient(135deg,#D3C6FF,#B5E9D8);color:var(--ink)}
+.ico.terra{background:linear-gradient(135deg,#FFC9B8,#D3C6FF)}
+.fila:nth-child(3n) .ico{background:linear-gradient(135deg,#B5E9D8,#F8E7B0)}
+.foto{background-color:rgba(211,198,255,.45)}
+/* acento melocotón en lo activo y lo principal */
+.seg button.on,.f2-op.on,.btn,.tel,.toast{background:var(--acento);color:var(--ink);box-shadow:var(--sombra-btn)}
+.btn.sec{background:var(--card);color:var(--ink);box-shadow:var(--sombra)}
+.btn.peligro{background:none;color:var(--rojo);box-shadow:none;border:0}
+.cd-acc button,.fu1,.ca-dia{background:var(--verde2);color:var(--ink)}
+.pill.ok{background:rgba(181,233,216,.6);color:#2F7A63}
+.pill.neutro{background:rgba(42,36,51,.06)}
+/* ficha con QR: de oscura a degradado pastel */
+.f1c.oscura{background:linear-gradient(150deg,#D3C6FF 0%,#C7DDF3 50%,#B5E9D8 100%);color:var(--ink);border:var(--borde);box-shadow:0 14px 34px rgba(120,100,140,.16)}
+.f1c.oscura .f1c-tit span,.f1c.oscura .f1c-grid span{color:#5E566E;opacity:1}
+.f1c.oscura .f1c-dueno .f1c-et{color:#4F8E7B}
+.f1c.oscura .f1c-dueno span{color:#5E566E;opacity:1}
+.f1c.oscura .f1c-dueno{border-top-color:rgba(42,36,51,.14)}
+.f1c-qr{box-shadow:0 4px 12px rgba(90,76,110,.18)}
+.f1c-qr.vacio{border-color:rgba(42,36,51,.3);color:var(--ink)}
+/* vacunas tipo billete: sin semicírculos (sobre el degradado se ven como manchas) */
+.v2::before,.v2::after{display:none}
+.v2-talon::after{border-right-color:rgba(255,255,255,.8)}
+/* gráfica del peso */
+.grafica .area{fill:rgba(211,198,255,.4)}
+.grafica .lin{stroke:#8B78D8}
+.grafica .pt{fill:#fff;stroke:#8B78D8}
+/* menú */
+body.menu-a nav.tabs{background:rgba(255,255,255,.7);border-top:var(--borde);box-shadow:0 -8px 24px rgba(120,100,140,.08)}
+body.menu-a nav.tabs button.on{color:var(--ink)}
+body.menu-a nav.tabs button.on svg{background:var(--acento)}
+.mas-nav span{background:var(--acento);color:var(--ink)}
+.estado.sync{background:#D9A441}
+[role=button]:focus-visible,.fila:focus-visible{outline-color:#9B87E8}
+@media (min-width:1024px){
+  body.menu-a nav.tabs{background:none;border:0;box-shadow:none}
+  body.menu-a nav.tabs .in{background:rgba(255,255,255,.6);border:var(--borde);border-radius:999px;padding:5px;box-shadow:var(--sombra);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);flex:none;width:fit-content}
+  body.menu-a nav.tabs button{color:#5E566E}
+  body.menu-a nav.tabs button.on{background:var(--acento);color:var(--ink)}
+  body.menu-a nav.tabs button:not(.on):not(.mas-nav):hover{background:rgba(255,255,255,.8)}
+  body.menu-a nav.tabs .mas-nav{margin-left:6px}
+}
 </style>
 </head>
 <body>
@@ -397,7 +474,7 @@ body.menu-a .mas-nav{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v32';
+const VERSION = 'v33';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -742,11 +819,12 @@ function renderSalud() {
 
 /* ---------- pasaporte de vacunas ---------- */
 let filtroAnio = '', filtroAnioPrev = '';
+// Colores de cada marca en versión pastel (estilo Alba), con texto oscuro del mismo tono
 const MARCAS = [
-  [/eurican.*pneumo/i, '#F2B6CF', '#5A1E3A'], [/eurican.*(dappi|lmulti)/i, '#2D5C9A', '#fff'], [/letifend|leti\b/i, '#3E8FCF', '#fff'], [/canigen/i, '#2E8B3E', '#fff'], [/eurican/i, '#C8202F', '#fff'], [/rabigen|virbac/i, '#1F5FA6', '#fff'], [/versiguard|zoetis|vanguard/i, '#F4F1EA', '#B3262E'],
-  [/nobivac|msd/i, '#0E7C7B', '#fff'], [/canileish/i, '#6B3FA0', '#fff'],
+  [/eurican.*pneumo/i, '#F8D3E2', '#5A1E3A'], [/eurican.*(dappi|lmulti)/i, '#C9D9F2', '#1F3F6E'], [/letifend|leti\b/i, '#CBE3F5', '#1D5A85'], [/canigen/i, '#CDEBD2', '#1F6A2F'], [/eurican/i, '#F7C9CC', '#8A1E28'], [/rabigen|virbac/i, '#C8D8F0', '#1B4A82'], [/versiguard|zoetis|vanguard/i, '#F6E4E2', '#9A2A30'],
+  [/nobivac|msd/i, '#C4E8E4', '#0B5B5A'], [/canileish/i, '#DDD0F2', '#4A2A78'],
 ];
-const colorMarca = t => { for (const [re, bg, fg] of MARCAS) if (re.test(t || '')) return [bg, fg]; return ['var(--verde)', 'var(--sobre)']; };
+const colorMarca = t => { for (const [re, bg, fg] of MARCAS) if (re.test(t || '')) return [bg, fg]; return ['#DDD0F2', '#2A2433']; };
 
 
 

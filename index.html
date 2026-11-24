@@ -434,12 +434,30 @@ body.menu-a nav.tabs button.on svg{background:var(--acento)}
   body.menu-a nav.tabs button:not(.on):not(.mas-nav):hover{background:rgba(255,255,255,.8)}
   body.menu-a nav.tabs .mas-nav{margin-left:6px}
 }
+/* Título a la izquierda, Ajustes arriba a la derecha y menú común de Mis apps (píldora + «+» aparte) */
+header.top h1{font-size:30px;text-align:left;letter-spacing:-.02em}
+header.top h1 .estado::after{inset:-16.5px}
+.ajustes-top{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.95);color:var(--ink);box-shadow:0 6px 18px rgba(120,100,140,.12)}
+.ajustes-top svg{width:20px;height:20px}
+@media (max-width:1023px){
+  body.menu-a{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+  body.menu-a nav.tabs{bottom:calc(14px + env(safe-area-inset-bottom));padding:0;background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;align-items:center;gap:10px;pointer-events:none}
+  body.menu-a nav.tabs .in{flex:none;width:auto;max-width:none;gap:4px;padding:5px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.95);
+    box-shadow:0 10px 30px rgba(120,100,140,.14);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);pointer-events:auto}
+  body.menu-a nav.tabs .in button{flex:none;min-width:60px;height:52px;padding:0 10px;border-radius:999px;gap:2px;font-size:11px;font-weight:600;color:#6E6680;justify-content:center}
+  body.menu-a nav.tabs .in button svg{width:20px;height:20px;padding:0;background:none!important}
+  body.menu-a nav.tabs .in button.on{background:#FFCBB3;color:#2A2433}
+  body.menu-a nav.tabs .mas-nav{pointer-events:auto;padding:0;border:0;background:none;flex:none}
+  body.menu-a nav.tabs .mas-nav span{width:56px;height:56px;border-radius:50%;background:#FFCBB3;color:#2A2433;box-shadow:0 10px 30px rgba(255,160,122,.3)}
+}
+@media (min-width:1024px){.ajustes-top{display:none}}
 </style>
 </head>
 <body>
 
 <header class="top">
   <h1><span id="titulo">Mi Mascota</span><button class="estado" id="estado" onclick="abrirAjustes()" aria-label="Estado de la sincronización"></button></h1>
+  <button class="ajustes-top" onclick="abrirAjustes()" aria-label="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
 </header>
 
 <main>
@@ -456,10 +474,11 @@ body.menu-a nav.tabs button.on svg{background:var(--acento)}
 <nav class="tabs"><div class="in">
   <button data-tab="inicio" class="on" onclick="irA('inicio')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg>Inicio</button>
   <button data-tab="salud" onclick="irA('salud')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.4-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.8-7.5 10.2-7.5 10.2z"/><path d="M12 10.5v5M9.5 13h5" stroke-linecap="round"/></svg>Salud</button>
-  <button class="mas-nav" onclick="accionFab()" aria-label="Añadir"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button>
-  <button data-tab="peso" onclick="irA('peso')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="5.6" r="2.2"/><path d="M7.4 9h9.2l2.7 10.4a1.2 1.2 0 0 1-1.2 1.5H5.9a1.2 1.2 0 0 1-1.2-1.5z"/><text x="12" y="17.4" text-anchor="middle" font-size="6.4" font-weight="800" font-family="Nunito,sans-serif" fill="currentColor" stroke="none">kg</text></svg>Peso</button>
+  <button data-tab="peso" onclick="irA('peso')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="5.6" r="2.2"/><path d="M7.4 9h9.2l2.7 10.4a1.2 1.2 0 0 1-1.2 1.5H5.9a1.2 1.2 0 0 1-1.2-1.5z"/><text x="12" y="17.4" text-anchor="middle" font-size="6.4" font-weight="800" font-family="Sora,sans-serif" fill="currentColor" stroke="none">kg</text></svg>Peso</button>
   <button data-tab="docs" onclick="irA('docs')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 7a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></svg>Documentos</button>
-</div></nav>
+</div>
+  <button class="mas-nav" onclick="accionFab()" aria-label="Añadir"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button>
+</nav>
 
 <div class="velo" id="velo"><div class="hoja" id="hoja" role="dialog" aria-modal="true" tabindex="-1"></div></div>
 
@@ -474,7 +493,7 @@ body.menu-a nav.tabs button.on svg{background:var(--acento)}
 
 <script>
 'use strict';
-const VERSION = 'v33';
+const VERSION = 'v34';
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s);
@@ -516,7 +535,7 @@ const SVG = {
   cuenco: '<path d="M3 11h18a9 7 0 0 1-18 0z"/><path d="M8 7.5c1-.9 2.4-1.4 4-1.4s3 .5 4 1.4"/><path d="M6 21h12"/>',
   tarta: '<path d="M4 21h16M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7"/><path d="M5 16c1.5 1 2.5 1 3.5 0s2.5-1 3.5 0 2.5 1 3.5 0 2-1 3.5 0M12 12V8"/><path d="M12 3.5c.8 1 1.2 1.8 0 3-1.2-1.2-.8-2 0-3z"/>',
   gota: '<path d="M12 3s6.5 7 6.5 11.3A6.5 6.5 0 0 1 5.5 14.3C5.5 10 12 3 12 3z"/><path d="M9 14.5a3 3 0 0 0 3 3"/>',
-  bascula: '<circle cx="12" cy="5.6" r="2.2"/><path d="M7.4 9h9.2l2.7 10.4a1.2 1.2 0 0 1-1.2 1.5H5.9a1.2 1.2 0 0 1-1.2-1.5z"/><text x="12" y="17.4" text-anchor="middle" font-size="6.4" font-weight="800" font-family="Nunito,sans-serif" fill="currentColor" stroke="none">kg</text>',
+  bascula: '<circle cx="12" cy="5.6" r="2.2"/><path d="M7.4 9h9.2l2.7 10.4a1.2 1.2 0 0 1-1.2 1.5H5.9a1.2 1.2 0 0 1-1.2-1.5z"/><text x="12" y="17.4" text-anchor="middle" font-size="6.4" font-weight="800" font-family="Sora,sans-serif" fill="currentColor" stroke="none">kg</text>',
   carro: '<path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/>',
   doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
   calendario: '<rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><circle cx="12" cy="15" r="1" fill="currentColor"/>',

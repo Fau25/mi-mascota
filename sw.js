@@ -1,5 +1,5 @@
 // Cada cambio de la app: subir la versión (mi-mascota-vNN)
-const CACHE = 'mi-mascota-v33';
+const CACHE = 'mi-mascota-v34';
 const ARCHIVOS = ['./', 'index.html', 'manifest.json', 'icon-180.png', 'icon-192.png', 'icon-512.png', 'fuentes/sora-400.woff2', 'fuentes/sora-500.woff2', 'fuentes/sora-600.woff2', 'fuentes/sora-700.woff2'];
 
 self.addEventListener('install', e => {
